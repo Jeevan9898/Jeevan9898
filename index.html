@@ -452,228 +452,334 @@
         /* ============================================================
            LOADER — CINEMATIC UPGRADE
         ============================================================ */
+        /* ============================================================
+           PIXEL INTRO  (igloo.inc — pixels crystallise into name)
+        ============================================================ */
+        #pixel-canvas {
+            position: fixed; inset: 0; z-index: 10001;
+            pointer-events: none; width: 100%; height: 100%;
+        }
         #loader-overlay {
             position: fixed; inset: 0; background: #000008;
-            z-index: 10000; cursor: pointer;
-            overflow: hidden;
+            z-index: 10000; cursor: pointer; overflow: hidden;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: clamp(10px,2vh,20px);
         }
-
-        /* Grid bg */
-        #loader-grid {
-            position: absolute; inset: 0; pointer-events: none;
-            background-image:
-                linear-gradient(rgba(0,242,255,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,242,255,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%);
+        #intro-name {
+            font-family: var(--display);
+            font-size: clamp(3rem, 9vw, 8rem);
+            font-weight: 700; letter-spacing: clamp(6px,2vw,22px);
+            text-transform: uppercase; text-align: center; line-height: 0.88;
+            color: #fff; position: relative; z-index: 10003;
+            opacity: 0; transform: translateY(14px);
+            transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.16,1,0.3,1);
         }
-
-        /* Center logo area */
-        #loader-center {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex; flex-direction: column; align-items: center;
-            gap: 0;
+        #intro-name.show { opacity: 1; transform: translateY(0); }
+        #intro-name .n2  {
+            display: block; color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.45);
         }
-
-        .loader-ring {
-            position: relative; width: 180px; height: 180px;
-            display: flex; justify-content: center; align-items: center;
+        #intro-roles {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 8px; z-index: 10003; position: relative;
+            opacity: 0; transform: translateY(8px);
+            transition: opacity 0.9s ease 0.3s, transform 0.9s ease 0.3s;
         }
-        .loader-ring svg {
-            position: absolute; inset: 0; width: 100%; height: 100%;
+        #intro-roles.show { opacity: 1; transform: translateY(0); }
+        .role-chip {
+            font-family: var(--mono); font-size: clamp(0.5rem,1.2vw,0.65rem);
+            color: var(--cyan); letter-spacing: 3px;
+            border: 1px solid rgba(0,242,255,0.22); padding: 5px 14px;
+            clip-path: polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);
         }
-        .ring-track { fill: none; stroke: rgba(0,242,255,0.08); stroke-width: 1; }
-        .ring-progress {
-            fill: none; stroke: var(--cyan); stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-dasharray: 502;
-            stroke-dashoffset: 502;
-            animation: ring-fill 3s cubic-bezier(0.4,0,0.2,1) forwards 0.5s;
-            filter: drop-shadow(0 0 4px var(--cyan));
+        #intro-hint {
+            position: absolute; bottom: clamp(14px,4vh,36px);
+            font-family: var(--mono); font-size: clamp(0.48rem,1vw,0.58rem);
+            color: rgba(0,242,255,0.3); letter-spacing: 5px; text-transform: uppercase;
+            opacity: 0; animation: hint-pulse 1.8s ease-in-out infinite;
+            z-index: 10003; transition: opacity 0.8s ease;
         }
-        .ring-progress-2 {
-            fill: none; stroke: rgba(0,242,255,0.3); stroke-width: 0.5;
-            stroke-dasharray: 502;
-            stroke-dashoffset: 502;
-            animation: ring-fill 2s cubic-bezier(0.4,0,0.2,1) forwards 0.2s;
-        }
-        @keyframes ring-fill {
-            to { stroke-dashoffset: 0; }
-        }
-
-        .loader-inner-text {
-            position: absolute; text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-        }
-        .loader-pct {
-            font-family: var(--mono); font-size: 2rem; color: var(--cyan);
-            text-shadow: 0 0 20px var(--cyan), 0 0 40px rgba(0,242,255,0.3);
-            letter-spacing: -2px;
-            animation: count-up 3s ease forwards 0.5s;
-        }
-        @keyframes count-up {
-            0% { --n: 0; }
-            100% { --n: 100; }
-        }
-        .loader-pct-label {
-            font-family: var(--mono); font-size: 0.5rem;
-            color: rgba(0,242,255,0.5); letter-spacing: 3px;
-        }
-
-        /* Boot log */
+        #intro-hint.show { opacity: 1; }
+        @keyframes hint-pulse { 0%,100%{opacity:0.2;} 50%{opacity:0.8;} }
         #loader-log {
-            position: absolute; bottom: 22%; left: 50%;
-            transform: translateX(-50%);
-            width: 400px; max-width: 90vw;
-            font-family: var(--mono); font-size: 0.58rem;
-            color: var(--text-muted); letter-spacing: 1px;
-            line-height: 1.8;
-            border-left: 1px solid rgba(0,242,255,0.2);
-            padding-left: 16px;
+            position: absolute; bottom: clamp(48px,10vh,80px); left: clamp(16px,5vw,56px);
+            font-family: var(--mono); font-size: clamp(0.45rem,0.9vw,0.55rem);
+            color: var(--text-muted); letter-spacing: 1px; line-height: 1.9;
+            border-left: 1px solid rgba(0,242,255,0.12); padding-left: 12px;
+            z-index: 10003;
         }
-        .log-line { opacity: 0; animation: log-appear 0.3s ease forwards; }
-        .log-line.ok::before { content: '[OK] '; color: #00ff88; }
-        .log-line.info::before { content: '[INFO] '; color: var(--cyan); }
-        .log-line.warn::before { content: '[WARN] '; color: var(--gold); }
-        @keyframes log-appear { to { opacity: 1; } }
-
-        .loader-click-text {
-            position: absolute; bottom: 12%; left: 50%;
-            transform: translateX(-50%);
-            font-family: var(--display); font-size: 0.75rem;
-            color: var(--cyan); letter-spacing: 8px;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px var(--cyan);
-            animation: click-pulse 1.5s ease-in-out infinite;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            white-space: nowrap;
-        }
-        .loader-click-text.show { opacity: 1; }
-        @keyframes click-pulse {
-            0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
-            50% { opacity: 1; transform: translateX(-50%) scale(1.02); }
-        }
-
-        /* Loader top text */
-        .loader-title-block {
-            text-align: center; margin-top: 20px;
-        }
-        .loader-name {
-            font-family: var(--display); font-size: 1.1rem;
-            color: white; letter-spacing: 8px; text-transform: uppercase;
-            opacity: 0; animation: fade-in 1s ease forwards 1s;
-        }
-        .loader-sub {
-            font-family: var(--mono); font-size: 0.5rem;
-            color: var(--text-muted); letter-spacing: 4px;
-            margin-top: 6px;
-            opacity: 0; animation: fade-in 1s ease forwards 1.5s;
-        }
-        @keyframes fade-in { to { opacity: 1; } }
-
-        /* Corner decorations on loader */
+        .log-line { opacity:0; animation: log-appear 0.25s ease forwards; }
+        .log-line.ok::before   { content:'[OK] ';   color:#00ff88; }
+        .log-line.info::before { content:'[INFO] '; color:var(--cyan); }
+        .log-line.warn::before { content:'[WARN] '; color:var(--gold); }
+        @keyframes log-appear { to{opacity:1;} }
+        #intro-bar { position:absolute; bottom:0; left:0; right:0; height:1px;
+            background:rgba(0,242,255,0.05); z-index:10003; }
+        #intro-bar-fill { height:100%; width:0%;
+            background:linear-gradient(90deg,transparent,var(--cyan),rgba(0,242,255,0.3));
+            box-shadow:0 0 6px var(--cyan); transition:width 0.12s linear; }
         .loader-corner {
-            position: absolute; width: 40px; height: 40px;
-            border-color: rgba(0,242,255,0.3); border-style: solid;
+            position:absolute; width:clamp(20px,3.2vw,38px); height:clamp(20px,3.2vw,38px);
+            border-color:rgba(0,242,255,0.18); border-style:solid;
         }
-        .loader-corner.tl { top: 20px; left: 20px; border-width: 1px 0 0 1px; }
-        .loader-corner.tr { top: 20px; right: 20px; border-width: 1px 1px 0 0; }
-        .loader-corner.bl { bottom: 20px; left: 20px; border-width: 0 0 1px 1px; }
-        .loader-corner.br { bottom: 20px; right: 20px; border-width: 0 1px 1px 0; }
-
+        .loader-corner.tl{top:18px;left:18px;border-width:1px 0 0 1px;}
+        .loader-corner.tr{top:18px;right:18px;border-width:1px 1px 0 0;}
+        .loader-corner.bl{bottom:18px;left:18px;border-width:0 0 1px 1px;}
+        .loader-corner.br{bottom:18px;right:18px;border-width:0 1px 1px 0;}
+        #loader-grid {
+            position:absolute; inset:0; pointer-events:none;
+            background-image:
+                linear-gradient(rgba(0,242,255,0.025) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(0,242,255,0.025) 1px,transparent 1px);
+            background-size:clamp(28px,4.5vw,54px) clamp(28px,4.5vw,54px);
+            mask-image:radial-gradient(ellipse 72% 72% at 50% 50%,black 30%,transparent 100%);
+        }
         /* ============================================================
-           SECTIONS — UPGRADED
+           IGLOO-STYLE LAYOUT SYSTEM
         ============================================================ */
+
+        /* -- Layout content wrapper -- */
         .content-layer {
             position: relative; z-index: 5;
-            opacity: 0; transition: opacity 2s ease;
+            opacity: 0;
+            transition: opacity 1.2s ease;
         }
         .content-layer.visible { opacity: 1; }
 
+        /* -- Scroll snap container -- */
+        .snap-container {
+            height: 100dvh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        /* -- Each section: full viewport, snaps -- */
         section {
-            min-height: 120vh;
-            display: flex; flex-direction: column; justify-content: center;
-            padding: 0 10% 0 10%;
-            pointer-events: none;
+            height: 100dvh;
+            min-height: 560px;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: grid;
+            grid-template-columns: 1fr var(--watermark-col, 120px);
+            grid-template-rows: 1fr;
+            padding: 0;
             position: relative;
+            overflow: hidden;
+            pointer-events: none;
         }
 
-        /* Vertical sector line on left */
-        section::before {
+        /* Left vertical accent line */
+        section::after {
             content: '';
-            position: absolute; left: 0; top: 10%; bottom: 10%;
+            position: absolute;
+            left: var(--sec-pad-x);
+            top: 12%; bottom: 12%;
             width: 1px;
-            background: linear-gradient(180deg, transparent, rgba(0,242,255,0.12), transparent);
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(0,242,255,0.18) 30%,
+                rgba(0,242,255,0.18) 70%,
+                transparent 100%
+            );
         }
 
+        /* -- Section inner: the actual content -- */
         .section-inner {
+            grid-column: 1;
+            grid-row: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 var(--sec-pad-x);
             position: relative;
+            z-index: 2;
         }
 
-        .tag {
-            color: var(--cyan); font-family: var(--mono);
-            font-size: 0.65rem; letter-spacing: 5px;
-            display: inline-flex; align-items: center; gap: 10px;
-            margin-bottom: 16px; text-transform: uppercase;
+        /* -- Stagger reveal system -- */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1);
         }
-        .tag::before {
-            content: '';
-            display: inline-block; width: 24px; height: 1px;
-            background: var(--cyan);
+        .reveal-item.delay-1 { transition-delay: 0.08s; }
+        .reveal-item.delay-2 { transition-delay: 0.18s; }
+        .reveal-item.delay-3 { transition-delay: 0.32s; }
+        .reveal-item.delay-4 { transition-delay: 0.48s; }
+        .reveal-item.delay-5 { transition-delay: 0.62s; }
+        section.in-view .reveal-item { opacity: 1; transform: translateY(0); }
+
+        /* -- Section number tag -- */
+        .sec-eyebrow {
+            font-family: var(--mono);
+            font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+            color: var(--cyan); letter-spacing: 5px;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: clamp(14px, 2.5vh, 22px);
+            text-transform: uppercase;
         }
-        .tag::after {
-            content: attr(data-num);
-            font-size: 0.5rem; color: rgba(0,242,255,0.4);
-            letter-spacing: 2px;
+        .sec-eyebrow-line {
+            display: block;
+            width: clamp(20px, 3vw, 36px); height: 1px;
+            background: var(--cyan); flex-shrink: 0;
+        }
+        .sec-eyebrow-num {
+            font-size: clamp(0.48rem, 1vw, 0.58rem);
+            color: rgba(0,242,255,0.35);
+            letter-spacing: 2px; margin-left: auto;
         }
 
-        h1 {
+        /* -- Main heading -- */
+        .sec-heading {
             font-family: var(--display);
-            font-size: clamp(3rem, 9vw, 7.5rem);
+            font-size: clamp(2.8rem, 7.5vw, 7rem);
             font-weight: 700; margin: 0;
-            line-height: 0.88; text-transform: uppercase;
-            position: relative;
+            line-height: 0.86; text-transform: uppercase;
+            position: relative; letter-spacing: -0.5px;
         }
-
-        /* Ghost text behind h1 */
-        h1 .ghost {
+        /* Ghost echo */
+        .sec-heading::after {
+            content: attr(data-text);
             position: absolute; inset: 0;
-            font-family: var(--display);
             color: transparent;
-            -webkit-text-stroke: 1px rgba(0,242,255,0.07);
-            font-size: inherit; font-weight: inherit;
-            line-height: inherit;
-            transform: translate(4px, 4px);
-            pointer-events: none;
-            user-select: none;
+            -webkit-text-stroke: 1px rgba(0,242,255,0.06);
+            transform: translate(5px, 5px);
+            pointer-events: none; user-select: none;
+            white-space: pre;
         }
 
-        p.lead {
-            font-size: 1.1rem; max-width: 520px; color: #889ab0;
-            margin-top: 24px; font-weight: 300; line-height: 1.7;
+        /* -- Horizontal rule -- */
+        .sec-rule {
+            height: 1px; width: 0;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            margin: clamp(14px, 2.5vh, 22px) 0;
+            transition: width 1.1s cubic-bezier(0.4,0,0.2,1) 0.3s;
+        }
+        section.in-view .sec-rule { width: clamp(80px, 20vw, 240px); }
+
+        /* -- Lead paragraph -- */
+        .sec-lead {
             font-family: var(--body);
-            border-left: 2px solid rgba(0,242,255,0.2);
-            padding-left: 16px;
+            font-size: clamp(0.88rem, 1.6vw, 1.05rem);
+            color: #7a8ea8; line-height: 1.75;
+            font-weight: 300;
+            max-width: 460px;
         }
 
-        /* Section number watermark */
-        .section-watermark {
-            position: absolute; right: -2%;
-            top: 50%; transform: translateY(-50%);
+        /* -- Big background watermark number -- */
+        .sec-watermark {
+            grid-column: 2; grid-row: 1;
+            display: flex; align-items: center;
             font-family: var(--display);
-            font-size: clamp(6rem, 18vw, 16rem);
+            font-size: clamp(5rem, 14vw, 12rem);
             color: transparent;
-            -webkit-text-stroke: 1px rgba(0,242,255,0.04);
-            font-weight: 700; pointer-events: none;
-            user-select: none; line-height: 1;
-            letter-spacing: -10px;
+            -webkit-text-stroke: 1px rgba(0,242,255,0.05);
+            font-weight: 700; line-height: 1;
+            letter-spacing: -6px;
+            user-select: none; pointer-events: none;
+            padding-right: 8px;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.5s;
+        }
+        section.in-view .sec-watermark { opacity: 1; }
+
+        /* ─── HERO SECTION (01) ─────────────────────────────── */
+        #sec-0 { grid-template-columns: 1fr; }
+        #sec-0 .section-inner { padding-top: clamp(80px, 15vh, 140px); }
+        #sec-0 .sec-watermark { display: none; }
+
+        .hero-name-block {
+            display: flex; flex-direction: column;
+            gap: clamp(6px, 1.2vh, 12px);
+            margin-bottom: clamp(16px, 3vh, 28px);
+        }
+        .hero-title {
+            font-family: var(--display);
+            font-size: clamp(3.2rem, 10vw, 9rem);
+            font-weight: 700; line-height: 0.82;
+            text-transform: uppercase; letter-spacing: -1px;
+            color: #fff;
+        }
+        .hero-title .line-2 {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+        }
+        .hero-divider {
+            display: flex; align-items: center; gap: 16px;
+            margin: clamp(12px, 2.5vh, 24px) 0;
+        }
+        .hero-divider-line {
+            flex: 1; height: 1px;
+            max-width: 200px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 1s cubic-bezier(0.4,0,0.2,1) 0.4s;
+        }
+        section.in-view .hero-divider-line { transform: scaleX(1); }
+        .hero-divider-dot {
+            width: 4px; height: 4px; border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+        }
+        .hero-role-row {
+            display: flex; flex-wrap: wrap;
+            gap: 8px 16px; align-items: center;
+        }
+        .hero-role-chip {
+            font-family: var(--mono);
+            font-size: clamp(0.55rem, 1.1vw, 0.68rem);
+            color: var(--text-muted); letter-spacing: 3px;
+            border: 1px solid rgba(0,242,255,0.18);
+            padding: 5px 12px;
+            background: rgba(0,242,255,0.03);
+            text-transform: uppercase;
+            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+        }
+        .hero-scroll-hint {
+            position: absolute; bottom: clamp(20px, 5vh, 40px);
+            left: var(--sec-pad-x);
+            display: flex; align-items: center; gap: 10px;
+            font-family: var(--mono); font-size: 0.5rem;
+            color: rgba(0,242,255,0.3); letter-spacing: 4px;
+        }
+        .hero-scroll-hint::before {
+            content: '';
+            display: block; width: 1px;
+            height: clamp(24px, 4vh, 40px);
+            background: linear-gradient(180deg, var(--cyan), transparent);
+            animation: scroll-hint-pulse 2s ease-in-out infinite;
+        }
+        @keyframes scroll-hint-pulse {
+            0%,100% { opacity: 0.3; } 50% { opacity: 0.9; }
         }
 
-        /* ============================================================
-           HUD LABELS
-        ============================================================ */
+        /* ─── STANDARD SECTION LAYOUT ────────────────────────── */
+        .sec-stats-row {
+            display: flex; gap: clamp(20px, 5vw, 48px);
+            margin-top: clamp(16px, 3.5vh, 32px);
+            flex-wrap: wrap;
+        }
+        .sec-stat {
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .sec-stat-val {
+            font-family: var(--display);
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            color: #fff; line-height: 1;
+        }
+        .sec-stat-label {
+            font-family: var(--mono); font-size: 0.52rem;
+            color: var(--text-muted); letter-spacing: 3px;
+        }
+
+        /* ─── SECTOR TRANSITION CARD responsive sizing ─────── */
+        .sector-card-tag   { font-size: clamp(0.48rem, 1.5vw, 0.62rem); }
+        .sector-card-label { font-size: clamp(2rem, 8vw, 7.5rem); }
+        .sector-card-sub   { font-size: clamp(0.5rem, 1.2vw, 0.65rem); letter-spacing: clamp(3px, 1vw, 8px); }
+
+        /* ─── HUD LABELS ────────────────────────────────────── */
         .hud-label {
             position: absolute; color: var(--cyan);
             font-family: var(--mono); font-size: 0.55rem;
@@ -683,98 +789,215 @@
             letter-spacing: 2px;
         }
 
+        /* ─── ABOUT PANEL sizing tweak ─────────────────────── */
+        #about-modal {
+            top: 50%; left: clamp(12px, 4vw, 5%);
+            transform: translateY(-50%) translateX(-30px);
+            width: min(480px, calc(100vw - 24px));
+        }
+        #about-modal.active {
+            transform: translateY(-50%) translateX(0);
+        }
+
         /* ============================================================
-           SECTION 01 - HERO SPECIAL STYLING
+           FULL RESPONSIVE SYSTEM
         ============================================================ */
-        .hero-section { min-height: 130vh; }
-        .hero-role {
-            font-family: var(--mono); font-size: 0.8rem;
-            color: var(--cyan); letter-spacing: 4px;
-            margin-top: 20px; opacity: 0.8;
+
+        /* CSS custom properties scaled by viewport */
+        :root {
+            --sec-pad-x: clamp(24px, 8vw, 10%);
+            --watermark-col: clamp(60px, 10vw, 140px);
+        }
+
+        /* ── WIDE DESKTOP (1440px+) ── */
+        @media (min-width: 1440px) {
+            .sec-heading { font-size: clamp(7rem, 8vw, 10rem); }
+            .hero-title   { font-size: clamp(8rem, 10vw, 12rem); }
+        }
+
+        /* ── LAPTOP / DESKTOP (1024–1439px) ── */
+        @media (min-width: 1024px) and (max-width: 1439px) {
+            /* default styles fine */
+        }
+
+        /* ── TABLET (640–1023px) ── */
+        @media (min-width: 640px) and (max-width: 1023px) {
+            :root { --sec-pad-x: clamp(28px, 6vw, 60px); }
+            section { grid-template-columns: 1fr 80px; }
+            .hero-title { font-size: clamp(3rem, 9vw, 6rem); }
+            .sec-heading { font-size: clamp(2.6rem, 7vw, 5rem); }
+            .sec-watermark { font-size: clamp(4rem, 12vw, 8rem); }
+            #top-bar { display: none; }
+            #bottom-hud { padding: 0 12px; }
+        }
+
+        /* ── MOBILE (< 640px) ── */
+        @media (max-width: 639px) {
+            :root { --sec-pad-x: 20px; --watermark-col: 0px; }
+
+            section {
+                grid-template-columns: 1fr;
+                height: 100dvh;
+                min-height: 500px;
+            }
+            .sec-watermark { display: none; }
+            section::after { left: 16px; }
+
+            .hero-title { font-size: clamp(2.4rem, 11vw, 4.5rem); }
+            .hero-title .line-2 { -webkit-text-stroke: 1px rgba(255,255,255,0.35); }
+            .sec-heading { font-size: clamp(2.2rem, 10vw, 4rem); line-height: 0.88; }
+            .sec-lead { font-size: 0.85rem; }
+
+            #top-bar    { display: none; }
+            #side-nav   { display: none; }
+            #bottom-hud { height: 44px; padding: 0 12px; }
+            #scroll-progress { display: none; }
+
+            .sec-stats-row { gap: 16px; }
+            .sec-stat-val  { font-size: clamp(1.2rem, 6vw, 1.8rem); }
+
+            /* Sector transition card */
+            .sector-card-label { font-size: clamp(2.2rem, 11vw, 4.5rem); }
+            .sector-card-sub   { letter-spacing: 3px; font-size: 0.52rem; }
+            #sector-alert { font-size: 0.5rem; letter-spacing: 3px; padding: 6px 14px; }
+
+            /* About modal full-width on mobile */
+            #about-modal {
+                left: 10px; right: 10px; top: auto;
+                bottom: 56px;
+                transform: translateY(20px);
+                width: auto;
+            }
+            #about-modal.active {
+                transform: translateY(0);
+            }
+            .about-panel { max-height: 55dvh; overflow-y: auto; }
+
+            /* Modals */
+            .modal-content { width: 90%; }
+
+            /* Sound btn */
+            .sound-btn { padding: 6px 12px; font-size: 0.55rem; }
+
+            /* HUD cursor — hide data on mobile */
+            .cursor-data { display: none; }
+        }
+
+        /* ── VERY SMALL PHONES (< 375px) ── */
+        @media (max-width: 374px) {
+            .hero-title { font-size: 2.2rem; }
+            .sec-heading { font-size: 2rem; }
+            .sec-eyebrow { font-size: 0.5rem; letter-spacing: 3px; }
+        }
+
+        /* ── LANDSCAPE MOBILE ── */
+        @media (max-width: 768px) and (orientation: landscape) {
+            section { height: 100dvh; min-height: 360px; }
+            .hero-title { font-size: clamp(2rem, 9vh, 5rem); }
+            .sec-heading { font-size: clamp(1.8rem, 8vh, 4rem); }
+            .hero-scroll-hint { display: none; }
+        }
+
+        /* ── WINDOWS HIGH-DPI (125%, 150%) ── */
+        @media (-webkit-min-device-pixel-ratio: 1.25) and (min-width: 1024px) {
+            .sec-heading { letter-spacing: -0.5px; }
+        }
+
+        /* Disable pointer: never show cursor ring */
+        @media (pointer: coarse) {
+            #cursor-hud { display: none; }
         }
 
         /* ============================================================
            SECTOR TRANSITION — GAS & METEOROID CANVAS
         ============================================================ */
 
-        /* Canvas layer: gases + meteoroids drawn here */
+        /* ── GAS+METEOROID CANVAS ── */
         #transition-canvas {
             position: fixed; inset: 0; z-index: 8000;
-            pointer-events: none; opacity: 0;
-            width: 100%; height: 100%;
-            transition: opacity 0.15s;
+            pointer-events: none; opacity: 0; width: 100%; height: 100%;
+            transition: opacity 0.2s;
         }
         #transition-canvas.active { opacity: 1; }
-
-        /* Sector name card floats above canvas */
+        #transition-backdrop {
+            position: fixed; inset: 0; z-index: 8001; pointer-events: none;
+            background: radial-gradient(ellipse 110% 110% at 50% 50%,
+                rgba(0,0,8,0) 0%, rgba(0,0,8,0.6) 60%, rgba(0,0,8,0.88) 100%);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        #transition-backdrop.show { opacity: 1; }
+        #transition-backdrop.hide { opacity: 0; transition: opacity 0.7s ease 0.6s; }
+        /* Bottom-left card — never overlaps section headings */
         #sector-transition {
-            position: fixed; inset: 0; z-index: 8001;
-            pointer-events: none;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
+            position: fixed; inset: 0; z-index: 8002; pointer-events: none;
+            padding: 0 clamp(20px,6vw,72px) clamp(28px,7vh,72px);
+            display: flex; flex-direction: column; justify-content: flex-end;
         }
-        #sector-transition.fire { opacity: 1; }
-
-        .sector-card {
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            opacity: 0; transform: scale(0.9) translateY(14px);
-            text-align: center;
-            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+        .sector-bg-num {
+            position: absolute; right: clamp(-20px,-1vw,10px); bottom: clamp(-30px,-3vh,-50px);
+            font-family: var(--display); font-size: clamp(28vw,36vw,48vw);
+            font-weight: 700; line-height: 0.78; color: transparent;
+            user-select: none; letter-spacing: -12px;
+            opacity: 0; transform: translateX(50px);
+            transition: opacity 0.55s ease 0.05s, transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.05s;
         }
-        #sector-transition.fire .sector-card { opacity: 1; transform: scale(1) translateY(0); }
-        #sector-transition.fadeout .sector-card {
-            opacity: 0; transform: scale(0.96) translateY(-12px);
-            transition: opacity 0.45s ease, transform 0.45s ease;
+        #sector-transition.fire    .sector-bg-num { opacity: 1; transform: translateX(0); }
+        #sector-transition.fadeout .sector-bg-num { opacity: 0; transform: translateX(-30px); transition-delay: 0s; }
+        .sector-rule-line {
+            height: 1px; width: 0; margin-bottom: clamp(8px,1.5vh,14px);
+            transition: width 0.55s cubic-bezier(0.4,0,0.2,1) 0.08s;
         }
+        #sector-transition.fire    .sector-rule-line { width: clamp(50px,12vw,180px); }
+        #sector-transition.fadeout .sector-rule-line { width: 0; transition-delay: 0s; }
         .sector-card-tag {
-            font-family: var(--mono); font-size: 0.6rem;
-            letter-spacing: 6px; text-transform: uppercase; opacity: 0.7;
+            font-family: var(--mono);
+            font-size: clamp(0.46rem,1.1vw,0.58rem); letter-spacing: clamp(4px,0.8vw,8px);
+            text-transform: uppercase; margin-bottom: clamp(4px,1vh,10px);
+            opacity: 0; transform: translateY(8px);
+            transition: opacity 0.35s ease 0.06s, transform 0.45s ease 0.06s;
         }
+        #sector-transition.fire    .sector-card-tag { opacity: 0.65; transform: translateY(0); }
+        #sector-transition.fadeout .sector-card-tag { opacity: 0; transition-delay: 0s; }
         .sector-card-label {
-            font-family: var(--display); font-size: clamp(3rem, 10vw, 8rem);
-            color: white; text-transform: uppercase;
-            font-weight: 700; line-height: 0.85; letter-spacing: 2px;
+            font-family: var(--display);
+            font-size: clamp(2.8rem,8vw,7.5rem);
+            font-weight: 700; line-height: 0.84; text-transform: uppercase;
+            letter-spacing: -1px; max-width: 65vw;
+            opacity: 0; transform: translateY(28px);
+            transition: opacity 0.55s ease 0.14s, transform 0.65s cubic-bezier(0.16,1,0.3,1) 0.14s;
         }
+        #sector-transition.fire    .sector-card-label { opacity: 1; transform: translateY(0); }
+        #sector-transition.fadeout .sector-card-label { opacity: 0; transform: translateY(-16px); transition-delay: 0s; }
         .sector-card-sub {
-            font-family: var(--mono); font-size: 0.65rem;
-            letter-spacing: 8px;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-top: 10px; margin-top: 4px; width: 100%;
+            font-family: var(--mono);
+            font-size: clamp(0.46rem,1vw,0.6rem); letter-spacing: clamp(3px,0.8vw,7px);
+            margin-top: clamp(6px,1.2vh,14px); padding-bottom: clamp(10px,3vh,28px);
+            opacity: 0; transform: translateY(6px);
+            transition: opacity 0.35s ease 0.26s, transform 0.45s ease 0.26s;
         }
-
-        /* HUD alert strip */
+        #sector-transition.fire    .sector-card-sub { opacity: 0.5; transform: translateY(0); }
+        #sector-transition.fadeout .sector-card-sub { opacity: 0; transition-delay: 0s; }
+        /* Alert strip — top left, below HUD bar */
         #sector-alert {
-            position: fixed; bottom: 44px; left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            z-index: 8002; pointer-events: none;
-            font-family: var(--mono); font-size: 0.55rem;
-            color: var(--cyan); letter-spacing: 5px;
-            background: rgba(0,10,20,0.9);
-            border: 1px solid rgba(0,242,255,0.3);
-            border-top: 2px solid var(--cyan);
-            padding: 8px 24px; opacity: 0; white-space: nowrap;
-            clip-path: polygon(12px 0%, calc(100% - 12px) 0%, 100% 100%, 0% 100%);
+            position: fixed; top: 38px; left: clamp(14px,5vw,72px);
+            z-index: 8003; pointer-events: none;
+            font-family: var(--mono); font-size: clamp(0.46rem,0.9vw,0.54rem);
+            letter-spacing: clamp(3px,0.7vw,5px);
+            border-left: 2px solid currentColor;
+            padding: 4px 0 4px 10px;
+            opacity: 0; transform: translateX(-14px); white-space: nowrap;
         }
-        #sector-alert.show {
-            animation: alert-pop 2.2s cubic-bezier(0.16,1,0.3,1) forwards;
+        #sector-alert.show { animation: alert-slide-in 2.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+        @keyframes alert-slide-in {
+            0%  { opacity:0; transform:translateX(-14px); }
+            12% { opacity:1; transform:translateX(0); }
+            72% { opacity:1; transform:translateX(0); }
+            100%{ opacity:0; transform:translateX(-6px); }
         }
-        @keyframes alert-pop {
-            0%   { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
-            70%  { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-        }
+      }
 
-        /* ============================================================
-           RESPONSIVE
-        ============================================================ */
-        @media (max-width: 768px) {
-            #side-nav { display: none; }
-            section { padding: 0 6% 0 8%; }
-            .about-panel { width: calc(100vw - 40px); }
-            #about-modal { left: 20px; right: 20px; width: auto; }
-        }
     </style>
+
 </head>
 <body>
 
@@ -901,54 +1124,45 @@
         </div>
     </div>
 
-    <!-- ======= SECTOR TRANSITION: GAS + METEOROID CANVAS ======= -->
+    <!-- ======= PIXEL CANVAS ======= -->
+    <canvas id="pixel-canvas"></canvas>
+
+    <!-- ======= SECTOR TRANSITION ======= -->
     <canvas id="transition-canvas"></canvas>
+    <div id="transition-backdrop"></div>
     <div id="sector-transition">
-        <div class="sector-card">
-            <div class="sector-card-tag" id="tc-tag">ENTERING</div>
-            <div class="sector-card-label" id="tc-label">SECTOR 02</div>
-            <div class="sector-card-sub" id="tc-sub">KEY PROJECTS</div>
-        </div>
+        <div class="sector-bg-num" id="tc-bg-num">02</div>
+        <div class="sector-rule-line" id="tc-rule"></div>
+        <div class="sector-card-tag" id="tc-tag">ENTERING</div>
+        <div class="sector-card-label" id="tc-label">KEY<br>PROJECTS</div>
+        <div class="sector-card-sub" id="tc-sub">SECTOR_02 // DATA CUBES</div>
     </div>
     <div id="sector-alert">▸ ENTERING SECTOR_02</div>
 
-    <!-- ======= LOADER — CINEMATIC ======= -->
-    <div id="loader-overlay" onclick="launchSequence()">
+    <!-- ======= INTRO LOADER ======= -->
+    <div id="loader-overlay">
         <div class="loader-corner tl"></div>
         <div class="loader-corner tr"></div>
         <div class="loader-corner bl"></div>
         <div class="loader-corner br"></div>
         <div id="loader-grid"></div>
-
-        <div id="loader-center">
-            <div class="loader-ring">
-                <svg viewBox="0 0 180 180">
-                    <circle class="ring-track" cx="90" cy="90" r="80"/>
-                    <circle class="ring-progress-2" cx="90" cy="90" r="80" transform="rotate(-90 90 90)"/>
-                    <circle class="ring-progress" cx="90" cy="90" r="80" transform="rotate(-90 90 90)"/>
-                </svg>
-                <div class="loader-inner-text">
-                    <div class="loader-pct" id="loader-pct">0%</div>
-                    <div class="loader-pct-label">BOOT</div>
-                </div>
-            </div>
-            <div class="loader-title-block">
-                <div class="loader-name">JEEVAN YADAV</div>
-                <div class="loader-sub">SPACE NARRATIVE // PORTFOLIO v2.4</div>
-            </div>
+        <div id="intro-name">JEEVAN<span class="n2">YADAV</span></div>
+        <div id="intro-roles">
+            <span class="role-chip">Blockchain Dev</span>
+            <span class="role-chip">Web3 Architect</span>
+            <span class="role-chip">Full Stack</span>
         </div>
-
         <div id="loader-log">
-            <div class="log-line info" style="animation-delay:0.6s">Initializing render engine...</div>
-            <div class="log-line ok" style="animation-delay:1.1s">THREE.js r128 loaded</div>
-            <div class="log-line ok" style="animation-delay:1.5s">Starfield generated [40000 particles]</div>
-            <div class="log-line info" style="animation-delay:2.0s">Loading GLTF assets...</div>
-            <div class="log-line ok" style="animation-delay:2.4s">Robot model mounted</div>
-            <div class="log-line warn" style="animation-delay:2.7s">Sound: awaiting user gesture</div>
-            <div class="log-line ok" style="animation-delay:3.1s">All systems nominal</div>
+            <div class="log-line info" style="animation-delay:0.8s">Initializing render engine...</div>
+            <div class="log-line ok"   style="animation-delay:1.4s">THREE.js r128 loaded</div>
+            <div class="log-line ok"   style="animation-delay:1.9s">Starfield [40,000 pts] ready</div>
+            <div class="log-line info" style="animation-delay:2.5s">Loading GLTF assets...</div>
+            <div class="log-line ok"   style="animation-delay:3.0s">Robot model mounted</div>
+            <div class="log-line warn" style="animation-delay:3.4s">Audio: awaiting gesture</div>
+            <div class="log-line ok"   style="animation-delay:3.8s">All systems nominal</div>
         </div>
-
-        <div class="loader-click-text" id="click-prompt">[ CLICK TO LAUNCH ]</div>
+        <div id="intro-bar"><div id="intro-bar-fill"></div></div>
+        <div id="intro-hint">[ click anywhere to launch ]</div>
     </div>
 
     <!-- ======= HUD LABELS ======= -->
@@ -963,75 +1177,141 @@
 
     <div id="canvas-container"></div>
 
-    <!-- ======= CONTENT SECTIONS — UPGRADED ======= -->
+    <!-- ======= IGLOO-STYLE SECTIONS ======= -->
     <div class="content-layer" id="main-content">
 
-        <!-- SECTOR 01: INTRO -->
-        <section class="hero-section" id="sec-0">
+        <!-- ═══ SECTOR 01: HERO ═══ -->
+        <section id="sec-0">
             <div class="section-inner">
-                <span class="tag" data-num="// 001">SECTOR_01</span>
-                <div style="height: 240px;"></div>
-                <div class="hero-role">BLOCKCHAIN DEV &nbsp;/&nbsp; WEB3 ARCHITECT &nbsp;/&nbsp; FULL STACK</div>
+
+                <div class="sec-eyebrow reveal-item">
+                    <span class="sec-eyebrow-line"></span>
+                    SECTOR_01
+                    <span class="sec-eyebrow-num">// 001</span>
+                </div>
+
+                <div class="hero-name-block">
+                    <div class="hero-title reveal-item delay-1">
+                        JEEVAN
+                        <span class="line-2">YADAV</span>
+                    </div>
+                </div>
+
+                <div class="hero-divider reveal-item delay-2">
+                    <div class="hero-divider-line"></div>
+                    <div class="hero-divider-dot"></div>
+                </div>
+
+                <div class="hero-role-row reveal-item delay-3">
+                    <span class="hero-role-chip">Blockchain Dev</span>
+                    <span class="hero-role-chip">Web3 Architect</span>
+                    <span class="hero-role-chip">Full Stack</span>
+                </div>
+
+                <div class="hero-scroll-hint reveal-item delay-4">SCROLL TO EXPLORE</div>
             </div>
-            <div class="section-watermark">01</div>
         </section>
 
-        <!-- SECTOR 02: PROJECTS -->
+        <!-- ═══ SECTOR 02: PROJECTS ═══ -->
         <section id="sec-1">
             <div class="section-inner">
-                <span class="tag" data-num="// 002">SECTOR_02</span>
-                <h1>KEY<br>PROJECTS<span class="ghost" aria-hidden="true">KEY<br>PROJECTS</span></h1>
-                <p class="lead">Hover over the Data Cubes to scan mission files.</p>
+                <div class="sec-eyebrow reveal-item">
+                    <span class="sec-eyebrow-line"></span>
+                    SECTOR_02
+                    <span class="sec-eyebrow-num">// 002</span>
+                </div>
+                <h2 class="sec-heading reveal-item delay-1" data-text="KEY&#10;PROJECTS">KEY<br>PROJECTS</h2>
+                <div class="sec-rule reveal-item delay-2"></div>
+                <p class="sec-lead reveal-item delay-3">Hover the Data Cubes to scan mission files.</p>
+                <div class="sec-stats-row reveal-item delay-4">
+                    <div class="sec-stat"><span class="sec-stat-val">3</span><span class="sec-stat-label">LIVE MISSIONS</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">ETH</span><span class="sec-stat-label">NETWORK</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">WEB3</span><span class="sec-stat-label">STACK</span></div>
+                </div>
             </div>
-            <div class="section-watermark">02</div>
+            <div class="sec-watermark reveal-item">02</div>
         </section>
 
-        <!-- SECTOR 03: SKILLS -->
+        <!-- ═══ SECTOR 03: SKILLS ═══ -->
         <section id="sec-2">
             <div class="section-inner">
-                <span class="tag" data-num="// 003">SECTOR_03</span>
-                <h1>SKILLS &amp;<br>STACK<span class="ghost" aria-hidden="true">SKILLS &amp;<br>STACK</span></h1>
-                <p class="lead">Scanning the Asteroid Field. Each rock holds a technology.</p>
+                <div class="sec-eyebrow reveal-item">
+                    <span class="sec-eyebrow-line"></span>
+                    SECTOR_03
+                    <span class="sec-eyebrow-num">// 003</span>
+                </div>
+                <h2 class="sec-heading reveal-item delay-1" data-text="SKILLS &amp;&#10;STACK">SKILLS &amp;<br>STACK</h2>
+                <div class="sec-rule reveal-item delay-2"></div>
+                <p class="sec-lead reveal-item delay-3">Scan the Asteroid Field — each rock holds a technology.</p>
+                <div class="sec-stats-row reveal-item delay-4">
+                    <div class="sec-stat"><span class="sec-stat-val">5+</span><span class="sec-stat-label">CORE SKILLS</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">90%</span><span class="sec-stat-label">SOLIDITY</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">95%</span><span class="sec-stat-label">C++ / DSA</span></div>
+                </div>
             </div>
-            <div class="section-watermark">03</div>
+            <div class="sec-watermark reveal-item">03</div>
         </section>
 
-        <!-- SECTOR 04: EDUCATION -->
+        <!-- ═══ SECTOR 04: EDUCATION ═══ -->
         <section id="sec-3">
             <div class="section-inner">
-                <span class="tag" data-num="// 004">SECTOR_04</span>
-                <h1>ACADEMIC<br>LOGS<span class="ghost" aria-hidden="true">ACADEMIC<br>LOGS</span></h1>
-                <p class="lead">Education & Certifications. Knowledge encoded in crystal.</p>
+                <div class="sec-eyebrow reveal-item">
+                    <span class="sec-eyebrow-line"></span>
+                    SECTOR_04
+                    <span class="sec-eyebrow-num">// 004</span>
+                </div>
+                <h2 class="sec-heading reveal-item delay-1" data-text="ACADEMIC&#10;LOGS">ACADEMIC<br>LOGS</h2>
+                <div class="sec-rule reveal-item delay-2"></div>
+                <p class="sec-lead reveal-item delay-3">Education &amp; Certifications — knowledge encoded in crystal.</p>
+                <div class="sec-stats-row reveal-item delay-4">
+                    <div class="sec-stat"><span class="sec-stat-val">2026</span><span class="sec-stat-label">GRADUATION</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">CSE</span><span class="sec-stat-label">MAJOR</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">B.E.</span><span class="sec-stat-label">DEGREE</span></div>
+                </div>
             </div>
-            <div class="section-watermark">04</div>
+            <div class="sec-watermark reveal-item">04</div>
         </section>
 
-        <!-- SECTOR 05: CONTACT -->
+        <!-- ═══ SECTOR 05: CONTACT ═══ -->
         <section id="sec-4">
             <div class="section-inner">
-                <span class="tag" data-num="// 005">SECTOR_05</span>
-                <h1>CONTACT<br>UPLINK<span class="ghost" aria-hidden="true">CONTACT<br>UPLINK</span></h1>
-                <p class="lead">Click UFOs to establish connection and open a channel.</p>
+                <div class="sec-eyebrow reveal-item">
+                    <span class="sec-eyebrow-line"></span>
+                    SECTOR_05
+                    <span class="sec-eyebrow-num">// 005</span>
+                </div>
+                <h2 class="sec-heading reveal-item delay-1" data-text="CONTACT&#10;UPLINK">CONTACT<br>UPLINK</h2>
+                <div class="sec-rule reveal-item delay-2"></div>
+                <p class="sec-lead reveal-item delay-3">Click the UFOs to open a direct channel.</p>
+                <div class="sec-stats-row reveal-item delay-4">
+                    <div class="sec-stat"><span class="sec-stat-val">3</span><span class="sec-stat-label">CHANNELS</span></div>
+                    <div class="sec-stat"><span class="sec-stat-val">24H</span><span class="sec-stat-label">RESPONSE</span></div>
+                </div>
             </div>
-            <div class="section-watermark">05</div>
+            <div class="sec-watermark reveal-item">05</div>
         </section>
 
-        <!-- SYSTEM END -->
-        <section style="justify-content: center; align-items: center; min-height: 100vh; padding: 0;" id="sec-5">
-            <div style="text-align: center; position: relative;">
-                <span class="tag" style="color: var(--orange); border-color: var(--orange); justify-content: center;" data-num="">SYSTEM_END</span>
-                <h1 style="font-size: clamp(1.5rem, 5vw, 3rem); color: var(--orange); margin-top: 16px; letter-spacing: 4px;">
+        <!-- ═══ SECTOR END: WARP ═══ -->
+        <section id="sec-5" style="grid-template-columns: 1fr;">
+            <div class="section-inner" style="align-items: center; text-align: center;">
+                <div class="sec-eyebrow reveal-item" style="justify-content:center; color:var(--orange);">
+                    <span class="sec-eyebrow-line" style="background:var(--orange);"></span>
+                    SYSTEM_END
+                    <span class="sec-eyebrow-num" style="color:rgba(255,69,0,0.4);">// END</span>
+                </div>
+                <h2 class="sec-heading reveal-item delay-1"
+                    style="color:var(--orange); -webkit-text-stroke:0;"
+                    data-text="RE-INITIALIZE&#10;SEQUENCE">
                     RE-INITIALIZE<br>SEQUENCE
-                </h1>
-                <p class="lead" style="margin: 16px auto 0; text-align:center; border:none; padding:0; color:#554433;">
-                    [ HOVER SHIP · CLICK TO WARP ]
+                </h2>
+                <div class="sec-rule reveal-item delay-2" style="background:linear-gradient(90deg,transparent,var(--orange),transparent); margin:20px auto;"></div>
+                <p class="sec-lead reveal-item delay-3" style="color:#554433; text-align:center; border:none; padding:0; margin:0 auto;">
+                    Hover the ship &nbsp;·&nbsp; Click to warp back
                 </p>
             </div>
         </section>
 
-        <div style="height: 20vh;"></div>
     </div>
-
     <!-- ======= ALL ORIGINAL JAVASCRIPT (UNCHANGED) + UI ADDITIONS ======= -->
     <script type="module">
 
@@ -1292,7 +1572,7 @@
 
         // ---- SECTOR TRANSITION: GAS CLOUDS + METEOROIDS ----
 
-        const sectorBoundaries = [
+        const sectorBoundaries = window._sectorBoundaries = [
             { pct: 0.15, label: 'KEY\nPROJECTS',   sub: 'SECTOR_02 // DATA CUBES',     tag: 'ENTERING', palette: 'cyan'   },
             { pct: 0.35, label: 'SKILLS\n& STACK',  sub: 'SECTOR_03 // ASTEROID FIELD', tag: 'ENTERING', palette: 'green'  },
             { pct: 0.55, label: 'ACADEMIC\nLOGS',   sub: 'SECTOR_04 // CRYSTAL LOGS',   tag: 'ENTERING', palette: 'gold'   },
@@ -1519,60 +1799,73 @@
 
         // ---------- MAIN FIRE FUNCTION ----------
         let transitionCooldown = false;
+        const backdrop = document.getElementById('transition-backdrop');
+        const SECTOR_NUMS = ['02','03','04','05','END'];
 
         function fireSectorTransition(boundary) {
             if (transitionCooldown) return;
             transitionCooldown = true;
 
-            const pal     = PALETTES[boundary.palette] || PALETTES.cyan;
-            const colors  = CARD_COLORS[boundary.palette] || CARD_COLORS.cyan;
-            const txEl    = document.getElementById('sector-transition');
-            const alertEl = document.getElementById('sector-alert');
-            const tcLabel = document.getElementById('tc-label');
-            const tcSub   = document.getElementById('tc-sub');
-            const tcTag   = document.getElementById('tc-tag');
+            const pal    = PALETTES[boundary.palette] || PALETTES.cyan;
+            const colors = CARD_COLORS[boundary.palette] || CARD_COLORS.cyan;
+            const glow   = pal.glow.join(',');
+            const txEl   = document.getElementById('sector-transition');
+            const alEl   = document.getElementById('sector-alert');
+            const tcLbl  = document.getElementById('tc-label');
+            const tcSub  = document.getElementById('tc-sub');
+            const tcTag  = document.getElementById('tc-tag');
+            const tcNum  = document.getElementById('tc-bg-num');
+            const tcRule = document.getElementById('tc-rule');
 
-            // Style sector card
-            tcLabel.innerHTML    = boundary.label.replace('\n', '<br>');
-            tcLabel.style.color  = colors.label;
-            tcLabel.style.textShadow = `0 0 60px rgba(${pal.glow.join(',')},0.5), 0 0 120px rgba(${pal.glow.join(',')},0.2)`;
-            tcSub.textContent    = boundary.sub;
-            tcSub.style.color    = colors.sub;
-            tcTag.textContent    = boundary.tag;
-            tcTag.style.color    = colors.tag;
-            alertEl.textContent  = '▸ ' + boundary.sub;
-            alertEl.style.borderTopColor = colors.alertBorder;
-            alertEl.style.color          = colors.alertText;
+            const bIdx   = sectorBoundaries.indexOf(boundary);
+            tcNum.textContent  = SECTOR_NUMS[bIdx] || '0' + (bIdx + 2);
+            tcNum.style.webkitTextStroke = `1px rgba(${glow},0.11)`;
+            tcRule.style.background = `linear-gradient(90deg,rgba(${glow},0.8),transparent)`;
+            tcLbl.innerHTML   = boundary.label.replace('\n','<br>');
+            tcLbl.style.color = colors.label;
+            tcLbl.style.textShadow = `0 0 60px rgba(${glow},0.4),0 0 100px rgba(${glow},0.15)`;
+            tcSub.textContent = boundary.sub;
+            tcSub.style.color = colors.sub;
+            tcTag.textContent = boundary.tag;
+            tcTag.style.color = colors.tag;
+            alEl.textContent  = '▸ ' + boundary.sub;
+            alEl.style.color  = colors.sub;
+            alEl.style.borderLeftColor = colors.sub;
 
-            // Start canvas
+            // Show backdrop
+            backdrop.classList.remove('hide');
+            requestAnimationFrame(() => backdrop.classList.add('show'));
+
+            // Start gas+meteoroid canvas
             if (txRafId) cancelAnimationFrame(txRafId);
             txGas = []; txRocks = [];
             txCanvas.classList.add('active');
-            txEndTime = performance.now() + 2200;
+            txEndTime = performance.now() + 2400;
             txSpawnBurst(pal);
             txRunning = true;
             txRafId = requestAnimationFrame(txTick);
 
-            // Show name card
-            txEl.classList.remove('fire', 'fadeout');
+            // Reveal card after 130ms
+            txEl.classList.remove('fire','fadeout');
             requestAnimationFrame(() => requestAnimationFrame(() => {
-                txEl.classList.add('fire');
-                alertEl.classList.remove('show');
-                void alertEl.offsetWidth;
-                alertEl.classList.add('show');
+                setTimeout(() => txEl.classList.add('fire'), 130);
+                alEl.classList.remove('show');
+                void alEl.offsetWidth;
+                alEl.classList.add('show');
             }));
 
-            // Fade out card after 1.4s
-            setTimeout(() => {
-                txEl.classList.add('fadeout');
-            }, 1400);
+            // Fade card at 1.3s
+            setTimeout(() => txEl.classList.add('fadeout'), 1300);
 
-            // Full cleanup at 2.4s
+            // Full cleanup at 2.8s
             setTimeout(() => {
-                txEl.classList.remove('fire', 'fadeout');
-                alertEl.classList.remove('show');
+                txEl.classList.remove('fire','fadeout');
+                alEl.classList.remove('show');
+                backdrop.classList.remove('show');
+                backdrop.classList.add('hide');
+                setTimeout(() => backdrop.classList.remove('hide'), 900);
                 transitionCooldown = false;
-            }, 2500);
+            }, 2800);
         }
 
         // ---- END SECTOR TRANSITION ENGINE ----
@@ -1599,38 +1892,35 @@
         window.addEventListener('scroll', () => {
             if(isLaunched) {
                 targetScroll = window.scrollY;
-                // Update scroll progress bar
                 const maxScroll = document.body.scrollHeight - window.innerHeight;
-                const pct = maxScroll > 0 ? (window.scrollY / maxScroll * 100) : 0;
+                if (maxScroll <= 0) return;
+
+                const pct = (window.scrollY / maxScroll) * 100;
+                const normPct = pct / 100;
+
+                // Progress bar + depth
                 document.getElementById('scroll-fill').style.height = pct + '%';
                 document.getElementById('scroll-pct-display').textContent = Math.round(pct) + '%';
-                // Update top bar depth
                 document.getElementById('tb-depth').textContent = pct.toFixed(2);
-                // Update sector indicator
-                const sectorIdx = Math.min(Math.floor(pct / 20), sectorNames.length - 1);
+
+                // 6 sectors = 6 equal scroll bands
+                const totalSectors = 6;
+                const sectorIdx = Math.min(Math.floor(normPct * totalSectors), totalSectors - 1);
                 document.getElementById('sector-name-display').textContent = '▸ ' + sectorNames[sectorIdx];
-                document.getElementById('tb-sector-val').textContent = '0' + (sectorIdx + 1);
-                // Update side nav
+                document.getElementById('tb-sector-val').textContent = String(sectorIdx + 1).padStart(2, '0');
                 document.querySelectorAll('.nav-item').forEach((n, i) => {
                     n.classList.toggle('active', i === sectorIdx);
                 });
 
-                // ---- SECTOR BOUNDARY CROSSING DETECTION ----
-                const normPct = pct / 100;
+                // ── BOUNDARY CROSSING ──
                 const newSector = getSectorIndex(normPct);
-                if (newSector !== lastSectorPct && lastSectorPct !== -1) {
-                    // Find which boundary we just crossed
-                    const direction = newSector > lastSectorPct ? 1 : -1;
-                    if (direction === 1) {
-                        // Moving forward — find the boundary we just passed
-                        const crossed = sectorBoundaries.find(b =>
-                            b.pct > (lastSectorPct * 0.2) && b.pct <= normPct + 0.05
-                        ) || sectorBoundaries[Math.max(0, newSector - 1)];
-                        if (crossed) fireSectorTransition(crossed);
-                    }
+                if (newSector !== lastSectorPct && lastSectorPct !== -1 && newSector > lastSectorPct) {
+                    const crossed = sectorBoundaries.find(b =>
+                        normPct >= b.pct - 0.03 && normPct <= b.pct + 0.15
+                    ) || sectorBoundaries[Math.max(0, newSector - 1)];
+                    if (crossed) fireSectorTransition(crossed);
                 }
                 lastSectorPct = newSector;
-                // ---- END CROSSING DETECTION ----
             }
         });
 
@@ -1687,41 +1977,150 @@
         }
 
         // --- LOADER ANIMATION ---
-        let loaderPct = 0;
-        const loaderPctEl = document.getElementById('loader-pct');
-        const loaderInterval = setInterval(() => {
-            loaderPct = Math.min(loaderPct + Math.random() * 4 + 1, 100);
-            loaderPctEl.textContent = Math.floor(loaderPct) + '%';
-            if(loaderPct >= 100) {
-                clearInterval(loaderInterval);
-                setTimeout(() => {
-                    document.getElementById('click-prompt').classList.add('show');
-                }, 200);
-            }
-        }, 60);
+        // ════════════════════════════════════════════════════════
+        //  PIXEL DISSOLVE INTRO  (igloo.inc style)
+        // ════════════════════════════════════════════════════════
 
-        // --- LAUNCH & LOOP ---
+        const pxCanvas = document.getElementById('pixel-canvas');
+        const pxCtx    = pxCanvas.getContext('2d');
+        let pxW = pxCanvas.width  = window.innerWidth;
+        let pxH = pxCanvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            pxW = pxCanvas.width  = window.innerWidth;
+            pxH = pxCanvas.height = window.innerHeight;
+        });
+
+        // Pixel grid — PX size keeps total count manageable on all devices
+        const PX   = Math.max(5, Math.round(Math.min(pxW, pxH) / 100));
+        const COLS = Math.ceil(pxW / PX);
+        const ROWS = Math.ceil(pxH / PX);
+        const N    = COLS * ROWS;
+
+        // Build pixel data arrays
+        const px_x    = new Float32Array(N);
+        const px_y    = new Float32Array(N);
+        const px_rev  = new Float32Array(N);   // reveal time (s)
+        const px_diss = new Float32Array(N);   // dissolve time (s, from dissolve start)
+        const px_col  = new Array(N);
+
+        const BASE_COLS = ['#0a141e','#0d1c2a','#0e1825','#162336','#06101a'];
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                const i  = r * COLS + c;
+                const cx = c / COLS - 0.5;
+                const cy = r / ROWS - 0.5;
+                const d  = Math.sqrt(cx*cx + cy*cy);
+                px_x[i]    = c * PX;
+                px_y[i]    = r * PX;
+                px_rev[i]  = 0.05 + Math.random() * 1.8;
+                px_diss[i] = 0.3 + d * 2.2 + Math.random() * 0.5; // edges dissolve first
+                const rnd  = Math.random();
+                px_col[i]  = rnd < 0.015 ? '#00f2ff'
+                           : rnd < 0.005 ? 'rgba(255,255,255,0.9)'
+                           : BASE_COLS[Math.floor(Math.random() * BASE_COLS.length)];
+            }
+        }
+
+        let pxPhase    = 'build';
+        const pxT0     = performance.now();
+        let pxDissT0   = 0;
+        let pxRaf      = null;
+        let launched   = false;
+
+        const barFill  = document.getElementById('intro-bar-fill');
+        const nameEl   = document.getElementById('intro-name');
+        const rolesEl  = document.getElementById('intro-roles');
+        const hintEl   = document.getElementById('intro-hint');
+
+        function pxDraw(t, dissolving) {
+            pxCtx.clearRect(0, 0, pxW, pxH);
+            for (let i = 0; i < N; i++) {
+                let a;
+                if (!dissolving) {
+                    const dt = t - px_rev[i];
+                    if (dt <= 0) continue;
+                    a = Math.min(1, dt * 4);
+                } else {
+                    const dt = t - px_diss[i];
+                    if (dt >= 0.5) continue;
+                    a = dt < 0 ? 1 : Math.max(0, 1 - dt * 2.2);
+                }
+                if (a < 0.03) continue;
+                pxCtx.globalAlpha = a * (0.78 + Math.random() * 0.22); // flicker
+                pxCtx.fillStyle = px_col[i];
+                pxCtx.fillRect(px_x[i], px_y[i], PX - 1, PX - 1);
+            }
+            pxCtx.globalAlpha = 1;
+        }
+
+        function pxTick(now) {
+            if (pxPhase === 'build') {
+                const t = (now - pxT0) / 1000;
+                pxDraw(t, false);
+                barFill.style.width = Math.min(100, (t / 4.5) * 100) + '%';
+                if (t > 1.2) nameEl.classList.add('show');
+                if (t > 2.2) rolesEl.classList.add('show');
+                if (t > 3.5) hintEl.classList.add('show');
+                if (t > 7 && !launched) triggerLaunch(); // auto-launch safety
+                pxRaf = requestAnimationFrame(pxTick);
+            } else if (pxPhase === 'dissolve') {
+                const t = (now - pxDissT0) / 1000;
+                pxDraw(t, true);
+                if (t > 2.4) {
+                    pxCtx.clearRect(0, 0, pxW, pxH);
+                    pxCanvas.style.display = 'none';
+                    pxPhase = 'done';
+                    return;
+                }
+                pxRaf = requestAnimationFrame(pxTick);
+            }
+        }
+
+        pxRaf = requestAnimationFrame(pxTick);
+
+        // ── CLICK/TOUCH to launch — NO gate, works immediately ──
+        document.getElementById('loader-overlay').addEventListener('click',      triggerLaunch);
+        document.getElementById('loader-overlay').addEventListener('touchstart', triggerLaunch, { passive: true });
+
+        function triggerLaunch() {
+            if (launched) return;
+            launched = true;
+            pxDissT0 = performance.now();
+            pxPhase  = 'dissolve';
+            nameEl.style.transition  = 'opacity 0.5s ease';
+            nameEl.style.opacity     = '0';
+            rolesEl.style.transition = 'opacity 0.35s ease';
+            rolesEl.style.opacity    = '0';
+            hintEl.style.opacity     = '0';
+            const ov = document.getElementById('loader-overlay');
+            ov.style.pointerEvents = 'none';
+            setTimeout(() => {
+                ov.style.transition = 'opacity 0.9s ease';
+                ov.style.opacity    = '0';
+                setTimeout(() => ov.remove(), 1100);
+            }, 300);
+            launchSequence();
+        }
+
+        // ════════════════════════════════════════════════════════
+        //  LAUNCH SEQUENCE
+        // ════════════════════════════════════════════════════════
+
         window.launchSequence = () => {
             if(isLaunched) return;
             isLaunched = true;
             initAudio();
 
-            const overlay = document.getElementById('loader-overlay');
-            overlay.style.transition = 'opacity 1s ease';
-            overlay.style.opacity = 0;
-            setTimeout(()=> overlay.remove(), 1500);
-
-            // Show UI chrome
             setTimeout(() => {
                 document.getElementById('top-bar').classList.add('visible');
                 document.getElementById('side-nav').classList.add('visible');
                 document.getElementById('scroll-progress').classList.add('visible');
                 document.getElementById('bottom-hud').classList.add('visible');
-            }, 800);
+            }, 900);
 
             gsap.to(playerShip.rotation, { x: -Math.PI / 4, duration: 1, ease: "power2.inOut" });
             gsap.to(playerShip.position, { z: -300, y: 30, duration: 3, ease: "power3.in" });
-            
+
             gsap.to(warpMat, { opacity: 1, duration: 1, onComplete: () => {
                 gsap.to(warpMat, { opacity: 0, delay: 1, duration: 1 });
             }});
@@ -1733,7 +2132,7 @@
                 playerShip.visible = false;
                 document.getElementById('main-content').classList.add('visible');
                 if(robot) robot.visible = true;
-                lastSectorPct = 0; // start tracking from sector 0
+                lastSectorPct = 0;
                 gsap.to(starField.scale, { z: 1, duration: 1 });
             }});
         };
@@ -1958,13 +2357,36 @@
             const el = document.getElementById(id); if(el) { el.style.left = `${x}px`; el.style.top = `${y}px`; }
         }
 
-        setTimeout(launchSequence, 6000);
         animate();
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        // ── IGLOO-STYLE SECTION REVEAL (IntersectionObserver) ──
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                } else {
+                    // Remove so it re-animates when re-entered
+                    entry.target.classList.remove('in-view');
+                }
+            });
+        }, {
+            threshold: 0.25,   // Trigger when 25% of section is visible
+            rootMargin: '0px'
+        });
+
+        document.querySelectorAll('section').forEach(sec => sectionObserver.observe(sec));
+
+        // Auto-trigger hero on load
+        const heroSection = document.getElementById('sec-0');
+        if (heroSection) {
+            setTimeout(() => heroSection.classList.add('in-view'), 400);
+        }
+        // ── END SECTION REVEAL ──
     </script>
 </body>
 </html>
