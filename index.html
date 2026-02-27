@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeevan Yadav | Space Narrative</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@100;300;400;700;900&family=Share+Tech+Mono&display=swap">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@100;300;400;700;900&family=Share+Tech+Mono&display=swap');
-
         /* ============================================================
            CSS VARIABLES
         ============================================================ */
@@ -39,7 +41,7 @@
         body, html {
             background: var(--bg); color: white;
             font-family: var(--body);
-            overflow-x: hidden; cursor: none;
+            overflow-x: hidden;
         }
 
         /* GRAIN OVERLAY */
@@ -466,20 +468,16 @@
             align-items: center; justify-content: center;
             gap: clamp(10px,2vh,20px);
         }
-        #intro-name {
-            font-family: var(--display);
-            font-size: clamp(3rem, 9vw, 8rem);
-            font-weight: 700; letter-spacing: clamp(6px,2vw,22px);
-            text-transform: uppercase; text-align: center; line-height: 0.88;
-            color: #fff; position: relative; z-index: 10003;
-            opacity: 0; transform: translateY(14px);
-            transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.16,1,0.3,1);
+        /* ── ROCK FRAGMENT NAME CANVAS ── */
+        #name-canvas {
+            position: relative; z-index: 10003;
+            display: block;
+            width: min(94vw, 780px);
+            height: clamp(110px, 20vh, 200px);
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
-        #intro-name.show { opacity: 1; transform: translateY(0); }
-        #intro-name .n2  {
-            display: block; color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.45);
-        }
+        #name-canvas.show { opacity: 1; }
         #intro-roles {
             display: flex; flex-wrap: wrap; justify-content: center;
             gap: 8px; z-index: 10003; position: relative;
@@ -630,26 +628,7 @@
             letter-spacing: 2px; margin-left: auto;
         }
 
-        /* -- Main heading -- */
-        .sec-heading {
-            font-family: var(--display);
-            font-size: clamp(2.8rem, 7.5vw, 7rem);
-            font-weight: 700; margin: 0;
-            line-height: 0.86; text-transform: uppercase;
-            position: relative; letter-spacing: -0.5px;
-        }
-        /* Ghost echo */
-        .sec-heading::after {
-            content: attr(data-text);
-            position: absolute; inset: 0;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(0,242,255,0.06);
-            transform: translate(5px, 5px);
-            pointer-events: none; user-select: none;
-            white-space: pre;
-        }
-
-        /* -- Horizontal rule -- */
+        /* -- Section rule line -- */
         .sec-rule {
             height: 1px; width: 0;
             background: linear-gradient(90deg, var(--cyan), transparent);
@@ -703,8 +682,7 @@
         }
         .hero-title .line-2 {
             display: block;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.85);
         }
         .hero-divider {
             display: flex; align-items: center; gap: 16px;
@@ -811,7 +789,6 @@
 
         /* ── WIDE DESKTOP (1440px+) ── */
         @media (min-width: 1440px) {
-            .sec-heading { font-size: clamp(7rem, 8vw, 10rem); }
             .hero-title   { font-size: clamp(8rem, 10vw, 12rem); }
         }
 
@@ -825,7 +802,6 @@
             :root { --sec-pad-x: clamp(28px, 6vw, 60px); }
             section { grid-template-columns: 1fr 80px; }
             .hero-title { font-size: clamp(3rem, 9vw, 6rem); }
-            .sec-heading { font-size: clamp(2.6rem, 7vw, 5rem); }
             .sec-watermark { font-size: clamp(4rem, 12vw, 8rem); }
             #top-bar { display: none; }
             #bottom-hud { padding: 0 12px; }
@@ -845,7 +821,6 @@
 
             .hero-title { font-size: clamp(2.4rem, 11vw, 4.5rem); }
             .hero-title .line-2 { -webkit-text-stroke: 1px rgba(255,255,255,0.35); }
-            .sec-heading { font-size: clamp(2.2rem, 10vw, 4rem); line-height: 0.88; }
             .sec-lead { font-size: 0.85rem; }
 
             #top-bar    { display: none; }
@@ -886,7 +861,6 @@
         /* ── VERY SMALL PHONES (< 375px) ── */
         @media (max-width: 374px) {
             .hero-title { font-size: 2.2rem; }
-            .sec-heading { font-size: 2rem; }
             .sec-eyebrow { font-size: 0.5rem; letter-spacing: 3px; }
         }
 
@@ -894,13 +868,11 @@
         @media (max-width: 768px) and (orientation: landscape) {
             section { height: 100dvh; min-height: 360px; }
             .hero-title { font-size: clamp(2rem, 9vh, 5rem); }
-            .sec-heading { font-size: clamp(1.8rem, 8vh, 4rem); }
             .hero-scroll-hint { display: none; }
         }
 
         /* ── WINDOWS HIGH-DPI (125%, 150%) ── */
         @media (-webkit-min-device-pixel-ratio: 1.25) and (min-width: 1024px) {
-            .sec-heading { letter-spacing: -0.5px; }
         }
 
         /* Disable pointer: never show cursor ring */
@@ -1002,16 +974,14 @@
 <body>
 
     <!-- ======= CUSTOM CURSOR ======= -->
-    <div id="cursor-hud">
-        <div class="crosshair-outer">
-            <div class="c-tick tl"></div>
-            <div class="c-tick tr"></div>
-            <div class="c-tick bl"></div>
-            <div class="c-tick br"></div>
-            <div class="crosshair-inner"></div>
-        </div>
-        <div class="cursor-data" id="cursor-xy">X: 000 | Y: 000</div>
-    </div>
+    <div id="cursor-ball"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- ═══ FILM GRAIN ═══ -->
+    <div id="grain-overlay"></div>
+
+    <!-- ═══ PAGE PROGRESS BAR ═══ -->
+    <div id="page-progress"></div>
 
     <!-- ======= TOP STATUS BAR ======= -->
     <div id="top-bar">
@@ -1146,7 +1116,10 @@
         <div class="loader-corner bl"></div>
         <div class="loader-corner br"></div>
         <div id="loader-grid"></div>
-        <div id="intro-name">JEEVAN<span class="n2">YADAV</span></div>
+
+        <!-- Rock-fragment name drawn on canvas -->
+        <canvas id="name-canvas"></canvas>
+
         <div id="intro-roles">
             <span class="role-chip">Blockchain Dev</span>
             <span class="role-chip">Web3 Architect</span>
@@ -1190,27 +1163,21 @@
                     <span class="sec-eyebrow-num">// 001</span>
                 </div>
 
-                <div class="hero-name-block">
-                    <div class="hero-title reveal-item delay-1">
-                        JEEVAN
-                        <span class="line-2">YADAV</span>
-                    </div>
-                </div>
-
-                <div class="hero-divider reveal-item delay-2">
+                <div class="hero-divider reveal-item delay-1">
                     <div class="hero-divider-line"></div>
                     <div class="hero-divider-dot"></div>
                 </div>
 
-                <div class="hero-role-row reveal-item delay-3">
+                <div class="hero-role-row reveal-item delay-2">
                     <span class="hero-role-chip">Blockchain Dev</span>
                     <span class="hero-role-chip">Web3 Architect</span>
                     <span class="hero-role-chip">Full Stack</span>
                 </div>
 
-                <div class="hero-scroll-hint reveal-item delay-4">SCROLL TO EXPLORE</div>
+                <div class="hero-scroll-hint reveal-item delay-3">SCROLL TO EXPLORE</div>
             </div>
         </section>
+
 
         <!-- ═══ SECTOR 02: PROJECTS ═══ -->
         <section id="sec-1">
@@ -1220,19 +1187,18 @@
                     SECTOR_02
                     <span class="sec-eyebrow-num">// 002</span>
                 </div>
-                <h2 class="sec-heading reveal-item delay-1" data-text="KEY&#10;PROJECTS">KEY<br>PROJECTS</h2>
-                <div class="sec-rule reveal-item delay-2"></div>
-                <p class="sec-lead reveal-item delay-3">Hover the Data Cubes to scan mission files.</p>
-                <div class="sec-stats-row reveal-item delay-4">
+                <div class="sec-rule reveal-item delay-1"></div>
+                <p class="sec-lead reveal-item delay-2">Hover the Data Cubes to scan mission files.</p>
+                <div class="sec-stats-row reveal-item delay-3">
                     <div class="sec-stat"><span class="sec-stat-val">3</span><span class="sec-stat-label">LIVE MISSIONS</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">ETH</span><span class="sec-stat-label">NETWORK</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">WEB3</span><span class="sec-stat-label">STACK</span></div>
                 </div>
             </div>
-            <div class="sec-watermark reveal-item">02</div>
         </section>
 
-        <!-- ═══ SECTOR 03: SKILLS ═══ -->
+
+                <!-- ═══ SECTOR 03: SKILLS ═══ -->
         <section id="sec-2">
             <div class="section-inner">
                 <div class="sec-eyebrow reveal-item">
@@ -1240,16 +1206,14 @@
                     SECTOR_03
                     <span class="sec-eyebrow-num">// 003</span>
                 </div>
-                <h2 class="sec-heading reveal-item delay-1" data-text="SKILLS &amp;&#10;STACK">SKILLS &amp;<br>STACK</h2>
-                <div class="sec-rule reveal-item delay-2"></div>
-                <p class="sec-lead reveal-item delay-3">Scan the Asteroid Field — each rock holds a technology.</p>
-                <div class="sec-stats-row reveal-item delay-4">
+                <div class="sec-rule reveal-item delay-1"></div>
+                <p class="sec-lead reveal-item delay-2">Scan the Asteroid Field — each rock holds a technology.</p>
+                <div class="sec-stats-row reveal-item delay-3">
                     <div class="sec-stat"><span class="sec-stat-val">5+</span><span class="sec-stat-label">CORE SKILLS</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">90%</span><span class="sec-stat-label">SOLIDITY</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">95%</span><span class="sec-stat-label">C++ / DSA</span></div>
                 </div>
             </div>
-            <div class="sec-watermark reveal-item">03</div>
         </section>
 
         <!-- ═══ SECTOR 04: EDUCATION ═══ -->
@@ -1260,16 +1224,14 @@
                     SECTOR_04
                     <span class="sec-eyebrow-num">// 004</span>
                 </div>
-                <h2 class="sec-heading reveal-item delay-1" data-text="ACADEMIC&#10;LOGS">ACADEMIC<br>LOGS</h2>
-                <div class="sec-rule reveal-item delay-2"></div>
-                <p class="sec-lead reveal-item delay-3">Education &amp; Certifications — knowledge encoded in crystal.</p>
-                <div class="sec-stats-row reveal-item delay-4">
+                <div class="sec-rule reveal-item delay-1"></div>
+                <p class="sec-lead reveal-item delay-2">Education &amp; Certifications — knowledge encoded in crystal.</p>
+                <div class="sec-stats-row reveal-item delay-3">
                     <div class="sec-stat"><span class="sec-stat-val">2026</span><span class="sec-stat-label">GRADUATION</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">CSE</span><span class="sec-stat-label">MAJOR</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">B.E.</span><span class="sec-stat-label">DEGREE</span></div>
                 </div>
             </div>
-            <div class="sec-watermark reveal-item">04</div>
         </section>
 
         <!-- ═══ SECTOR 05: CONTACT ═══ -->
@@ -1280,15 +1242,13 @@
                     SECTOR_05
                     <span class="sec-eyebrow-num">// 005</span>
                 </div>
-                <h2 class="sec-heading reveal-item delay-1" data-text="CONTACT&#10;UPLINK">CONTACT<br>UPLINK</h2>
-                <div class="sec-rule reveal-item delay-2"></div>
-                <p class="sec-lead reveal-item delay-3">Click the UFOs to open a direct channel.</p>
-                <div class="sec-stats-row reveal-item delay-4">
+                <div class="sec-rule reveal-item delay-1"></div>
+                <p class="sec-lead reveal-item delay-2">Click the UFOs to open a direct channel.</p>
+                <div class="sec-stats-row reveal-item delay-3">
                     <div class="sec-stat"><span class="sec-stat-val">3</span><span class="sec-stat-label">CHANNELS</span></div>
                     <div class="sec-stat"><span class="sec-stat-val">24H</span><span class="sec-stat-label">RESPONSE</span></div>
                 </div>
             </div>
-            <div class="sec-watermark reveal-item">05</div>
         </section>
 
         <!-- ═══ SECTOR END: WARP ═══ -->
@@ -1299,8 +1259,8 @@
                     SYSTEM_END
                     <span class="sec-eyebrow-num" style="color:rgba(255,69,0,0.4);">// END</span>
                 </div>
-                <h2 class="sec-heading reveal-item delay-1"
-                    style="color:var(--orange); -webkit-text-stroke:0;"
+                <h2 class="reveal-item delay-1"
+                    style="font-family:var(--display); font-size:clamp(2rem,6vw,5rem); font-weight:700; line-height:0.86; text-transform:uppercase; letter-spacing:-0.5px; color:var(--orange); margin:0;"
                     data-text="RE-INITIALIZE&#10;SEQUENCE">
                     RE-INITIALIZE<br>SEQUENCE
                 </h2>
@@ -1884,9 +1844,7 @@
         function handleInput(x, y) {
             mouse.x = (x / window.innerWidth) * 2 - 1;
             mouse.y = -(y / window.innerHeight) * 2 + 1;
-            const hud = document.getElementById('cursor-hud');
-            gsap.to(hud, {left: x, top: y, duration: 0.08});
-            document.getElementById('cursor-xy').innerText = `X: ${String(x).padStart(4,'0')} | Y: ${String(y).padStart(4,'0')}`;
+            // cursor-hud replaced by magnetic cursor
         }
         window.addEventListener('mousemove', (e) => handleInput(e.clientX, e.clientY));
         window.addEventListener('scroll', () => {
@@ -2028,7 +1986,7 @@
         let launched   = false;
 
         const barFill  = document.getElementById('intro-bar-fill');
-        const nameEl   = document.getElementById('intro-name');
+        const nameEl   = document.getElementById('name-canvas');
         const rolesEl  = document.getElementById('intro-roles');
         const hintEl   = document.getElementById('intro-hint');
 
@@ -2058,7 +2016,7 @@
                 const t = (now - pxT0) / 1000;
                 pxDraw(t, false);
                 barFill.style.width = Math.min(100, (t / 4.5) * 100) + '%';
-                if (t > 1.2) nameEl.classList.add('show');
+                if (t > 1.2 && !nameEl.classList.contains('show')) { nameEl.classList.add('show'); drawRockName(); }
                 if (t > 2.2) rolesEl.classList.add('show');
                 if (t > 3.5) hintEl.classList.add('show');
                 if (t > 7 && !launched) triggerLaunch(); // auto-launch safety
@@ -2087,7 +2045,7 @@
             launched = true;
             pxDissT0 = performance.now();
             pxPhase  = 'dissolve';
-            nameEl.style.transition  = 'opacity 0.5s ease';
+            nameEl.style.transition  = 'opacity 0.45s ease';
             nameEl.style.opacity     = '0';
             rolesEl.style.transition = 'opacity 0.35s ease';
             rolesEl.style.opacity    = '0';
@@ -2335,8 +2293,9 @@
                 isLoopReady = false; playerShip.visible = false; document.getElementById('lbl-head').style.opacity=0;
             }
 
-            const hud = document.getElementById('cursor-hud');
-            if(locked) hud.classList.add('locked'); else hud.classList.remove('locked');
+            // cursor ring color on lock
+            if(locked) { cursorRing.style.borderColor='var(--orange)'; cursorBall.style.background='var(--orange)'; }
+            else { cursorRing.style.borderColor=''; cursorBall.style.background=''; }
         }
 
         function resetUFO(grp) { gsap.to(grp.children[1].material, {opacity:0.1}); }
@@ -2387,6 +2346,427 @@
             setTimeout(() => heroSection.classList.add('in-view'), 400);
         }
         // ── END SECTION REVEAL ──
+
+
+        // ════════════════════════════════════════════════════════
+        //  ROCK-FRAGMENT NAME  — JEEVAN YADAV assembled from rocks
+        // ════════════════════════════════════════════════════════
+
+        // ════════════════════════════════════════════════════════
+        //  ROCK-FRAGMENT NAME  — assembled from asteroid shards
+        // ════════════════════════════════════════════════════════
+
+        async function drawRockName() {
+            const nc = document.getElementById('name-canvas');
+            if (!nc) return;
+
+            // Wait for Syncopate to be ready — crucial on first load
+            await document.fonts.ready;
+
+            const ctx = nc.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+
+            // Force explicit pixel dimensions (don't rely on offsetWidth while hidden)
+            const W = Math.max(nc.offsetWidth, window.innerWidth * 0.88, 400);
+            const H = Math.max(nc.offsetHeight, window.innerHeight * 0.20, 130);
+            nc.style.width  = W + 'px';
+            nc.style.height = H + 'px';
+            nc.width  = Math.round(W * dpr);
+            nc.height = Math.round(H * dpr);
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, W, H);
+
+            const rng   = (a, b) => a + Math.random() * (b - a);
+            const LINES = ['JEEVAN', 'YADAV'];
+            const FS    = Math.min(H * 0.38, W / 5.2, 88);
+            const LINE_GAP = FS * 1.22;
+            const startY = H / 2 - LINE_GAP * 0.5;
+
+            for (let li = 0; li < LINES.length; li++) {
+                const word  = LINES[li];
+                const yBase = startY + li * LINE_GAP + FS * 0.9;
+
+                // ── Step 1: sample pixels inside the glyph ──────────────
+                const off = document.createElement('canvas');
+                const OW  = Math.round(W * dpr);
+                const OH  = Math.round(H * dpr);
+                off.width  = OW;
+                off.height = OH;
+                const ox = off.getContext('2d');
+
+                const fontStr = `900 ${FS * dpr}px "Syncopate", "Arial Black", sans-serif`;
+                ox.font          = fontStr;
+                ox.textAlign     = 'center';
+                ox.textBaseline  = 'alphabetic';
+                ox.fillStyle     = '#fff';
+                ox.fillText(word, (W / 2) * dpr, yBase * dpr);
+
+                const imgData = ox.getImageData(0, 0, OW, OH).data;
+                const hits    = [];
+                const STEP    = Math.max(3, Math.round(dpr * 2));
+                for (let py = 0; py < OH; py += STEP) {
+                    for (let px = 0; px < OW; px += STEP) {
+                        if (imgData[(py * OW + px) * 4 + 3] > 100) {
+                            hits.push([px / dpr, py / dpr]);
+                        }
+                    }
+                }
+
+                if (hits.length === 0) {
+                    // Font not rendered — fallback: draw plain text
+                    ctx.font = fontStr;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'alphabetic';
+                    ctx.fillStyle = li === 0 ? 'rgba(180,220,235,0.9)' : 'rgba(140,200,230,0.8)';
+                    ctx.fillText(word, W / 2, yBase);
+                    continue;
+                }
+
+                // ── Step 2: scatter rock shards inside glyph ────────────
+                const SHARDS = Math.min(Math.floor(hits.length * 0.18), 320);
+                for (let s = 0; s < SHARDS; s++) {
+                    const [cx, cy] = hits[Math.floor(Math.random() * hits.length)];
+                    const r        = rng(FS * 0.032, FS * 0.11);
+                    const verts    = Math.floor(rng(5, 10));
+                    const rot      = rng(0, Math.PI * 2);
+
+                    ctx.beginPath();
+                    for (let v = 0; v <= verts; v++) {
+                        const ang  = (v / verts) * Math.PI * 2 + rot;
+                        const d    = r * rng(0.5, 1.2);
+                        v === 0
+                            ? ctx.moveTo(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d)
+                            : ctx.lineTo(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d);
+                    }
+                    ctx.closePath();
+
+                    // Stone colour: cool blue-grey for both lines
+                    const hue  = li === 0 ? rng(190, 230) : rng(200, 245);
+                    const sat  = rng(10, 38);
+                    const lig  = rng(28, 68);
+                    ctx.fillStyle = `hsl(${hue},${sat}%,${lig}%)`;
+                    ctx.fill();
+
+                    // Facet edge
+                    ctx.strokeStyle = `rgba(${li===0?'140,215,230':'110,190,255'},${rng(0.18,0.55)})`;
+                    ctx.lineWidth   = rng(0.25, 0.85);
+                    ctx.stroke();
+
+                    // Cyan glow shard (~8%)
+                    if (Math.random() < 0.08) {
+                        ctx.save();
+                        ctx.fillStyle   = `rgba(0,242,255,${rng(0.12, 0.38)})`;
+                        ctx.shadowColor = '#00f2ff';
+                        ctx.shadowBlur  = 10;
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                }
+
+                // ── Step 3: letter outline — cyan wire frame ─────────────
+                ctx.font          = fontStr;
+                ctx.textAlign     = 'center';
+                ctx.textBaseline  = 'alphabetic';
+                ctx.lineJoin      = 'round';
+                ctx.lineWidth     = dpr * 0.9;
+                ctx.strokeStyle   = `rgba(0,242,255,${li===0 ? 0.65 : 0.45})`;
+                ctx.strokeText(word, W / 2, yBase);
+                // Ghost fill — very faint so rocks shine through
+                ctx.fillStyle = `rgba(255,255,255,${li===0 ? 0.07 : 0.04})`;
+                ctx.fillText(word, W / 2, yBase);
+            }
+
+            // ── Step 4: fissure cracks across the name ───────────────────
+            for (let c = 0; c < 8; c++) {
+                const x0 = W * 0.08 + Math.random() * W * 0.84;
+                const y0 = Math.random() * H;
+                ctx.beginPath(); ctx.moveTo(x0, y0);
+                let qx = x0, qy = y0;
+                for (let seg = 0; seg < 7; seg++) {
+                    qx += (Math.random() - 0.5) * FS * 0.25;
+                    qy += (Math.random() - 0.4) * FS * 0.15;
+                    ctx.lineTo(qx, qy);
+                }
+                ctx.strokeStyle = `rgba(0,242,255,${0.05 + Math.random() * 0.12})`;
+                ctx.lineWidth   = 0.6;
+                ctx.stroke();
+            }
+        }
+
+
+        // ════════════════════════════════════════════════════════
+        //  SEBASTIEN-LEMPENS INSPIRED FEATURES
+        // ════════════════════════════════════════════════════════
+
+        // ── 1. LENIS SMOOTH SCROLL ───────────────────────────
+        let lenis;
+        function initLenis() {
+            if (typeof Lenis === 'undefined') return;
+            lenis = new Lenis({
+                duration: 1.4,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smoothWheel: true,
+                wheelMultiplier: 0.9,
+                touchMultiplier: 1.8,
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            // Sync scroll events
+            lenis.on('scroll', ({ scroll, limit, velocity }) => {
+                const pct = scroll / limit;
+                // Page progress bar
+                const bar = document.getElementById('page-progress');
+                if (bar) bar.style.transform = `scaleX(${pct})`;
+            });
+        }
+        initLenis();
+
+        // ── 2. MAGNETIC CURSOR ───────────────────────────────
+        const cursorBall = document.getElementById('cursor-ball');
+        const cursorRing = document.getElementById('cursor-ring');
+
+        let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+        let rx = mx, ry = my; // ring follows with lag
+
+        window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+        // Magnetic pull: interactive elements attract the cursor
+        const MAGNETIC_TARGETS = '[data-magnetic], .mag-btn, button, a, .nav-item';
+        let activeMagnet = null;
+        let magnetOffX = 0, magnetOffY = 0;
+
+        document.addEventListener('mouseover', e => {
+            const target = e.target.closest(MAGNETIC_TARGETS);
+            if (target) {
+                activeMagnet = target;
+                cursorBall.classList.add('hovering');
+                cursorRing.classList.add('hovering');
+            }
+        });
+        document.addEventListener('mouseout', e => {
+            const target = e.target.closest(MAGNETIC_TARGETS);
+            if (target && activeMagnet === target) {
+                activeMagnet = null;
+                magnetOffX = 0; magnetOffY = 0;
+                cursorBall.classList.remove('hovering');
+                cursorRing.classList.remove('hovering');
+                gsap.to(target, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+            }
+        });
+
+        document.addEventListener('mousemove', e => {
+            if (activeMagnet) {
+                const rect = activeMagnet.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const dx = e.clientX - cx;
+                const dy = e.clientY - cy;
+                const pull = 0.28;
+                magnetOffX = dx * pull;
+                magnetOffY = dy * pull;
+                gsap.to(activeMagnet, {
+                    x: magnetOffX, y: magnetOffY,
+                    duration: 0.4, ease: 'power2.out'
+                });
+            }
+        });
+
+        // Cursor render loop
+        (function cursorLoop() {
+            // Ball snaps to mouse
+            gsap.set(cursorBall, { x: mx, y: my });
+            // Ring lags behind
+            rx += (mx - rx) * 0.12;
+            ry += (my - ry) * 0.12;
+            gsap.set(cursorRing, { x: rx, y: ry });
+            requestAnimationFrame(cursorLoop);
+        })();
+
+        // Click effect
+        document.addEventListener('mousedown', () => {
+            cursorBall.classList.add('clicking');
+            cursorRing.classList.add('clicking');
+        });
+        document.addEventListener('mouseup', () => {
+            cursorBall.classList.remove('clicking');
+            cursorRing.classList.remove('clicking');
+        });
+
+        // ── 3. TEXT SCRAMBLE ────────────────────────────────
+        const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&';
+        function scrambleText(el, finalText, duration = 1000) {
+            const len = finalText.length;
+            let frame = 0;
+            const totalFrames = Math.round(duration / 40);
+            const clear = setInterval(() => {
+                let output = '';
+                for (let i = 0; i < len; i++) {
+                    if (frame / totalFrames > i / len) {
+                        output += finalText[i];
+                    } else {
+                        output += CHARS[Math.floor(Math.random() * CHARS.length)];
+                    }
+                }
+                el.textContent = output;
+                frame++;
+                if (frame >= totalFrames) {
+                    el.textContent = finalText;
+                    clearInterval(clear);
+                }
+            }, 40);
+        }
+
+        // Attach scramble to elements on hover
+        function attachScramble() {
+            document.querySelectorAll('[data-scramble]').forEach(el => {
+                const original = el.dataset.scramble || el.textContent.trim();
+                el.dataset.scramble = original;
+                let scrambling = false;
+                el.addEventListener('mouseenter', () => {
+                    if (scrambling) return;
+                    scrambling = true;
+                    scrambleText(el, original, 700);
+                    setTimeout(() => scrambling = false, 750);
+                });
+            });
+        }
+        attachScramble();
+
+        function heroScramble() { /* hero name removed from sec-0 */ }
+
+        // ── 4. TILT CARDS ────────────────────────────────────
+        function initTilt() {
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                // Add shine layer
+                if (!card.querySelector('.tilt-shine')) {
+                    const shine = document.createElement('div');
+                    shine.className = 'tilt-shine';
+                    card.appendChild(shine);
+                }
+                card.addEventListener('mousemove', e => {
+                    const r    = card.getBoundingClientRect();
+                    const x    = e.clientX - r.left;
+                    const y    = e.clientY - r.top;
+                    const cx   = r.width  / 2;
+                    const cy   = r.height / 2;
+                    const rotX = ((y - cy) / cy) * -10;
+                    const rotY = ((x - cx) / cx) *  10;
+                    card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02,1.02,1.02)`;
+                    card.style.setProperty('--mx', `${(x/r.width)*100}%`);
+                    card.style.setProperty('--my', `${(y/r.height)*100}%`);
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale3d(1,1,1)';
+                });
+            });
+        }
+        initTilt();
+        // Re-init after 3D objects load (they add cards dynamically)
+        setTimeout(initTilt, 3500);
+
+        // ── 5. COUNT-UP NUMBERS ─────────────────────────────
+        function countUp(el, target, duration = 1200) {
+            const isNum   = !isNaN(parseFloat(target));
+            if (!isNum) return; // skip text values like "ETH", "WEB3"
+            const num     = parseFloat(target);
+            const start   = performance.now();
+            const suffix  = target.replace(/[\d.]/g, '');
+            function tick(now) {
+                const t   = Math.min((now - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - t, 3);
+                const val  = Math.round(ease * num);
+                el.textContent = val + suffix;
+                if (t < 1) requestAnimationFrame(tick);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // Hook into section observer
+        const statObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.querySelectorAll('.sec-stat-val').forEach(el => {
+                    const orig = el.dataset.orig || el.textContent.trim();
+                    el.dataset.orig = orig;
+                    countUp(el, orig, 1400);
+                });
+                statObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.4 });
+
+        document.querySelectorAll('section').forEach(s => statObserver.observe(s));
+
+        // ── 6. SPLIT-REVEAL (Lempens line-by-line) ──────────
+        const splitObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.split-reveal').forEach(el => splitObserver.observe(el));
+
+        // ── 7. SCROLL VELOCITY SKEW ─────────────────────────
+        let lastScrollY  = 0;
+        let scrollVel    = 0;
+        let targetSkew   = 0;
+        const contentEl  = document.getElementById('main-content');
+
+        if (lenis) {
+            lenis.on('scroll', ({ scroll, velocity }) => {
+                targetSkew = Math.max(-4, Math.min(4, velocity * 0.4));
+            });
+        }
+
+        (function skewLoop() {
+            scrollVel += (targetSkew - scrollVel) * 0.1;
+            if (contentEl && Math.abs(scrollVel) > 0.01) {
+                contentEl.style.transform = `skewY(${scrollVel * 0.15}deg)`;
+            } else if (contentEl) {
+                contentEl.style.transform = '';
+            }
+            requestAnimationFrame(skewLoop);
+        })();
+
+        // ── 8. SCRAMBLE ALL EYEBROW TAGS on enter ────────────
+        const eyebrowObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const eyebrow = entry.target.querySelector('.sec-eyebrow');
+                if (eyebrow && !eyebrow.dataset.scrambled) {
+                    eyebrow.dataset.scrambled = '1';
+                    const textNode = Array.from(eyebrow.childNodes)
+                        .find(n => n.nodeType === 3 && n.textContent.trim());
+                    if (textNode) {
+                        const orig = textNode.textContent.trim();
+                        const span = document.createElement('span');
+                        span.textContent = orig;
+                        span.dataset.scramble = orig;
+                        textNode.replaceWith(span);
+                        setTimeout(() => scrambleText(span, orig, 600), 200);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('section').forEach(s => eyebrowObserver.observe(s));
+
+        // ── 9. HOOK HERO SCRAMBLE INTO LAUNCH ───────────────
+        const _origLaunch = window.launchSequence;
+        window.launchSequence = () => {
+            _origLaunch();
+            setTimeout(heroScramble, 2800);
+        };
+
+        // Prevent old cursor-hud references from throwing
+        window.addEventListener('error', e => {
+            if (e.message && e.message.includes('cursor-hud')) e.preventDefault();
+        });
+
     </script>
 </body>
 </html>
