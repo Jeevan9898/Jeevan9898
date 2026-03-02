@@ -6,6 +6,7 @@
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-jeevanyadavportfolio.vercel.app-black?style=for-the-badge&logo=vercel&logoColor=white)](https://jeevanyadavportfolio.vercel.app)
 [![Open to Work](https://img.shields.io/badge/Status-Open%20to%20Work-brightgreen?style=for-the-badge)](https://jeevanyadavportfolio.vercel.app)
+![Profile Views](https://komarev.com/ghpvc/?username=Jeevan9898&color=blue&style=for-the-badge)
 
 </div>
 
@@ -18,9 +19,8 @@ I'm a **Full Stack Developer** with a strong passion for **Blockchain**, **Web3*
 - 🔗 Building decentralized applications with **Solidity** and **Web3 tools**
 - ⚛️ Crafting performant frontends with **React** and **JavaScript**
 - 🌐 Exploring **system design** and distributed/decentralized architectures
-- 🤖 Sharpening skills in **AI-driven applications**
 - 🌱 Active **open-source contributor**
-- 🎓 B.E. in Computer Science — **Class of 2026**
+- 🎓 B.Tech in Computer Science
 
 > *Always curious. Always building. Always improving.* 🚀
 
@@ -52,9 +52,9 @@ I'm a **Full Stack Developer** with a strong passion for **Blockchain**, **Web3*
 
 <div align="center">
 
-![Jeevan's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Jeevan9898&show_icons=true&theme=tokyonight&hide_border=true&count_private=true)
+![Jeevan's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Jeevan9898&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&cache_seconds=1800&rank_icon=github)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Jeevan9898&layout=compact&theme=tokyonight&hide_border=true)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Jeevan9898&layout=compact&theme=tokyonight&hide_border=true&cache_seconds=1800)
 
 ![GitHub Streak](https://streak-stats.demolab.com?user=Jeevan9898&theme=tokyonight&hide_border=true)
 
