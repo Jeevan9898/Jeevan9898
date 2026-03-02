@@ -48,15 +48,11 @@ I'm a **Full Stack Developer** with a strong passion for **Blockchain**, **Web3*
 
 ---
 
-## 📊 GitHub Stats
+## 📊 GitHub Activity
 
 <div align="center">
 
-![Jeevan's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Jeevan9898&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&cache_seconds=1800&rank_icon=github)
-
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Jeevan9898&layout=compact&theme=tokyonight&hide_border=true&cache_seconds=1800)
-
-![GitHub Streak](https://streak-stats.demolab.com?user=Jeevan9898&theme=tokyonight&hide_border=true)
+[![Jeevan's Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Jeevan9898&theme=tokyo-night&hide_border=true)](https://github.com/Jeevan9898)
 
 </div>
 
