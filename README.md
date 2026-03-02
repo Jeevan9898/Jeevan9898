@@ -18,9 +18,8 @@ I'm a **Full Stack Developer** with a strong passion for **Blockchain**, **Web3*
 - 🔗 Building decentralized applications with **Solidity** and **Web3 tools**
 - ⚛️ Crafting performant frontends with **React** and **JavaScript**
 - 🌐 Exploring **system design** and distributed/decentralized architectures
-- 🤖 Sharpening skills in **AI-driven applications**
 - 🌱 Active **open-source contributor**
-- 🎓 B.E. in Computer Science — **Class of 2026**
+- 🎓 B.Tech in Computer Science 
 
 > *Always curious. Always building. Always improving.* 🚀
 
