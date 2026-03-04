@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Jeevan Yadav — GitHub City</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000814;overflow:hidden;font-family:'Share Tech Mono','Courier New',monospace;color:#00f2ff}
+  #c{display:block;width:100vw;height:100vh}
+
+  /* ── LOADING ── */
+  #loader{position:fixed;inset:0;background:#000814;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;z-index:100;gap:18px}
+  #loader h1{font-size:22px;letter-spacing:8px;text-shadow:0 0 20px #00f2ff}
+  #bar-wrap{width:280px;height:3px;background:#0a1f30;border:1px solid #0a3050}
+  #bar{height:100%;background:#00f2ff;width:0%;transition:width .3s;box-shadow:0 0 8px #00f2ff}
+  #load-msg{font-size:10px;letter-spacing:3px;color:rgba(0,242,255,.5);min-height:16px}
+
+  /* ── HUD ── */
+  #hud{position:fixed;top:0;left:0;right:0;padding:12px 20px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:linear-gradient(180deg,rgba(0,8,20,.85) 0%,transparent 100%);
+    pointer-events:none;z-index:10}
+  #hud-left{display:flex;flex-direction:column;gap:4px}
+  #hud-title{font-size:13px;letter-spacing:5px;text-shadow:0 0 14px #00f2ff}
+  #hud-sub{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.4)}
+  #hud-right{text-align:right;font-size:8px;letter-spacing:2px;color:rgba(0,242,255,.4);line-height:1.8}
+
+  /* ── TOOLTIP ── */
+  #tip{position:fixed;pointer-events:none;z-index:20;display:none;
+    background:rgba(2,12,24,.95);border:1px solid #00f2ff;padding:14px 18px;
+    min-width:220px;max-width:280px}
+  #tip::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#00f2ff}
+  #tip-name{font-size:12px;letter-spacing:2px;color:#fff;margin-bottom:6px;font-weight:bold}
+  #tip-commits{font-size:20px;color:#00f2ff;text-shadow:0 0 10px #00f2ff;letter-spacing:2px}
+  #tip-commits-label{font-size:8px;color:rgba(0,242,255,.5);letter-spacing:2px;margin-bottom:8px}
+  #tip-lang{font-size:9px;letter-spacing:2px;margin-bottom:4px}
+  #tip-desc{font-size:8px;color:rgba(255,255,255,.5);letter-spacing:1px;line-height:1.5;margin-bottom:8px;font-family:sans-serif}
+  #tip-stars{font-size:8px;color:rgba(255,215,0,.7);letter-spacing:2px}
+  #tip-click{font-size:7px;color:rgba(0,242,255,.4);letter-spacing:2px;margin-top:8px;border-top:1px solid rgba(0,242,255,.1);padding-top:8px}
+
+  /* ── LEGEND ── */
+  #legend{position:fixed;bottom:20px;left:20px;z-index:10;
+    background:rgba(0,8,20,.8);border:1px solid rgba(0,242,255,.15);
+    padding:12px 16px;display:none}
+  #legend h3{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.5);margin-bottom:10px}
+  .leg-item{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:8px;letter-spacing:1.5px}
+  .leg-dot{width:8px;height:8px;flex-shrink:0}
+
+  /* ── CONTROLS ── */
+  #controls{position:fixed;bottom:20px;right:20px;z-index:10;
+    font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.3);text-align:right;line-height:2}
+
+  /* ── STATS ── */
+  #stats{position:fixed;top:60px;right:20px;z-index:10;
+    background:rgba(0,8,20,.8);border:1px solid rgba(0,242,255,.12);
+    padding:12px 16px;font-size:8px;letter-spacing:2px;line-height:2.2;display:none}
+  #stats .val{color:#fff;text-shadow:0 0 8px rgba(0,242,255,.4)}
+
+  /* ── CORNER ACCENTS ── */
+  #tip .c{position:absolute;width:6px;height:6px;background:#00f2ff}
+  #tip .c.tl{top:0;left:0} #tip .c.tr{top:0;right:0}
+  #tip .c.bl{bottom:0;left:0} #tip .c.br{bottom:0;right:0}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <h1>◈ GITHUB CITY ◈</h1>
+  <div id="bar-wrap"><div id="bar"></div></div>
+  <div id="load-msg">INITIALISING...</div>
+</div>
+
+<canvas id="c"></canvas>
+
+<div id="hud">
+  <div id="hud-left">
+    <div id="hud-title">◈ JEEVAN YADAV — GITHUB CITY</div>
+    <div id="hud-sub">FULL STACK DEVELOPER · BLOCKCHAIN · WEB3 · B.TECH CSE 2028</div>
+  </div>
+  <div id="hud-right">
+    <div id="hud-repos">— REPOS</div>
+    <div id="hud-commits">— COMMITS</div>
+    <div id="hud-stars">— STARS</div>
+  </div>
+</div>
+
+<div id="tip">
+  <div class="c tl"></div><div class="c tr"></div>
+  <div class="c bl"></div><div class="c br"></div>
+  <div id="tip-name"></div>
+  <div id="tip-commits"></div>
+  <div id="tip-commits-label">TOTAL COMMITS</div>
+  <div id="tip-lang"></div>
+  <div id="tip-desc"></div>
+  <div id="tip-stars"></div>
+  <div id="tip-click">▶ CLICK TO OPEN REPO</div>
+</div>
+
+<div id="legend">
+  <h3>LANGUAGE</h3>
+  <div id="leg-items"></div>
+</div>
+
+<div id="stats">
+  <div>REPOSITORIES <span class="val" id="s-repos">—</span></div>
+  <div>TOTAL COMMITS <span class="val" id="s-commits">—</span></div>
+  <div>TOTAL STARS   <span class="val" id="s-stars">—</span></div>
+  <div>FOLLOWERS     <span class="val" id="s-follow">—</span></div>
+</div>
+
+<div id="controls">
+  DRAG — ORBIT &nbsp;|&nbsp; SCROLL — ZOOM<br>
+  HOVER — INSPECT &nbsp;|&nbsp; CLICK — OPEN REPO
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ─────────────────────────────────────────────────────────
+//  CONFIG
+// ─────────────────────────────────────────────────────────
+const USERNAME = 'Jeevan9898';
+
+const LANG_COLORS = {
+  JavaScript:'#f1e05a', Solidity:'#e4824a', Python:'#3b8bbf',
+  HTML:'#e34c26', CSS:'#7659a8', TypeScript:'#3178c6',
+  'C++':'#f34b7d', C:'#555599', Rust:'#dea584', Go:'#00acd7',
+  Java:'#b07219', PHP:'#4f5d95', Ruby:'#cc342d', Shell:'#89e051',
+  default:'#00f2ff'
+};
+
+// ─────────────────────────────────────────────────────────
+//  LOADING UI
+// ─────────────────────────────────────────────────────────
+let loadStep = 0;
+function setLoad(pct, msg){
+  document.getElementById('bar').style.width = pct+'%';
+  document.getElementById('load-msg').textContent = msg;
+}
+
+// ─────────────────────────────────────────────────────────
+//  GITHUB API
+// ─────────────────────────────────────────────────────────
+async function getCommits(repoName){
+  try{
+    const r = await fetch(
+      `https://api.github.com/repos/${USERNAME}/${repoName}/commits?per_page=1`,
+      {headers:{'Accept':'application/vnd.github.v3+json'}}
+    );
+    const link = r.headers.get('link');
+    if(!link) return 1;
+    const m = link.match(/page=(\d+)>; rel="last"/);
+    return m ? parseInt(m[1]) : 1;
+  } catch(e){ return 1; }
+}
+
+async function fetchAll(){
+  setLoad(5,'CONNECTING TO GITHUB...');
+  const user = await fetch(`https://api.github.com/users/${USERNAME}`).then(r=>r.json());
+  setLoad(20,'SCANNING REPOSITORIES...');
+
+  let repos = await fetch(
+    `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`,
+    {headers:{'Accept':'application/vnd.github.v3+json'}}
+  ).then(r=>r.json());
+
+  if(!Array.isArray(repos)) repos = [];
+  // filter out empty system repos
+  repos = repos.filter(r => !r.archived);
+
+  setLoad(35,'COUNTING COMMITS...');
+  const total = repos.length;
+  const enriched = [];
+  for(let i=0;i<repos.length;i++){
+    const repo = repos[i];
+    const commits = await getCommits(repo.name);
+    enriched.push({...repo, commitCount: commits});
+    setLoad(35 + ((i+1)/total)*50,
+      `ANALYSING ${repo.name.toUpperCase()} [${i+1}/${total}]`);
+  }
+  setLoad(90,'CONSTRUCTING CITY...');
+  return {user, repos: enriched};
+}
+
+// ─────────────────────────────────────────────────────────
+//  WINDOW TEXTURE
+// ─────────────────────────────────────────────────────────
+function makeWindowTex(height, color, density=0.55){
+  const W=128, H=Math.max(128, Math.ceil(height/25*512));
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#030d18'; ctx.fillRect(0,0,W,H);
+  const COLS=4, ROWS=Math.floor(H/32);
+  const cw=W/COLS, ch=H/ROWS;
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS;c++){
+      if(Math.random()<density){
+        const alpha = 0.35 + Math.random()*0.55;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = alpha;
+        ctx.fillRect(c*cw+3, r*ch+3, cw-6, ch-6);
+      }
+    }
+  }
+  ctx.globalAlpha=1;
+  return new THREE.CanvasTexture(cv);
+}
+
+// ─────────────────────────────────────────────────────────
+//  LABEL SPRITE
+// ─────────────────────────────────────────────────────────
+function makeLabel(name, commits, color){
+  const cv=document.createElement('canvas'); cv.width=320; cv.height=80;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,320,80);
+  ctx.fillStyle='rgba(1,10,20,0.82)'; ctx.fillRect(0,0,320,80);
+  ctx.fillStyle=color; ctx.fillRect(0,0,320,2);
+  ctx.font='bold 18px monospace'; ctx.fillStyle='#ffffff';
+  ctx.textAlign='center'; ctx.fillText(name,160,26);
+  ctx.font='13px monospace'; ctx.fillStyle=color;
+  ctx.fillText(commits+' COMMITS',160,50);
+  const tex=new THREE.CanvasTexture(cv);
+  const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
+  const sp=new THREE.Sprite(mat); sp.scale.set(10,2.5,1);
+  return sp;
+}
+
+// ─────────────────────────────────────────────────────────
+//  BUILD CITY
+// ─────────────────────────────────────────────────────────
+function buildCity(scene, repos){
+  const maxC = Math.max(...repos.map(r=>r.commitCount), 1);
+  const COLS = Math.ceil(Math.sqrt(repos.length + 1));
+  const SPACING = 9;
+  const HEIGHT_SCALE = 28;
+
+  // road material
+  const roadMat = new THREE.MeshStandardMaterial({color:0x04101c,roughness:0.95,metalness:0.1});
+
+  repos.forEach((repo, i)=>{
+    const col = i % COLS;
+    const row = Math.floor(i / COLS);
+    const cx = (col - (COLS-1)/2) * SPACING;
+    const cz = (row - (Math.ceil(repos.length/COLS)-1)/2) * SPACING;
+
+    const rawH = Math.max(1.5, (repo.commitCount / maxC) * HEIGHT_SCALE);
+    const H = parseFloat(rawH.toFixed(2));
+    const color = LANG_COLORS[repo.language] || LANG_COLORS.default;
+    const colObj = new THREE.Color(color);
+
+    // ── window texture (shared per side)
+    const winTex = makeWindowTex(H, color, 0.5 + Math.random()*0.25);
+
+    // ── materials: sides with window tex, top solid dark
+    const sideMat = new THREE.MeshStandardMaterial({
+      color: 0x060e1c,
+      map: winTex,
+      emissiveMap: winTex,
+      emissive: colObj.clone().multiplyScalar(0.35),
+      emissiveIntensity: 0.6,
+      roughness: 0.3, metalness: 0.5
+    });
+    const topMat = new THREE.MeshStandardMaterial({
+      color: 0x080f1a, roughness:0.4, metalness:0.6,
+      emissive: colObj.clone().multiplyScalar(0.08)
+    });
+    const mats = [sideMat, sideMat, topMat, new THREE.MeshStandardMaterial({color:0x020810}), sideMat, sideMat];
+
+    // ── building mesh
+    const geo = new THREE.BoxGeometry(5.2, H, 5.2);
+    const mesh = new THREE.Mesh(geo, mats);
+    mesh.position.set(cx, H/2, cz);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData = {...repo, _color: color};
+    scene.add(mesh);
+
+    // ── glowing edges
+    const edges = new THREE.EdgesGeometry(geo);
+    const lineMat = new THREE.LineBasicMaterial({color: colObj, transparent:true, opacity:0.55});
+    const lines = new THREE.LineSegments(edges, lineMat);
+    lines.position.copy(mesh.position);
+    scene.add(lines);
+
+    // ── roof accent (flat emissive top)
+    const roofGeo = new THREE.BoxGeometry(5.4, 0.12, 5.4);
+    const roofMat = new THREE.MeshStandardMaterial({
+      color: colObj, emissive: colObj, emissiveIntensity: 0.8,
+      transparent:true, opacity:0.6
+    });
+    const roof = new THREE.Mesh(roofGeo, roofMat);
+    roof.position.set(cx, H+0.06, cz);
+    scene.add(roof);
+
+    // ── antenna for tall buildings
+    if(H > 12){
+      const antGeo = new THREE.CylinderGeometry(0.05, 0.05, H*0.22, 4);
+      const antMat = new THREE.MeshStandardMaterial({color:0x112233});
+      const ant = new THREE.Mesh(antGeo, antMat);
+      ant.position.set(cx, H + H*0.11, cz);
+      scene.add(ant);
+
+      // blinking tip light
+      const tipGeo = new THREE.SphereGeometry(0.18, 6, 6);
+      const tipMat = new THREE.MeshStandardMaterial({
+        color: colObj, emissive: colObj, emissiveIntensity: 1.5
+      });
+      const tip = new THREE.Mesh(tipGeo, tipMat);
+      tip.position.set(cx, H + H*0.22+0.18, cz);
+      tip.userData._blink = {mat: tipMat, base: colObj.clone()};
+      scene.add(tip);
+    }
+
+    // ── roof point light
+    const pl = new THREE.PointLight(colObj, 0.55 + Math.random()*0.4, 16);
+    pl.position.set(cx, H+2.5, cz);
+    scene.add(pl);
+
+    // ── label sprite
+    const label = makeLabel(repo.name, repo.commitCount, color);
+    label.position.set(cx, H + 3.8 + (H > 12 ? H*0.22 : 0), cz);
+    label.userData._baseY = label.position.y;
+    scene.add(label);
+
+    mesh.userData._label = label;
+    mesh.userData._edges = lines;
+    mesh.userData._lineMat = lineMat;
+    mesh.userData._roofMat = roofMat;
+  });
+}
+
+// ─────────────────────────────────────────────────────────
+//  GROUND & ENVIRONMENT
+// ─────────────────────────────────────────────────────────
+function buildEnvironment(scene){
+  // ground plane
+  const gGeo = new THREE.PlaneGeometry(300, 300, 1, 1);
+  const gMat = new THREE.MeshStandardMaterial({
+    color:0x03080f, roughness:0.9, metalness:0.15,
+    envMapIntensity: 0.3
+  });
+  const ground = new THREE.Mesh(gGeo, gMat);
+  ground.rotation.x = -Math.PI/2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  // grid lines
+  const grid = new THREE.GridHelper(280, 56, 0x0a2540, 0x061830);
+  grid.position.y = 0.02;
+  scene.add(grid);
+
+  // neon road lines between building rows
+  const roadLineMat = new THREE.LineBasicMaterial({color:0x00f2ff,transparent:true,opacity:0.06});
+  for(let i=-6;i<=6;i++){
+    const pts=[new THREE.Vector3(i*9+4.5, 0.05, -80), new THREE.Vector3(i*9+4.5, 0.05, 80)];
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), roadLineMat));
+    const pts2=[new THREE.Vector3(-80, 0.05, i*9+4.5), new THREE.Vector3(80, 0.05, i*9+4.5)];
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts2), roadLineMat));
+  }
+
+  // stars
+  const starPos = [];
+  for(let i=0;i<3000;i++){
+    starPos.push(
+      (Math.random()-0.5)*600,
+      50 + Math.random()*250,
+      (Math.random()-0.5)*600
+    );
+  }
+  const starGeo = new THREE.BufferGeometry();
+  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+  const starMat = new THREE.PointsMaterial({color:0xffffff, size:0.35, sizeAttenuation:true,
+    transparent:true, opacity:0.8});
+  scene.add(new THREE.Points(starGeo, starMat));
+
+  // moon
+  const moonGeo = new THREE.SphereGeometry(14, 24, 24);
+  const moonMat = new THREE.MeshStandardMaterial({
+    color:0xf0e8c0, roughness:0.9, metalness:0.0,
+    emissive:0xf0e8c0, emissiveIntensity:0.12
+  });
+  const moon = new THREE.Mesh(moonGeo, moonMat);
+  moon.position.set(120, 160, -200);
+  scene.add(moon);
+
+  // moon glow (sprite)
+  const moonGlowCv=document.createElement('canvas');moonGlowCv.width=128;moonGlowCv.height=128;
+  const mgCtx=moonGlowCv.getContext('2d');
+  const mgGrad=mgCtx.createRadialGradient(64,64,0,64,64,64);
+  mgGrad.addColorStop(0,'rgba(240,232,192,0.35)');
+  mgGrad.addColorStop(1,'rgba(240,232,192,0)');
+  mgCtx.fillStyle=mgGrad; mgCtx.fillRect(0,0,128,128);
+  const moonGlowMat=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(moonGlowCv),transparent:true,depthWrite:false});
+  const moonGlow=new THREE.Sprite(moonGlowMat);
+  moonGlow.position.copy(moon.position);
+  moonGlow.scale.set(60,60,1);
+  scene.add(moonGlow);
+
+  // ambient moonlight from moon direction
+  const moonLight = new THREE.DirectionalLight(0x6688bb, 0.45);
+  moonLight.position.set(120, 160, -200);
+  moonLight.castShadow = true;
+  moonLight.shadow.mapSize.set(2048,2048);
+  moonLight.shadow.camera.near = 0.5;
+  moonLight.shadow.camera.far = 600;
+  moonLight.shadow.camera.left = -100;
+  moonLight.shadow.camera.right = 100;
+  moonLight.shadow.camera.top = 100;
+  moonLight.shadow.camera.bottom = -100;
+  scene.add(moonLight);
+
+  // ambient
+  scene.add(new THREE.AmbientLight(0x020810, 1.2));
+
+  // hemisphere
+  scene.add(new THREE.HemisphereLight(0x001428, 0x000408, 0.5));
+
+  // fog
+  scene.fog = new THREE.FogExp2(0x000814, 0.008);
+}
+
+// ─────────────────────────────────────────────────────────
+//  MAIN
+// ─────────────────────────────────────────────────────────
+async function main(){
+  // ── fetch
+  let user, repos;
+  try{
+    ({user, repos} = await fetchAll());
+  } catch(e){
+    document.getElementById('load-msg').textContent = 'API RATE LIMITED — RETRYING...';
+    // fallback minimal data
+    user = {login:USERNAME, public_repos:0, followers:0};
+    repos = [];
+  }
+
+  // ── update HUD stats
+  const totalCommits = repos.reduce((s,r)=>s+r.commitCount,0);
+  const totalStars   = repos.reduce((s,r)=>s+r.stargazers_count,0);
+  document.getElementById('hud-repos').textContent   = repos.length + ' REPOS';
+  document.getElementById('hud-commits').textContent = totalCommits + ' COMMITS';
+  document.getElementById('hud-stars').textContent   = totalStars   + ' STARS';
+  document.getElementById('s-repos').textContent     = repos.length;
+  document.getElementById('s-commits').textContent   = totalCommits;
+  document.getElementById('s-stars').textContent     = totalStars;
+  document.getElementById('s-follow').textContent    = user.followers || 0;
+
+  // ── legend
+  const langs = [...new Set(repos.map(r=>r.language).filter(Boolean))];
+  const legEl = document.getElementById('leg-items');
+  langs.forEach(l=>{
+    const c = LANG_COLORS[l]||LANG_COLORS.default;
+    legEl.innerHTML += `<div class="leg-item">
+      <div class="leg-dot" style="background:${c};box-shadow:0 0 5px ${c}"></div>
+      <span style="color:${c}">${l.toUpperCase()}</span>
+    </div>`;
+  });
+
+  // ── THREE SETUP
+  const canvas = document.getElementById('c');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x000814);
+
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+  // ── environment + city
+  buildEnvironment(scene);
+  buildCity(scene, repos);
+
+  setLoad(100, 'CITY READY');
+
+  // ── collect building meshes for raycasting
+  const buildingMeshes = [];
+  scene.traverse(obj=>{
+    if(obj.isMesh && obj.userData.name && obj.userData.commitCount !== undefined)
+      buildingMeshes.push(obj);
+  });
+
+  // ── hide loader
+  setTimeout(()=>{
+    document.getElementById('loader').style.transition='opacity .6s';
+    document.getElementById('loader').style.opacity=0;
+    setTimeout(()=>{
+      document.getElementById('loader').style.display='none';
+      document.getElementById('legend').style.display='block';
+      document.getElementById('stats').style.display='block';
+    },600);
+  },400);
+
+  // ─── CAMERA ORBIT ──────────────────────────────────────
+  let theta = 0.4, phi = 0.55, radius = 90;
+  let autoRotate = true;
+  let isDrag = false, prevMX = 0, prevMY = 0;
+  let targetTheta = theta, targetPhi = phi, targetRadius = radius;
+
+  canvas.addEventListener('mousedown', e=>{
+    isDrag=true; prevMX=e.clientX; prevMY=e.clientY;
+    autoRotate=false;
+  });
+  window.addEventListener('mouseup', ()=>isDrag=false);
+  window.addEventListener('mousemove', e=>{
+    if(!isDrag) return;
+    targetTheta -= (e.clientX-prevMX)*0.008;
+    targetPhi = Math.max(0.15, Math.min(Math.PI/2-0.05, targetPhi-(e.clientY-prevMY)*0.007));
+    prevMX=e.clientX; prevMY=e.clientY;
+  });
+  canvas.addEventListener('wheel', e=>{
+    targetRadius = Math.max(18, Math.min(160, targetRadius + e.deltaY*0.1));
+    e.preventDefault();
+  }, {passive:false});
+
+  // touch
+  let prevTouchDist=0, prevTouchX=0, prevTouchY=0;
+  canvas.addEventListener('touchstart', e=>{
+    if(e.touches.length===1){isDrag=true;autoRotate=false;prevTouchX=e.touches[0].clientX;prevTouchY=e.touches[0].clientY;}
+    if(e.touches.length===2){
+      prevTouchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    }
+  },{passive:true});
+  canvas.addEventListener('touchmove', e=>{
+    if(e.touches.length===1&&isDrag){
+      targetTheta-=(e.touches[0].clientX-prevTouchX)*0.01;
+      targetPhi=Math.max(0.15,Math.min(Math.PI/2-0.05,targetPhi-(e.touches[0].clientY-prevTouchY)*0.009));
+      prevTouchX=e.touches[0].clientX;prevTouchY=e.touches[0].clientY;
+    }
+    if(e.touches.length===2){
+      const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      targetRadius=Math.max(18,Math.min(160,targetRadius-(d-prevTouchDist)*0.2));
+      prevTouchDist=d;
+    }
+  },{passive:true});
+  canvas.addEventListener('touchend',()=>isDrag=false,{passive:true});
+
+  // ─── RAYCASTER / TOOLTIP ───────────────────────────────
+  const raycaster = new THREE.Raycaster();
+  const mouse2d = new THREE.Vector2();
+  let hoveredMesh = null;
+  const tip = document.getElementById('tip');
+
+  canvas.addEventListener('mousemove', e=>{
+    mouse2d.x = (e.clientX/window.innerWidth)*2-1;
+    mouse2d.y = -(e.clientY/window.innerHeight)*2+1;
+    raycaster.setFromCamera(mouse2d, camera);
+    const hits = raycaster.intersectObjects(buildingMeshes);
+    if(hits.length){
+      const m = hits[0].object;
+      if(m !== hoveredMesh){
+        // restore prev
+        if(hoveredMesh){
+          hoveredMesh.userData._lineMat.opacity = 0.55;
+          hoveredMesh.userData._roofMat.emissiveIntensity = 0.8;
+        }
+        hoveredMesh = m;
+        m.userData._lineMat.opacity = 1.0;
+        m.userData._roofMat.emissiveIntensity = 2.0;
+        // populate tooltip
+        const r = m.userData;
+        document.getElementById('tip-name').textContent = r.name.toUpperCase();
+        document.getElementById('tip-commits').textContent = r.commitCount.toLocaleString();
+        const langColor = r._color;
+        document.getElementById('tip-lang').innerHTML =
+          `<span style="color:${langColor};text-shadow:0 0 6px ${langColor};letter-spacing:2px">
+           ● ${(r.language||'UNKNOWN').toUpperCase()}</span>`;
+        document.getElementById('tip-desc').textContent = r.description || 'No description.';
+        document.getElementById('tip-stars').textContent =
+          `★ ${r.stargazers_count} STARS  ·  ⑂ ${r.forks_count} FORKS`;
+        tip.style.display='block';
+        tip.style.borderColor = langColor;
+        tip.querySelector('::before') && null; // update top bar color via JS
+        tip.style.setProperty('--tc', langColor);
+        tip.querySelector('.c.tl').style.background = langColor;
+        tip.querySelector('.c.tr').style.background = langColor;
+        tip.querySelector('.c.bl').style.background = langColor;
+        tip.querySelector('.c.br').style.background = langColor;
+      }
+      const pad=16;
+      tip.style.left = Math.min(e.clientX+20, window.innerWidth-tip.offsetWidth-pad)+'px';
+      tip.style.top  = Math.min(e.clientY-20, window.innerHeight-tip.offsetHeight-pad)+'px';
+      canvas.style.cursor='pointer';
+    } else {
+      if(hoveredMesh){
+        hoveredMesh.userData._lineMat.opacity=0.55;
+        hoveredMesh.userData._roofMat.emissiveIntensity=0.8;
+        hoveredMesh=null;
+      }
+      tip.style.display='none';
+      canvas.style.cursor='default';
+    }
+  });
+
+  canvas.addEventListener('click', ()=>{
+    if(hoveredMesh && hoveredMesh.userData.html_url)
+      window.open(hoveredMesh.userData.html_url,'_blank');
+  });
+
+  // ─── RESIZE ───────────────────────────────────────────
+  window.addEventListener('resize',()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  });
+
+  // ─── ANIMATE ──────────────────────────────────────────
+  let frame = 0;
+  function animate(){
+    requestAnimationFrame(animate);
+    frame++;
+
+    // auto rotate
+    if(autoRotate) targetTheta += 0.003;
+
+    // smooth camera
+    theta   += (targetTheta-theta)*0.06;
+    phi     += (targetPhi-phi)*0.06;
+    radius  += (targetRadius-radius)*0.06;
+
+    camera.position.x = radius * Math.sin(phi) * Math.cos(theta);
+    camera.position.y = radius * Math.cos(phi);
+    camera.position.z = radius * Math.sin(phi) * Math.sin(theta);
+    camera.lookAt(0, 6, 0);
+
+    // blink antenna tips
+    scene.traverse(obj=>{
+      if(obj.isMesh && obj.userData._blink){
+        const {mat, base} = obj.userData._blink;
+        const t = Math.sin(frame*0.08)*0.5+0.5;
+        mat.emissiveIntensity = 0.8 + t*1.8;
+      }
+      // label bob
+      if(obj.isSprite && obj.userData._baseY !== undefined){
+        obj.position.y = obj.userData._baseY + Math.sin(frame*0.03 + obj.id)*0.18;
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+main().catch(console.error);
+</script>
+</body>
+</html>
