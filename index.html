@@ -438,6 +438,75 @@
             filter: drop-shadow(0 0 12px rgba(0,242,255,0.4));
         }
 
+        /* ─── HERO PIXEL NAME (Sector 1) ─────────────────────────────── */
+        #hero-name-display {
+            position: absolute;
+            top: 50%;
+            left: 28%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 0.82;
+            gap: 0;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.4s ease 0.3s;
+        }
+        #sec-0.in-view #hero-name-display { opacity: 1; }
+
+        #hero-name-display .hn-line1 {
+            font-family: var(--display);
+            font-size: clamp(3.5rem, 12vw, 10rem);
+            font-weight: 700;
+            letter-spacing: clamp(8px, 2.5vw, 28px);
+            text-transform: uppercase;
+            color: #ffffff;
+            display: block;
+            /* Subtle pixel/scanline shimmer unique to hero */
+            animation: hero-name-flicker 6s ease-in-out infinite;
+        }
+        #hero-name-display .hn-line2 {
+            font-family: var(--display);
+            font-size: clamp(3.5rem, 12vw, 10rem);
+            font-weight: 700;
+            letter-spacing: clamp(8px, 2.5vw, 28px);
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(0,242,255,0.8);
+            display: block;
+            filter: drop-shadow(0 0 12px rgba(0,242,255,0.4));
+            animation: hero-name-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes hero-name-flicker {
+            0%, 95%, 100% { opacity: 1; }
+            96%            { opacity: 0.85; }
+            97%            { opacity: 1; }
+            98%            { opacity: 0.9; }
+        }
+        @keyframes hero-name-glow {
+            0%, 100% { filter: drop-shadow(0 0 12px rgba(0,242,255,0.4)); }
+            50%       { filter: drop-shadow(0 0 28px rgba(0,242,255,0.75)) drop-shadow(0 0 6px rgba(0,242,255,0.5)); }
+        }
+
+        /* scanline overlay sitting on top of the name for texture */
+        #hero-name-display::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 0, 0, 0.08) 3px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+        }
+
         #sec-0 {
             position: relative;
             overflow: hidden;
@@ -446,14 +515,8 @@
             justify-content: center;
         }
 
-        #name-canvas.hero-rock-bg {
-            position: absolute;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 1.4s ease 0.3s;
-        }
-        #sec-0.in-view #name-canvas.hero-rock-bg { opacity: 1; }
+        /* hide the old rock canvas — no longer needed */
+        #name-canvas.hero-rock-bg { display: none !important; }
 
         .robot-hint-strip {
             position: absolute;
@@ -718,6 +781,8 @@
             .hero-title      { font-size: clamp(8rem, 10vw, 13rem); }
             #intro-name .in-line1,
             #intro-name .in-line2 { font-size: clamp(6rem, 12vw, 12rem); }
+            #hero-name-display .hn-line1,
+            #hero-name-display .hn-line2 { font-size: clamp(6rem, 12vw, 12rem); }
             .sec-lead        { font-size: 1.1rem; }
         }
 
@@ -728,7 +793,9 @@
             #top-bar         { display: none; }
             #bottom-hud      { padding: 0 14px; }
             #intro-name .in-line1,
-            #intro-name .in-line2 { font-size: clamp(3rem, 10vw, 6rem); letter-spacing: 12px; }
+            #intro-name .in-line2,
+            #hero-name-display .hn-line1,
+            #hero-name-display .hn-line2 { font-size: clamp(3rem, 10vw, 6rem); letter-spacing: 12px; }
         }
 
         @media (max-width: 639px) {
@@ -737,7 +804,9 @@
             section::after { left: 14px; }
             .sec-watermark   { display: none; }
             #intro-name .in-line1,
-            #intro-name .in-line2 { font-size: clamp(2.8rem, 13vw, 5rem); letter-spacing: 6px; }
+            #intro-name .in-line2,
+            #hero-name-display .hn-line1,
+            #hero-name-display .hn-line2 { font-size: clamp(2.8rem, 13vw, 5rem); letter-spacing: 6px; }
             .sec-lead        { font-size: 0.82rem; }
             #top-bar         { display: none; }
             #side-nav        { display: none; }
@@ -758,7 +827,6 @@
             #about-modal.active { transform: translateY(0); }
             .about-panel        { max-height: 52dvh; overflow-y: auto; }
             .modal-content { width: 92%; }
-            #name-canvas.hero-rock-bg { opacity: 0.85; }
             .role-chip { font-size: 0.48rem; padding: 4px 10px; }
             #loader-log { display: none; }
         }
@@ -766,7 +834,9 @@
         @media (max-width: 374px) {
             .sec-eyebrow         { font-size: 0.48rem; letter-spacing: 2px; }
             #intro-name .in-line1,
-            #intro-name .in-line2 { font-size: 2.6rem; letter-spacing: 4px; }
+            #intro-name .in-line2,
+            #hero-name-display .hn-line1,
+            #hero-name-display .hn-line2 { font-size: 2.6rem; letter-spacing: 4px; }
         }
 
         @media (max-width: 768px) and (orientation: landscape) {
@@ -775,7 +845,9 @@
             #sec-0 .section-inner { padding-top: 48px; }
             #loader-log        { display: none; }
             #intro-name .in-line1,
-            #intro-name .in-line2 { font-size: clamp(2rem, 10vh, 5rem); }
+            #intro-name .in-line2,
+            #hero-name-display .hn-line1,
+            #hero-name-display .hn-line2 { font-size: clamp(2rem, 10vh, 5rem); }
         }
 
         @media (pointer: coarse) {
@@ -1050,7 +1122,15 @@
     <div class="content-layer" id="main-content">
 
         <section id="sec-0">
+            <!-- REPLACED: rock canvas → pixel-style name identical to loader intro -->
             <canvas id="name-canvas" class="hero-rock-bg"></canvas>
+
+            <!-- ── PIXEL NAME DISPLAY (matches loader intro style) ── -->
+            <div id="hero-name-display">
+                <span class="hn-line1">JEEVAN</span>
+                <span class="hn-line2">YADAV</span>
+            </div>
+
             <div class="hero-overlay">
                 <div class="hero-role-row">
                     <span class="hero-role-chip">Blockchain Dev</span>
@@ -1101,7 +1181,7 @@
             </div>
         </section>
 
-        <!-- SECTOR 04: EDUCATION — Updated with real data -->
+        <!-- SECTOR 04: EDUCATION -->
         <section id="sec-3">
             <div class="section-inner">
                 <div class="sec-eyebrow reveal-item">
@@ -1160,7 +1240,7 @@
     <script type="module">
 
         // ═══════════════════════════════════════════════════════
-        //  DATA — UPDATED WITH REAL INFO
+        //  DATA
         // ═══════════════════════════════════════════════════════
 
         const projectsData = [
@@ -1214,7 +1294,6 @@
             }
         ];
 
-        // ── EDUCATION — UPDATED ──────────────────────────────
         const eduData = [
             {
                 name: "B.TECH CSE",
@@ -1228,7 +1307,6 @@
             }
         ];
 
-        // ── CONTACT — REAL LINKS ─────────────────────────────
         const contactData = [
             {
                 id: "linkedin",
@@ -2165,123 +2243,12 @@
 
         document.querySelectorAll('section').forEach(sec => sectionObserver.observe(sec));
 
+        // Trigger hero section in-view (no more drawRockName needed)
         const heroSection = document.getElementById('sec-0');
-        let rockNameDrawn = false;
         if (heroSection) {
             setTimeout(() => {
                 heroSection.classList.add('in-view');
-                if (!rockNameDrawn) { rockNameDrawn = true; drawRockName(); }
             }, 1200);
-        }
-
-        async function drawRockName() {
-            const nc = document.getElementById('name-canvas');
-            if (!nc) return;
-            await document.fonts.ready;
-            await new Promise(r => setTimeout(r, 80));
-
-            const ctx = nc.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const W   = window.innerWidth;
-            const H   = window.innerHeight;
-            nc.width  = Math.round(W * dpr);
-            nc.height = Math.round(H * dpr);
-            ctx.scale(dpr, dpr);
-            ctx.clearRect(0, 0, W, H);
-
-            const rng   = (a,b) => a + Math.random()*(b-a);
-            const LINES = ['JEEVAN', 'YADAV'];
-
-            const FS       = Math.min(W / 6.5, H * 0.20, 140);
-            const LINE_GAP = FS * 1.38;
-            const totalH   = LINE_GAP * (LINES.length - 1) + FS;
-            const startY   = (H - totalH) / 2 + FS;
-
-            for (let li = 0; li < LINES.length; li++) {
-                const word    = LINES[li];
-                const yBase   = startY + li * LINE_GAP;
-                const fontStr = `400 ${FS}px "Black Ops One","Russo One","Arial Black",sans-serif`;
-
-                const mc = document.createElement('canvas').getContext('2d');
-                mc.font  = fontStr;
-                const tw = mc.measureText(word).width;
-                const margin = Math.max(W * 0.07, 24);
-                const xStart = Math.max(margin, Math.min(margin, (W - tw - margin)));
-
-                const off = document.createElement('canvas');
-                off.width  = Math.round(W * dpr);
-                off.height = Math.round(H * dpr);
-                const ox   = off.getContext('2d');
-                ox.font         = `400 ${FS * dpr}px "Black Ops One","Russo One","Arial Black",sans-serif`;
-                ox.textAlign    = 'left';
-                ox.textBaseline = 'alphabetic';
-                ox.fillStyle    = '#fff';
-                ox.fillText(word, xStart * dpr, yBase * dpr);
-
-                const imgData = ox.getImageData(0, 0, off.width, off.height).data;
-                const hits    = [];
-                const STEP    = Math.max(2, Math.round(dpr * 1.2));
-                for (let py = 0; py < off.height; py += STEP)
-                    for (let px = 0; px < off.width; px += STEP)
-                        if (imgData[(py * off.width + px) * 4 + 3] > 50)
-                            hits.push([px / dpr, py / dpr]);
-
-                if (!hits.length) {
-                    ctx.font = fontStr; ctx.textAlign = 'left';
-                    ctx.textBaseline = 'alphabetic';
-                    ctx.fillStyle = 'rgba(0,200,220,0.7)';
-                    ctx.fillText(word, xStart, yBase);
-                    continue;
-                }
-
-                const SHARDS = Math.min(Math.floor(hits.length * 0.30), 700);
-                for (let si = 0; si < SHARDS; si++) {
-                    const [cx, cy] = hits[Math.floor(Math.random() * hits.length)];
-                    const r   = rng(FS * 0.042, FS * 0.13);
-                    const vts = Math.floor(rng(5, 9));
-                    const rot = rng(0, Math.PI * 2);
-                    ctx.beginPath();
-                    for (let v = 0; v <= vts; v++) {
-                        const ang = (v/vts)*Math.PI*2 + rot;
-                        const d   = r * rng(0.5, 1.2);
-                        v === 0
-                            ? ctx.moveTo(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d)
-                            : ctx.lineTo(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d);
-                    }
-                    ctx.closePath();
-                    const hue = li===0 ? rng(185,230) : rng(200,250);
-                    const lig = rng(45, 82);
-                    ctx.globalAlpha = rng(0.78, 1.0);
-                    ctx.fillStyle   = `hsl(${hue},32%,${lig}%)`;
-                    ctx.fill();
-                    ctx.strokeStyle = `rgba(180,230,250,${rng(0.25,0.65)})`;
-                    ctx.lineWidth   = rng(0.3, 0.85);
-                    ctx.stroke();
-                    if (Math.random() < 0.11) {
-                        ctx.save();
-                        ctx.fillStyle   = `rgba(0,242,255,${rng(0.18,0.45)})`;
-                        ctx.shadowColor = '#00f2ff';
-                        ctx.shadowBlur  = 12;
-                        ctx.fill();
-                        ctx.restore();
-                    }
-                    ctx.globalAlpha = 1;
-                }
-
-                for (let c = 0; c < 6; c++) {
-                    const h0 = hits[Math.floor(Math.random()*hits.length)];
-                    ctx.beginPath(); ctx.moveTo(h0[0], h0[1]);
-                    let qx=h0[0], qy=h0[1];
-                    for (let seg=0; seg<6; seg++) {
-                        qx += (Math.random()-0.5)*FS*0.22;
-                        qy += (Math.random()-0.4)*FS*0.14;
-                        ctx.lineTo(qx,qy);
-                    }
-                    ctx.strokeStyle = `rgba(0,242,255,${0.05+Math.random()*0.12})`;
-                    ctx.lineWidth   = 0.6;
-                    ctx.stroke();
-                }
-            }
         }
 
         let lenis;
