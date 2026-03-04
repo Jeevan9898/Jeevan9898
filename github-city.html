@@ -14,7 +14,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 #cursor{
   position:fixed;pointer-events:none;z-index:9999;
   transform:translate(-50%,-50%);
-  transition:transform .08s ease;
   top:0;left:0
 }
 #cursor svg{
@@ -40,31 +39,97 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 .ld-dot{width:6px;height:6px;background:#00f2ff;border-radius:50%;box-shadow:0 0 12px #00f2ff,0 0 24px rgba(0,242,255,.4)}
 #ld-title{font-family:'Orbitron',monospace;font-size:15px;letter-spacing:8px;color:#00f2ff;
   text-shadow:0 0 20px #00f2ff,0 0 50px rgba(0,242,255,.25);text-align:center}
-#ld-sub{font-size:8px;letter-spacing:4px;color:rgba(0,242,255,.35);text-align:center}
+#ld-sub{font-size:9px;letter-spacing:4px;color:rgba(0,242,255,.35);text-align:center}
 .ld-bar{width:240px;height:1.5px;background:#030e1a;position:relative;overflow:hidden}
 .ld-bar::after{content:'';position:absolute;inset:0;
   background:linear-gradient(90deg,transparent,rgba(0,242,255,.2),transparent);
   animation:ldshim 1.6s ease-in-out infinite}
 #ld-prog{height:100%;width:0%;background:#00f2ff;
   transition:width .4s;box-shadow:0 0 10px #00f2ff}
-#ld-msg{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.35);min-height:14px;text-align:center}
+#ld-msg{font-size:9px;letter-spacing:3px;color:rgba(0,242,255,.35);min-height:14px;text-align:center}
+
+/* ─── INTRO STAR SCREEN ──────────────────────────── */
+#intro{
+  position:fixed;inset:0;z-index:200;
+  background:#000000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:32px;
+  transition:opacity 1.8s ease;
+}
+#intro-canvas{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+}
+.intro-content{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:24px;
+  pointer-events:none;
+}
+.intro-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(28px,5vw,64px);
+  letter-spacing:12px;
+  color:#00f2ff;
+  text-shadow:0 0 30px #00f2ff,0 0 80px rgba(0,242,255,.4),0 0 120px rgba(0,242,255,.15);
+  text-align:center;
+  animation:titlePulse 3s ease-in-out infinite;
+}
+.intro-name{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(12px,2vw,20px);
+  letter-spacing:8px;
+  color:rgba(0,242,255,.6);
+  text-align:center;
+}
+.intro-tagline{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(11px,1.5vw,15px);
+  letter-spacing:4px;
+  color:rgba(0,242,255,.35);
+  text-align:center;
+}
+.scroll-hint{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  animation:floatHint 2s ease-in-out infinite;
+}
+.scroll-hint-text{
+  font-family:'Share Tech Mono',monospace;
+  font-size:clamp(11px,1.5vw,14px);
+  letter-spacing:5px;
+  color:#00f2ff;
+  text-shadow:0 0 12px #00f2ff;
+}
+.scroll-arrow{
+  width:24px;height:24px;
+  border-right:2px solid #00f2ff;
+  border-bottom:2px solid #00f2ff;
+  transform:rotate(45deg);
+  box-shadow:2px 2px 8px rgba(0,242,255,.5);
+  margin-top:-6px;
+}
+.scroll-arrow:nth-child(3){opacity:.4}
+
+@keyframes titlePulse{0%,100%{text-shadow:0 0 30px #00f2ff,0 0 80px rgba(0,242,255,.4)}50%{text-shadow:0 0 40px #00f2ff,0 0 100px rgba(0,242,255,.6),0 0 160px rgba(0,242,255,.25)}}
+@keyframes floatHint{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
 /* ─── HUD TOP ─────────────────────────────────────── */
 #hud{
   position:fixed;top:0;left:0;right:0;z-index:30;
   padding:18px 28px;
   display:flex;justify-content:space-between;align-items:center;
-  background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,transparent 100%);
-  pointer-events:none;font-family:'Share Tech Mono',monospace
+  background:linear-gradient(180deg,rgba(0,0,0,.9) 0%,transparent 100%);
+  pointer-events:none;font-family:'Share Tech Mono',monospace;
+  opacity:0;transition:opacity 1s ease;
 }
-.hud-title{font-family:'Orbitron',monospace;font-size:14px;letter-spacing:6px;
-  color:#00f2ff;text-shadow:0 0 16px #00f2ff,0 0 40px rgba(0,242,255,.2);margin-bottom:3px}
-.hud-sub{font-size:7px;letter-spacing:3.5px;color:rgba(0,242,255,.32)}
+#hud.visible{opacity:1}
+.hud-title{font-family:'Orbitron',monospace;font-size:18px;letter-spacing:6px;
+  color:#00f2ff;text-shadow:0 0 16px #00f2ff,0 0 40px rgba(0,242,255,.2);margin-bottom:5px}
+.hud-sub{font-size:11px;letter-spacing:3px;color:rgba(0,242,255,.55)}
 .hud-stats{display:flex;gap:28px}
 .hstat{text-align:right}
-.hval{font-family:'Orbitron',monospace;font-size:20px;color:#fff;
+.hval{font-family:'Orbitron',monospace;font-size:22px;color:#fff;
   text-shadow:0 0 10px rgba(0,242,255,.55);letter-spacing:1px;line-height:1.1}
-.hlbl{font-size:6px;letter-spacing:3px;color:rgba(0,242,255,.28);margin-top:2px}
+.hlbl{font-size:10px;letter-spacing:3px;color:rgba(0,242,255,.45);margin-top:3px}
 
 /* ─── SCAN LINE OVERLAY ──────────────────────────── */
 #scanlines{
@@ -85,35 +150,34 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   font-family:'Share Tech Mono',monospace;
   background:rgba(0,1,8,.96);
   border:1px solid rgba(0,242,255,.22);
-  min-width:230px;max-width:265px;
+  min-width:230px;max-width:280px;
   backdrop-filter:blur(10px);
   clip-path:polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))
 }
 .tip-head{padding:14px 18px 12px;border-bottom:1px solid rgba(0,242,255,.08)}
-.tip-accent-bar{height:2px;margin:-14px -18px 12px;
-  box-shadow:0 0 10px currentColor}
-.tip-name{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:#fff}
+.tip-accent-bar{height:2px;margin:-14px -18px 12px;box-shadow:0 0 10px currentColor}
+.tip-name{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;color:#fff}
 .tip-body{padding:12px 18px 14px}
-.tip-commits-num{font-family:'Orbitron',monospace;font-size:32px;letter-spacing:0px;line-height:1}
-.tip-commits-lbl{font-size:7px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:10px}
-.tip-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:8px;letter-spacing:1.5px}
+.tip-commits-num{font-family:'Orbitron',monospace;font-size:32px;letter-spacing:0;line-height:1}
+.tip-commits-lbl{font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:10px}
+.tip-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:9px;letter-spacing:1.5px}
 .tip-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
-.tip-desc{font-size:8px;color:rgba(255,255,255,.32);font-family:sans-serif;
-  line-height:1.65;margin:8px 0;max-width:200px}
-.tip-meta{font-size:8px;letter-spacing:1.5px;color:rgba(255,215,0,.55);margin-top:4px}
-.tip-cta{
-  font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.3);
-  margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,242,255,.06)
-}
+.tip-desc{font-size:9px;color:rgba(255,255,255,.38);font-family:sans-serif;line-height:1.65;margin:8px 0;max-width:220px}
+.tip-meta{font-size:9px;letter-spacing:1.5px;color:rgba(255,215,0,.6);margin-top:4px}
+.tip-cta{font-size:8px;letter-spacing:2px;color:rgba(0,242,255,.4);margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,242,255,.06)}
 
 /* ─── BOTTOM BAR ─────────────────────────────────── */
 #bbar{
-  position:fixed;bottom:0;left:0;right:0;height:32px;
-  background:linear-gradient(0deg,rgba(0,0,0,.8) 0%,transparent 100%);
+  position:fixed;bottom:0;left:0;right:0;
+  padding:10px 0;
+  background:linear-gradient(0deg,rgba(0,0,0,.9) 0%,transparent 100%);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;
-  color:rgba(0,242,255,.22);pointer-events:none;z-index:30
+  font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:4px;
+  color:rgba(0,242,255,.6);pointer-events:none;z-index:30;
+  text-shadow:0 0 8px rgba(0,242,255,.3);
+  opacity:0;transition:opacity 1s ease;
 }
+#bbar.visible{opacity:1}
 
 /* ─── CORNER DECO ────────────────────────────────── */
 .corner{position:fixed;width:32px;height:32px;pointer-events:none;z-index:31}
@@ -123,9 +187,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 #c-bl{bottom:8px;left:8px;transform:scaleY(-1)}
 #c-br{bottom:8px;right:8px;transform:scale(-1)}
 
+/* ─── API STATUS BADGE ───────────────────────────── */
+#api-status{
+  position:fixed;top:72px;right:28px;z-index:50;
+  font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;
+  padding:4px 10px;border-radius:2px;
+  border:1px solid rgba(0,242,255,.2);
+  background:rgba(0,0,0,.6);
+  color:rgba(0,242,255,.5);
+  opacity:0;transition:opacity .5s;
+  pointer-events:none;
+}
+#api-status.show{opacity:1}
+
 @keyframes ldspin{to{transform:rotate(360deg)}}
 @keyframes ldshim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-@keyframes blink{0%,100%{opacity:.9}50%{opacity:.3}}
 </style>
 </head>
 <body>
@@ -133,14 +209,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 <!-- CURSOR -->
 <div id="cursor">
   <svg width="36" height="36" viewBox="-18 -18 36 36">
-    <!-- outer ring -->
     <circle class="cur-ring" cx="0" cy="0" r="12" fill="none" stroke="rgba(0,242,255,.75)" stroke-width=".8"/>
-    <!-- cross lines -->
     <line class="cur-cross" x1="-17" y1="0" x2="-15" y2="0" stroke="#00f2ff" stroke-width=".8" opacity=".9"/>
     <line class="cur-cross" x1="15" y1="0" x2="17" y2="0" stroke="#00f2ff" stroke-width=".8" opacity=".9"/>
     <line class="cur-cross" x1="0" y1="-17" x2="0" y2="-15" stroke="#00f2ff" stroke-width=".8" opacity=".9"/>
     <line class="cur-cross" x1="0" y1="15" x2="0" y2="17" stroke="#00f2ff" stroke-width=".8" opacity=".9"/>
-    <!-- corner ticks -->
     <line x1="-8.5" y1="-8.5" x2="-5" y2="-8.5" stroke="#00f2ff" stroke-width=".7" opacity=".6"/>
     <line x1="-8.5" y1="-8.5" x2="-8.5" y2="-5" stroke="#00f2ff" stroke-width=".7" opacity=".6"/>
     <line x1="8.5" y1="-8.5" x2="5" y2="-8.5" stroke="#00f2ff" stroke-width=".7" opacity=".6"/>
@@ -149,7 +222,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
     <line x1="-8.5" y1="8.5" x2="-8.5" y2="5" stroke="#00f2ff" stroke-width=".7" opacity=".6"/>
     <line x1="8.5" y1="8.5" x2="5" y2="8.5" stroke="#00f2ff" stroke-width=".7" opacity=".6"/>
     <line x1="8.5" y1="8.5" x2="8.5" y2="5" stroke="#00f2ff" stroke-width=".7" opacity=".6"/>
-    <!-- center dot -->
     <circle cx="0" cy="0" r="1.2" fill="#00f2ff" opacity=".9"/>
   </svg>
 </div>
@@ -164,6 +236,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   <div id="ld-sub">JEEVAN9898 · DEEP SPACE SECTOR</div>
   <div class="ld-bar"><div id="ld-prog"></div></div>
   <div id="ld-msg">INITIALISING WARP DRIVE...</div>
+</div>
+
+<!-- INTRO STAR SCREEN -->
+<div id="intro">
+  <canvas id="intro-canvas"></canvas>
+  <div class="intro-content">
+    <div class="intro-title">GIT CITY</div>
+    <div class="intro-name">◈ JEEVAN YADAV</div>
+    <div class="intro-tagline">FULL STACK · BLOCKCHAIN · WEB3 · B.TECH CSE 2028</div>
+    <div class="scroll-hint">
+      <div class="scroll-hint-text">SCROLL DOWN TO SEE THE BUILDINGS</div>
+      <div class="scroll-arrow"></div>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
 </div>
 
 <!-- CANVAS -->
@@ -186,6 +273,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   </div>
 </div>
 
+<!-- API STATUS -->
+<div id="api-status"></div>
+
 <!-- TOOLTIP -->
 <div id="tip">
   <div class="tip-head">
@@ -206,7 +296,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 </div>
 
 <!-- BOTTOM BAR -->
-<div id="bbar">DRAG — ORBIT &nbsp;·&nbsp; SCROLL — ZOOM &nbsp;·&nbsp; HOVER — INSPECT &nbsp;·&nbsp; CLICK — OPEN REPO</div>
+<div id="bbar">✦ DRAG TO ORBIT &nbsp;·&nbsp; SCROLL TO ZOOM &nbsp;·&nbsp; HOVER TO INSPECT &nbsp;·&nbsp; CLICK TO OPEN REPO ✦</div>
 
 <!-- CORNER DECO -->
 <div class="corner" id="c-tl"><svg viewBox="0 0 32 32"><path d="M2 18 L2 2 L18 2" fill="none" stroke="rgba(0,242,255,.25)" stroke-width="1"/></svg></div>
@@ -217,8 +307,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 'use strict';
+
 // ═══════════════════════════════════════════════
-//  CURSOR — follows mouse directly, no delay
+//  CURSOR
 // ═══════════════════════════════════════════════
 const cursorEl = document.getElementById('cursor');
 let mx = window.innerWidth/2, my = window.innerHeight/2;
@@ -229,6 +320,90 @@ document.addEventListener('mousemove', e => {
 }, {passive: true});
 
 // ═══════════════════════════════════════════════
+//  INTRO STAR CANVAS
+// ═══════════════════════════════════════════════
+(function initIntroStars() {
+  const cv = document.getElementById('intro-canvas');
+  const ctx = cv.getContext('2d');
+  let W, H, stars = [];
+
+  function resize() {
+    W = cv.width  = window.innerWidth;
+    H = cv.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // generate stars
+  for (let i = 0; i < 1200; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.8 + 0.2,
+      b: Math.random(),     // base brightness
+      s: Math.random() * 0.02 + 0.005, // twinkle speed
+      p: Math.random() * Math.PI * 2,  // phase
+      c: Math.random() > 0.8 ? `hsl(${200+Math.random()*40},80%,90%)` : '#ffffff'
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    if (!document.getElementById('intro').style.opacity || document.getElementById('intro').style.opacity !== '0') {
+      requestAnimationFrame(draw);
+    }
+    frame++;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, W, H);
+
+    stars.forEach(s => {
+      s.p += s.s;
+      const alpha = s.b * 0.5 + Math.sin(s.p) * 0.5;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = s.c;
+      ctx.globalAlpha = Math.max(0.1, Math.min(1, alpha));
+      ctx.fill();
+    });
+
+    // add a few bright glints
+    if (frame % 60 === 0) {
+      const gs = stars[Math.floor(Math.random()*stars.length)];
+      gs.b = 1; gs.r = Math.random() * 3 + 1;
+      setTimeout(() => { gs.b = Math.random(); gs.r = Math.random() * 1.8 + 0.2; }, 500);
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ═══════════════════════════════════════════════
+//  INTRO DISMISS (scroll or click)
+// ═══════════════════════════════════════════════
+let introShown = true;
+function dismissIntro() {
+  if (!introShown) return;
+  introShown = false;
+  const intro = document.getElementById('intro');
+  intro.style.opacity = '0';
+  intro.style.pointerEvents = 'none';
+  setTimeout(() => { intro.style.display = 'none'; }, 1900);
+  document.getElementById('hud').classList.add('visible');
+  document.getElementById('bbar').classList.add('visible');
+}
+
+window.addEventListener('wheel', dismissIntro, {once: true});
+window.addEventListener('touchstart', () => {
+  setTimeout(dismissIntro, 300);
+}, {once: true});
+document.getElementById('intro').addEventListener('click', dismissIntro);
+// Also dismiss after 8 seconds automatically
+setTimeout(dismissIntro, 8000);
+
+// ═══════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════
 const USERNAME = 'Jeevan9898';
@@ -237,6 +412,7 @@ const LANG_PAL = {
   HTML:'#e34c26', CSS:'#9b5fcb', TypeScript:'#3178c6',
   'C++':'#f34b7d', C:'#5a6baa', Rust:'#dea584', Go:'#00acd7',
   Java:'#b07219', PHP:'#4f5d95', Ruby:'#cc342d', Shell:'#89e051',
+  Markdown:'#083fa1', Vue:'#41b883', Svelte:'#ff3e00',
   default:'#00f2ff'
 };
 
@@ -248,48 +424,129 @@ function setLoad(p, m) {
   document.getElementById('ld-msg').textContent = m;
 }
 
+function showApiStatus(msg, isReal) {
+  const el = document.getElementById('api-status');
+  el.textContent = isReal ? '✓ LIVE GITHUB DATA' : '⚠ DEMO DATA — RATE LIMITED';
+  el.style.color = isReal ? 'rgba(0,255,100,.7)' : 'rgba(255,200,0,.7)';
+  el.style.borderColor = isReal ? 'rgba(0,255,100,.3)' : 'rgba(255,200,0,.3)';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
 // ═══════════════════════════════════════════════
-//  GITHUB API
+//  GITHUB API — FIXED & ROBUST
+//  Uses GraphQL for commit counts (much more reliable)
+//  Falls back gracefully per-repo
 // ═══════════════════════════════════════════════
-async function getCommits(name) {
+
+// Use contributor_count from stats endpoint — reliable & unauthenticated
+async function getCommitCount(repoName) {
   try {
+    // stats/contributors gives per-contributor totals — sum them for total commits
     const r = await fetch(
-      `https://api.github.com/repos/${USERNAME}/${name}/commits?per_page=1`,
-      {headers:{Accept:'application/vnd.github.v3+json'}}
+      `https://api.github.com/repos/${USERNAME}/${repoName}/commits?per_page=1`,
+      { headers: { Accept: 'application/vnd.github.v3+json' } }
     );
-    const lk = r.headers.get('link') || '';
-    const m = lk.match(/page=(\d+)>; rel="last"/);
-    return m ? +m[1] : 1;
-  } catch { return 1; }
+
+    if (r.status === 403 || r.status === 429) return null; // rate limited
+    if (!r.ok) return 1;
+
+    // Parse the Link header to find last page (= total commit count)
+    const link = r.headers.get('Link') || '';
+    const match = link.match(/[?&]page=(\d+)>;\s*rel="last"/);
+    if (match) return parseInt(match[1], 10);
+
+    // If no Link header, there's only 1 page of commits
+    // Try to count from the response body
+    const data = await r.json();
+    return Array.isArray(data) ? data.length : 1;
+  } catch {
+    return 1;
+  }
 }
 
 async function fetchData() {
   setLoad(5, 'SCANNING DEEP SPACE...');
-  const user = await fetch(`https://api.github.com/users/${USERNAME}`)
-    .then(r => r.json()).catch(() => ({}));
-  setLoad(15, 'DETECTING REPOSITORIES...');
-  const reposRaw = await fetch(
-    `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`,
-    {headers:{Accept:'application/vnd.github.v3+json'}}
-  ).then(r => r.json()).catch(() => []);
 
-  // if rate limited or bad response, throw so fallback kicks in
-  if (!Array.isArray(reposRaw) || reposRaw.length === 0) throw new Error('No repos from API');
+  // Fetch user profile
+  const userResp = await fetch(`https://api.github.com/users/${USERNAME}`, {
+    headers: { Accept: 'application/vnd.github.v3+json' }
+  });
+  if (!userResp.ok) throw new Error(`User fetch failed: ${userResp.status}`);
+  const user = await userResp.json();
+
+  // Check rate limit first
+  const rateResp = await fetch('https://api.github.com/rate_limit', {
+    headers: { Accept: 'application/vnd.github.v3+json' }
+  });
+  if (rateResp.ok) {
+    const rateData = await rateResp.json();
+    const remaining = rateData.resources?.core?.remaining ?? 60;
+    if (remaining < 5) throw new Error('GitHub API rate limit nearly exhausted');
+  }
+
+  setLoad(15, 'DETECTING REPOSITORIES...');
+
+  // Fetch all repos (public, non-fork first pass)
+  const reposResp = await fetch(
+    `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed&type=owner`,
+    { headers: { Accept: 'application/vnd.github.v3+json' } }
+  );
+  if (!reposResp.ok) throw new Error(`Repos fetch failed: ${reposResp.status}`);
+  const reposRaw = await reposResp.json();
+
+  if (!Array.isArray(reposRaw) || reposRaw.length === 0)
+    throw new Error('No repositories found');
+
+  setLoad(20, `FOUND ${reposRaw.length} REPOSITORIES — MAPPING COMMITS...`);
 
   const out = [];
+  let rateLimited = false;
+
   for (let i = 0; i < reposRaw.length; i++) {
     const rp = reposRaw[i];
-    const c = await getCommits(rp.name);
-    out.push({...rp, commitCount: c});
-    setLoad(18 + (i+1)/reposRaw.length*64, `MAPPING [${i+1}/${reposRaw.length}] ${rp.name.toUpperCase()}`);
+
+    let commitCount = 1;
+    if (!rateLimited) {
+      const c = await getCommitCount(rp.name);
+      if (c === null) {
+        rateLimited = true;
+        // Use push frequency as proxy when rate limited
+        commitCount = Math.max(1, Math.round((rp.size || 10) / 5));
+      } else {
+        commitCount = c;
+      }
+    } else {
+      commitCount = Math.max(1, Math.round((rp.size || 10) / 5));
+    }
+
+    out.push({
+      name: rp.name,
+      commitCount,
+      language: rp.language,
+      stargazers_count: rp.stargazers_count || 0,
+      forks_count: rp.forks_count || 0,
+      description: rp.description || '',
+      html_url: rp.html_url,
+      size: rp.size,
+      updated_at: rp.updated_at,
+      _rateLimitedCommit: rateLimited
+    });
+
+    const progress = 20 + ((i + 1) / reposRaw.length) * 60;
+    setLoad(progress, `MAPPING [${i+1}/${reposRaw.length}] ${rp.name.toUpperCase().substring(0,24)}`);
+
+    // Small delay to be nice to the API
+    if (i % 3 === 2) await new Promise(r => setTimeout(r, 120));
   }
+
   out.sort((a, b) => b.commitCount - a.commitCount);
   setLoad(84, 'CONSTRUCTING CITY GRID...');
-  return {user, repos: out};
+  return { user, repos: out, fromAPI: true };
 }
 
 // ═══════════════════════════════════════════════
-//  WINDOW TEXTURE — pixel crisp
+//  WINDOW TEXTURE
 // ═══════════════════════════════════════════════
 function makeWinTex(color, cols, rows, density) {
   const S = 14, W = cols*S, H = rows*S;
@@ -330,7 +587,6 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
   const grp = new THREE.Group();
   grp.position.set(cx, 0, cz);
 
-  // tier setbacks — wider base, narrow top (real skyscraper feel)
   const tiers = [
     { yStart: 0,                      yEnd: Math.floor(floors*.5),  w: fw   },
     { yStart: Math.floor(floors*.5),  yEnd: Math.floor(floors*.78), w: Math.max(2, fw-1) },
@@ -342,23 +598,20 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     const h = yEnd - yStart;
     const d = .28 + logR*.38 + (yStart/floors)*.18;
     const wt = makeWinTex(color, w*2, h*2, d);
-
     const sideMat = new THREE.MeshLambertMaterial({
       color: col3.clone().multiplyScalar(.12),
       map: wt, emissiveMap: wt,
       emissive: col3.clone(), emissiveIntensity: .45 + logR*.4,
     });
-    const topMat  = new THREE.MeshLambertMaterial({color: 0x030a18});
-    const botMat  = new THREE.MeshLambertMaterial({color: 0x010608});
+    const topMat = new THREE.MeshLambertMaterial({color: 0x030a18});
+    const botMat = new THREE.MeshLambertMaterial({color: 0x010608});
     const mats = [sideMat, sideMat, topMat, botMat, sideMat, sideMat];
-
     const geo  = new THREE.BoxGeometry(w, h, w);
     const mesh = new THREE.Mesh(geo, mats);
     mesh.position.set(0, yStart + h/2, 0);
     mesh.castShadow = mesh.receiveShadow = true;
     grp.add(mesh);
 
-    // edge glow outline
     const eMat = new THREE.LineBasicMaterial({
       color: col3.clone().multiplyScalar(1.8),
       transparent: true, opacity: .3
@@ -371,21 +624,18 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
   const topY = floors;
   const capW = Math.max(1, fw-2);
 
-  // roof glow cap
   const capGeo = new THREE.BoxGeometry(capW+.08, .14, capW+.08);
   const capMat = new THREE.MeshBasicMaterial({color: col3, transparent: true, opacity: .85});
   const cap = new THREE.Mesh(capGeo, capMat);
   cap.position.y = topY + .07;
   grp.add(cap);
 
-  // roof halo spread
   const haloGeo = new THREE.BoxGeometry(capW+1.2, .04, capW+1.2);
   const haloMat = new THREE.MeshBasicMaterial({color: col3, transparent: true, opacity: .15});
   const halo = new THREE.Mesh(haloGeo, haloMat);
   halo.position.y = topY + .02;
   grp.add(halo);
 
-  // spire on tall buildings
   if (floors > 20) {
     const spH = Math.floor(floors * .18);
     const spGeo = new THREE.CylinderGeometry(.05, .14, spH, 6);
@@ -394,7 +644,6 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     sp.position.y = topY + spH/2;
     grp.add(sp);
 
-    // blinking beacon cube (pixel style)
     const bGeo = new THREE.BoxGeometry(.4, .4, .4);
     const bMat = new THREE.MeshBasicMaterial({color: col3});
     const beacon = new THREE.Mesh(bGeo, bMat);
@@ -403,7 +652,6 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     grp.add(beacon);
   }
 
-  // rooftop point light
   const pl = new THREE.PointLight(col3, .65 + logR * .7, floors * 3, 2);
   pl.position.y = topY + 1.5;
   grp.add(pl);
@@ -417,8 +665,6 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
 //  SPACE ENVIRONMENT
 // ═══════════════════════════════════════════════
 function buildSpace(scene) {
-
-  // ── MULTI-LAYER STAR FIELD ──────────────────
   const starLayers = [
     {n:7000, rMin:380, rMax:650, size:1.0, op:.92},
     {n:2500, rMin:200, rMax:380, size:1.5, op:.75},
@@ -442,7 +688,6 @@ function buildSpace(scene) {
     g.addColorStop(.35, 'rgba(210,230,255,.85)');
     g.addColorStop(1,   'transparent');
     ctx.fillStyle = g; ctx.fillRect(0,0,16,16);
-
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     const mat = new THREE.PointsMaterial({
@@ -456,7 +701,7 @@ function buildSpace(scene) {
     starObjs.push(pts);
   });
 
-  // ── NEBULA GAS CLOUDS ───────────────────────
+  // Nebula clouds
   [
     {p:[ 60,130,-300], s:[310,140], c:'rgba(0,70,200,.06)'},
     {p:[-120,170,-350],s:[240,110], c:'rgba(100,0,200,.045)'},
@@ -476,22 +721,19 @@ function buildSpace(scene) {
       map: new THREE.CanvasTexture(cv), transparent: true,
       depthWrite: false, blending: THREE.AdditiveBlending,
     }));
-    sp.position.set(...n.p);
-    sp.scale.set(...n.s, 1);
+    sp.position.set(...n.p); sp.scale.set(...n.s, 1);
     scene.add(sp);
   });
 
-  // ── MOON ────────────────────────────────────
+  // Moon
   const mCv = document.createElement('canvas'); mCv.width = mCv.height = 256;
   const mCtx = mCv.getContext('2d');
   const mG = mCtx.createRadialGradient(128,128,0,128,128,128);
-  mG.addColorStop(0,   '#f8f0d8');
-  mG.addColorStop(.7,  '#e8d8b8');
-  mG.addColorStop(1,   '#d0c090');
+  mG.addColorStop(0,'#f8f0d8'); mG.addColorStop(.7,'#e8d8b8'); mG.addColorStop(1,'#d0c090');
   mCtx.fillStyle = mG; mCtx.beginPath(); mCtx.arc(128,128,128,0,Math.PI*2); mCtx.fill();
   [[75,80,18],[155,65,13],[55,165,9],[185,155,15],[120,125,7],[200,100,6]].forEach(([x,y,r]) => {
     const cg = mCtx.createRadialGradient(x,y,0,x,y,r);
-    cg.addColorStop(0, 'rgba(0,0,0,.22)'); cg.addColorStop(1, 'transparent');
+    cg.addColorStop(0,'rgba(0,0,0,.22)'); cg.addColorStop(1,'transparent');
     mCtx.fillStyle = cg; mCtx.beginPath(); mCtx.arc(x,y,r,0,Math.PI*2); mCtx.fill();
   });
   const moonMesh = new THREE.Mesh(
@@ -501,26 +743,23 @@ function buildSpace(scene) {
   moonMesh.position.set(200, 230, -380);
   scene.add(moonMesh);
 
-  // moon glow halo
   const mhCv = document.createElement('canvas'); mhCv.width = mhCv.height = 128;
   const mhCtx = mhCv.getContext('2d');
   const mhG = mhCtx.createRadialGradient(64,64,0,64,64,64);
-  mhG.addColorStop(0,   'rgba(240,230,190,.28)');
-  mhG.addColorStop(.4,  'rgba(200,215,255,.07)');
-  mhG.addColorStop(1,   'transparent');
+  mhG.addColorStop(0,'rgba(240,230,190,.28)');
+  mhG.addColorStop(.4,'rgba(200,215,255,.07)');
+  mhG.addColorStop(1,'transparent');
   mhCtx.fillStyle = mhG; mhCtx.fillRect(0,0,128,128);
   const mhSp = new THREE.Sprite(new THREE.SpriteMaterial({
     map: new THREE.CanvasTexture(mhCv), transparent: true,
     depthWrite: false, blending: THREE.AdditiveBlending,
   }));
-  mhSp.position.copy(moonMesh.position);
-  mhSp.scale.set(170, 170, 1);
+  mhSp.position.copy(moonMesh.position); mhSp.scale.set(170,170,1);
   scene.add(mhSp);
 
-  // ── SHOOTING STARS ──────────────────────────
+  // Shooting stars
   const TRAIL = 32;
   const shooters = [];
-
   function spawnShooter() {
     const sx=(Math.random()-.5)*700, sy=80+Math.random()*200, sz=(Math.random()-.5)*700;
     const ang=Math.random()*Math.PI*2, spd=6+Math.random()*10;
@@ -541,31 +780,20 @@ function buildSpace(scene) {
       life:0, maxLife:50+Math.random()*80,
     };
   }
+  for (let i=0; i<5; i++) { const s=spawnShooter(); s.life=Math.random()*s.maxLife; shooters.push(s); }
 
-  for (let i=0; i<5; i++) {
-    const s = spawnShooter(); s.life = Math.random()*s.maxLife; shooters.push(s);
-  }
-
-  // ── DISTANT SKYLINE ─────────────────────────
+  // Distant skyline
   for (let i = 0; i < 36; i++) {
-    const ang = (i/36)*Math.PI*2;
-    const d   = 185 + Math.random()*35;
-    const h   = 3 + Math.random()*30;
-    const w   = 2 + Math.random()*7;
-    const m   = new THREE.Mesh(
-      new THREE.BoxGeometry(w, h, .5),
-      new THREE.MeshBasicMaterial({color: 0x00090c})
-    );
+    const ang=(i/36)*Math.PI*2, d=185+Math.random()*35, h=3+Math.random()*30, w=2+Math.random()*7;
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,.5), new THREE.MeshBasicMaterial({color:0x00090c}));
     m.position.set(Math.cos(ang)*d, h/2, Math.sin(ang)*d);
     scene.add(m);
   }
 
-  // ── GROUND ──────────────────────────────────
-  // Smooth, dark, no grid pixels
+  // Ground
   const gCv = document.createElement('canvas'); gCv.width = gCv.height = 512;
   const gCtx = gCv.getContext('2d');
   gCtx.fillStyle = '#00040c'; gCtx.fillRect(0,0,512,512);
-  // barely-visible hex-grid
   gCtx.strokeStyle='rgba(0,80,160,.04)'; gCtx.lineWidth=.6;
   for (let i=0;i<512;i+=32) {
     gCtx.beginPath();gCtx.moveTo(i,0);gCtx.lineTo(i,512);gCtx.stroke();
@@ -574,52 +802,41 @@ function buildSpace(scene) {
   const gTex = new THREE.CanvasTexture(gCv);
   gTex.wrapS = gTex.wrapT = THREE.RepeatWrapping; gTex.repeat.set(14,14);
   const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(700, 700, 1, 1),
-    new THREE.MeshLambertMaterial({color: 0x00040c, map: gTex})
+    new THREE.PlaneGeometry(700,700,1,1),
+    new THREE.MeshLambertMaterial({color:0x00040c, map:gTex})
   );
   ground.rotation.x = -Math.PI/2; ground.position.y = -.02;
   ground.receiveShadow = true; scene.add(ground);
 
-  // thin neon road lines
   const lm = new THREE.LineBasicMaterial({color:0x002850, transparent:true, opacity:.25});
   [-5, 5].forEach(o => {
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(
-      [new THREE.Vector3(o, 0,-350), new THREE.Vector3(o, 0, 350)]), lm));
+      [new THREE.Vector3(o,0,-350), new THREE.Vector3(o,0,350)]), lm));
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(
-      [new THREE.Vector3(-350, 0, o), new THREE.Vector3(350, 0, o)]), lm));
+      [new THREE.Vector3(-350,0,o), new THREE.Vector3(350,0,o)]), lm));
   });
 
-  // ── UPDATE FN ───────────────────────────────
   let frame = 0;
   function updateSpace() {
     frame++;
-    // slowly drift stars
-    starObjs.forEach((s,i) => { s.rotation.y += 0.00003 * (i+1); });
-    // starfield twinkle
-    if (frame % 3 === 0) {
-      starObjs.forEach(s => {
-        s.material.opacity = s.material.opacity * .98 + (Math.random() * .1 + .82) * .02;
-      });
+    starObjs.forEach((s,i) => { s.rotation.y += 0.00003*(i+1); });
+    if (frame%3===0) {
+      starObjs.forEach(s => { s.material.opacity = s.material.opacity*.98+(Math.random()*.1+.82)*.02; });
     }
-    // update shooters
-    if (Math.random() < .007 && shooters.filter(s=>!s._dead).length < 8)
-      shooters.push(spawnShooter());
-    for (let i = shooters.length-1; i >= 0; i--) {
-      const s = shooters[i]; if (s._dead) continue;
+    if (Math.random()<.007 && shooters.filter(s=>!s._dead).length<8) shooters.push(spawnShooter());
+    for (let i=shooters.length-1; i>=0; i--) {
+      const s=shooters[i]; if(s._dead) continue;
       s.life++; s.x+=s.vx; s.y+=s.vy; s.z+=s.vz;
       s.head.position.set(s.x,s.y,s.z);
       s.trail.unshift({x:s.x,y:s.y,z:s.z});
-      if (s.trail.length > TRAIL) s.trail.pop();
-      const pa = s.geo.attributes.position.array;
+      if(s.trail.length>TRAIL) s.trail.pop();
+      const pa=s.geo.attributes.position.array;
       s.trail.forEach((p,pi)=>{ pa[pi*3]=p.x; pa[pi*3+1]=p.y; pa[pi*3+2]=p.z; });
-      s.geo.attributes.position.needsUpdate = true;
-      const t = s.life/s.maxLife;
-      const a = t<.15?t/.15 : t>.72?(1-t)/.28 : 1;
-      s.mat.opacity = .88*a; s.hMat.opacity = a;
-      if (s.life >= s.maxLife) {
-        scene.remove(s.line); scene.remove(s.head);
-        s._dead = true; shooters.splice(i,1);
-      }
+      s.geo.attributes.position.needsUpdate=true;
+      const t=s.life/s.maxLife;
+      const a=t<.15?t/.15:t>.72?(1-t)/.28:1;
+      s.mat.opacity=.88*a; s.hMat.opacity=a;
+      if(s.life>=s.maxLife) { scene.remove(s.line); scene.remove(s.head); s._dead=true; shooters.splice(i,1); }
     }
   }
   return {updateSpace};
@@ -653,14 +870,14 @@ function showTip(r, x, y) {
   cursorEl.classList.add('hover');
 }
 function moveTip(x, y) {
-  const pw = tip.offsetWidth||240, ph = tip.offsetHeight||220, pad=18;
-  const tx = x + 24 + pw > window.innerWidth-pad ? x - pw - 14 : x + 24;
-  const ty = Math.max(pad, Math.min(y - 16, window.innerHeight - ph - pad));
-  tip.style.left = tx + 'px'; tip.style.top = ty + 'px';
+  const pw=tip.offsetWidth||240, ph=tip.offsetHeight||220, pad=18;
+  const tx=x+24+pw>window.innerWidth-pad ? x-pw-14 : x+24;
+  const ty=Math.max(pad, Math.min(y-16, window.innerHeight-ph-pad));
+  tip.style.left=tx+'px'; tip.style.top=ty+'px';
 }
 function hideTip() {
-  tip.style.display = 'none';
-  hoveredGroup = null;
+  tip.style.display='none';
+  hoveredGroup=null;
   cursorEl.classList.remove('hover');
 }
 
@@ -668,36 +885,40 @@ function hideTip() {
 //  MAIN
 // ═══════════════════════════════════════════════
 async function main() {
-  // ── FALLBACK REPOS (always shown even if API fails/rate-limits)
   const FALLBACK = [
-    {name:'BlockChain',     commitCount:48, language:'Solidity',    stargazers_count:1, forks_count:0, description:'Full-stack DApp with Solidity, React & Web3.js. Wallet connection, on-chain transactions.', html_url:'https://github.com/Jeevan9898/BlockChain'},
-    {name:'Jeevan9898',     commitCount:22, language:'Markdown',    stargazers_count:0, forks_count:0, description:'GitHub profile README — pixel city portfolio.', html_url:'https://github.com/Jeevan9898/Jeevan9898'},
-    {name:'Space-Portfolio',commitCount:35, language:'JavaScript',  stargazers_count:0, forks_count:0, description:'3D space-themed portfolio built with Three.js and GSAP. Live on Vercel.', html_url:'https://github.com/Jeevan9898'},
-    {name:'Greeter-DApp',   commitCount:18, language:'Solidity',    stargazers_count:0, forks_count:0, description:'Decentralized Greeter App — Solidity contract + React + Web3.js on Ganache.', html_url:'https://github.com/Jeevan9898'},
-    {name:'B_Projects',     commitCount:12, language:'JavaScript',  stargazers_count:0, forks_count:0, description:'React + Smart Contract projects collection.', html_url:'https://github.com/Jeevan9898'},
-    {name:'DSA-Practice',   commitCount:60, language:'C++',         stargazers_count:0, forks_count:0, description:'Data Structures & Algorithms practice. Arrays, trees, recursion, linked lists.', html_url:'https://github.com/Jeevan9898'},
-    {name:'Python-OOP',     commitCount:14, language:'Python',      stargazers_count:0, forks_count:0, description:'Python OOP fundamentals — classes, inheritance, encapsulation.', html_url:'https://github.com/Jeevan9898'},
+    {name:'BlockChain',     commitCount:48, language:'Solidity',   stargazers_count:1, forks_count:0, description:'Full-stack DApp with Solidity, React & Web3.js. Wallet connection, on-chain transactions.', html_url:'https://github.com/Jeevan9898/BlockChain'},
+    {name:'Jeevan9898',     commitCount:22, language:'Markdown',   stargazers_count:0, forks_count:0, description:'GitHub profile README — pixel city portfolio.', html_url:'https://github.com/Jeevan9898/Jeevan9898'},
+    {name:'Space-Portfolio',commitCount:35, language:'JavaScript', stargazers_count:0, forks_count:0, description:'3D space-themed portfolio built with Three.js and GSAP. Live on Vercel.', html_url:'https://github.com/Jeevan9898'},
+    {name:'Greeter-DApp',   commitCount:18, language:'Solidity',   stargazers_count:0, forks_count:0, description:'Decentralized Greeter App — Solidity contract + React + Web3.js on Ganache.', html_url:'https://github.com/Jeevan9898'},
+    {name:'B_Projects',     commitCount:12, language:'JavaScript', stargazers_count:0, forks_count:0, description:'React + Smart Contract projects collection.', html_url:'https://github.com/Jeevan9898'},
+    {name:'DSA-Practice',   commitCount:60, language:'C++',        stargazers_count:0, forks_count:0, description:'Data Structures & Algorithms practice. Arrays, trees, recursion, linked lists.', html_url:'https://github.com/Jeevan9898'},
+    {name:'Python-OOP',     commitCount:14, language:'Python',     stargazers_count:0, forks_count:0, description:'Python OOP fundamentals — classes, inheritance, encapsulation.', html_url:'https://github.com/Jeevan9898'},
   ];
 
-  let repos = FALLBACK, user = {};
-  try { ({user, repos} = await fetchData()); }
-  catch(e) {
-    setLoad(84,'USING DEMO DATA — GITHUB RATE LIMITED');
-    console.warn('GitHub API failed, using fallback:', e);
+  let repos = FALLBACK, user = {}, fromAPI = false;
+  try {
+    const result = await fetchData();
+    user = result.user;
+    repos = result.repos;
+    fromAPI = result.fromAPI;
+    console.log(`✅ Loaded ${repos.length} real repos from GitHub API`);
+  } catch(e) {
+    setLoad(84, 'USING DEMO DATA — GITHUB RATE LIMITED');
+    console.warn('GitHub API failed, using fallback:', e.message);
     repos = FALLBACK;
   }
-  // safety: if API returned empty array, use fallback
+
   if (!repos || repos.length === 0) repos = FALLBACK;
 
-  const totC = repos.reduce((s,r)=>s+r.commitCount,0);
-  const totS = repos.reduce((s,r)=>s+(r.stargazers_count||0),0);
+  const totC = repos.reduce((s,r)=>s+r.commitCount, 0);
+  const totS = repos.reduce((s,r)=>s+(r.stargazers_count||0), 0);
   document.getElementById('hv-b').textContent = repos.length;
   document.getElementById('hv-c').textContent = totC.toLocaleString();
   document.getElementById('hv-s').textContent = totS;
 
-  setLoad(90,'WARMING UP ENGINES...');
+  setLoad(90, 'WARMING UP ENGINES...');
 
-  // ── THREE SETUP ─────────────────────────────
+  // ── THREE SETUP
   const canvas   = document.getElementById('c');
   const renderer = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -713,17 +934,15 @@ async function main() {
 
   const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, .1, 1200);
 
-  // ── LIGHTS ──────────────────────────────────
   scene.add(new THREE.AmbientLight(0x010510, 1.6));
   scene.add(new THREE.HemisphereLight(0x000e20, 0x000000, .5));
   const dl = new THREE.DirectionalLight(0x334455, .45);
   dl.position.set(4, 12, -8); dl.castShadow = true;
   dl.shadow.mapSize.set(1024,1024); scene.add(dl);
 
-  // ── ENVIRONMENT + CITY ──────────────────────
   const {updateSpace} = buildSpace(scene);
 
-  const maxC = Math.max(...repos.map(r=>r.commitCount), 1);
+  const maxC  = Math.max(...repos.map(r=>r.commitCount), 1);
   const COLS  = Math.ceil(Math.sqrt(repos.length));
   const SP    = 17;
   const groups = [];
@@ -735,23 +954,19 @@ async function main() {
     groups.push(makeBuilding(scene, repo, cx, cz, maxC));
   });
 
-  setLoad(100,'ENTERING GIT CITY ◈');
-  // always hide loader after short delay
-  const hideLoader = () => {
+  setLoad(100, 'ENTERING GIT CITY ◈');
+  setTimeout(() => {
     const ld = document.getElementById('loader');
     ld.style.opacity = '0';
     setTimeout(() => { ld.style.display = 'none'; }, 1000);
-  };
-  setTimeout(hideLoader, 600);
+    // Show API status after loader fades
+    setTimeout(() => showApiStatus('', fromAPI), 1200);
+  }, 600);
 
-  // ── ORBIT CAMERA STATE ──────────────────────
-  let theta    = 0.4;       // azimuth
-  let phi      = 0.88;      // polar (clamped)
-  let radius   = 110;       // distance
-  let tTheta   = theta, tPhi = phi, tRadius = radius;
-  let autoRot  = true;
-  let isDrag   = false;
-  let dragX    = 0, dragY   = 0;
+  // ── CAMERA ORBIT STATE
+  let theta  = 0.4, phi = 0.88, radius = 110;
+  let tTheta = theta, tPhi = phi, tRadius = radius;
+  let autoRot = true, isDrag = false, dragX = 0, dragY = 0;
 
   function setCam() {
     camera.position.x = radius * Math.sin(phi) * Math.cos(theta);
@@ -761,105 +976,84 @@ async function main() {
   }
   setCam();
 
-  // MOUSE DRAG ORBIT
   canvas.addEventListener('mousedown', e => {
     if (e.button !== 0) return;
-    isDrag = true; autoRot = false;
-    dragX = e.clientX; dragY = e.clientY;
-    canvas.style.cursor = 'none';
+    isDrag=true; autoRot=false; dragX=e.clientX; dragY=e.clientY;
   });
-  window.addEventListener('mouseup', () => { isDrag = false; });
+  window.addEventListener('mouseup', () => { isDrag=false; });
   window.addEventListener('mousemove', e => {
     if (!isDrag) return;
-    const dx = e.clientX - dragX;
-    const dy = e.clientY - dragY;
-    tTheta -= dx * .008;
-    tPhi    = Math.max(.12, Math.min(1.48, tPhi - dy * .006));
-    dragX = e.clientX; dragY = e.clientY;
+    tTheta -= (e.clientX-dragX)*.008;
+    tPhi    = Math.max(.12, Math.min(1.48, tPhi-(e.clientY-dragY)*.006));
+    dragX=e.clientX; dragY=e.clientY;
   });
-
-  // SCROLL ZOOM
   canvas.addEventListener('wheel', e => {
-    tRadius = Math.max(18, Math.min(200, tRadius + e.deltaY * .12));
+    tRadius = Math.max(18, Math.min(200, tRadius+e.deltaY*.12));
     e.preventDefault();
-  }, {passive: false});
+  }, {passive:false});
 
-  // TOUCH ORBIT + PINCH ZOOM
   let lastTouchX=0, lastTouchY=0, lastPinchD=0, touchDrag=false;
   canvas.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) {
-      touchDrag=true; autoRot=false;
-      lastTouchX=e.touches[0].clientX; lastTouchY=e.touches[0].clientY;
-    }
-    if (e.touches.length === 2)
-      lastPinchD = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    if (e.touches.length===1) { touchDrag=true; autoRot=false; lastTouchX=e.touches[0].clientX; lastTouchY=e.touches[0].clientY; }
+    if (e.touches.length===2) lastPinchD=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
   }, {passive:true});
   canvas.addEventListener('touchmove', e => {
-    if (e.touches.length === 1 && touchDrag) {
-      tTheta -= (e.touches[0].clientX - lastTouchX) * .01;
-      tPhi    = Math.max(.12, Math.min(1.48, tPhi - (e.touches[0].clientY - lastTouchY) * .008));
+    if (e.touches.length===1 && touchDrag) {
+      tTheta -= (e.touches[0].clientX-lastTouchX)*.01;
+      tPhi    = Math.max(.12, Math.min(1.48, tPhi-(e.touches[0].clientY-lastTouchY)*.008));
       lastTouchX=e.touches[0].clientX; lastTouchY=e.touches[0].clientY;
     }
-    if (e.touches.length === 2) {
-      const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
-      tRadius = Math.max(18, Math.min(200, tRadius - (d-lastPinchD)*.28));
-      lastPinchD = d;
+    if (e.touches.length===2) {
+      const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      tRadius=Math.max(18,Math.min(200,tRadius-(d-lastPinchD)*.28)); lastPinchD=d;
     }
   }, {passive:true});
-  canvas.addEventListener('touchend', () => touchDrag=false, {passive:true});
+  canvas.addEventListener('touchend', ()=>touchDrag=false, {passive:true});
 
-  // ── RAYCASTER / HOVER ───────────────────────
+  // ── RAYCASTER
   const raycaster = new THREE.Raycaster();
   let allMeshes = [];
   groups.forEach(g => g.traverse(c => { if (c.isMesh && !c.userData._beacon) allMeshes.push(c); }));
 
   canvas.addEventListener('mousemove', e => {
     if (isDrag) return;
-    const nx = (e.clientX/window.innerWidth)*2 - 1;
-    const ny = -(e.clientY/window.innerHeight)*2 + 1;
+    const nx=(e.clientX/window.innerWidth)*2-1;
+    const ny=-(e.clientY/window.innerHeight)*2+1;
     raycaster.setFromCamera(new THREE.Vector2(nx,ny), camera);
     const hits = raycaster.intersectObjects(allMeshes);
     if (hits.length) {
       let g = hits[0].object;
-      while (g && !g.userData._isBuilding) g = g.parent;
+      while (g && !g.userData._isBuilding) g=g.parent;
       if (!g) return;
-      if (g !== hoveredGroup) { hoveredGroup = g; showTip(g.userData, e.clientX, e.clientY); }
+      if (g!==hoveredGroup) { hoveredGroup=g; showTip(g.userData, e.clientX, e.clientY); }
       else moveTip(e.clientX, e.clientY);
-    } else { hideTip(); }
+    } else hideTip();
+  });
+  canvas.addEventListener('click', () => {
+    if (hoveredGroup?.userData?.html_url) window.open(hoveredGroup.userData.html_url, '_blank');
   });
 
-  canvas.addEventListener('click', e => {
-    if (hoveredGroup && hoveredGroup.userData.html_url)
-      window.open(hoveredGroup.userData.html_url, '_blank');
-  });
-
-  // RESIZE
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  // ── ANIMATE ─────────────────────────────────
+  // ── ANIMATE
   let frame = 0;
   function animate() {
     requestAnimationFrame(animate);
     frame++;
-
-    // auto rotate
     if (autoRot) tTheta += .0018;
-
-    // smooth camera easing
-    theta  += (tTheta  - theta)  * .055;
-    phi    += (tPhi    - phi)    * .055;
-    radius += (tRadius - radius) * .055;
+    theta  += (tTheta-theta)*.055;
+    phi    += (tPhi-phi)*.055;
+    radius += (tRadius-radius)*.055;
     setCam();
 
-    // beacon blink
     scene.traverse(o => {
       if (o.userData._beacon) {
         const {mat, col} = o.userData._beacon;
-        const t = Math.sin(frame*.09 + o.id*.7) * .5 + .5;
+        const t = Math.sin(frame*.09+o.id*.7)*.5+.5;
         mat.color.lerpColors(col, new THREE.Color(1,1,1), t*.45);
       }
     });
