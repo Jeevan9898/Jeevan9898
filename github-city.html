@@ -268,18 +268,20 @@ async function fetchData() {
   const user = await fetch(`https://api.github.com/users/${USERNAME}`)
     .then(r => r.json()).catch(() => ({}));
   setLoad(15, 'DETECTING REPOSITORIES...');
-  let repos = await fetch(
+  const reposRaw = await fetch(
     `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`,
     {headers:{Accept:'application/vnd.github.v3+json'}}
   ).then(r => r.json()).catch(() => []);
-  if (!Array.isArray(repos)) repos = [];
+
+  // if rate limited or bad response, throw so fallback kicks in
+  if (!Array.isArray(reposRaw) || reposRaw.length === 0) throw new Error('No repos from API');
 
   const out = [];
-  for (let i = 0; i < repos.length; i++) {
-    const rp = repos[i];
+  for (let i = 0; i < reposRaw.length; i++) {
+    const rp = reposRaw[i];
     const c = await getCommits(rp.name);
     out.push({...rp, commitCount: c});
-    setLoad(18 + (i+1)/repos.length*64, `MAPPING [${i+1}/${repos.length}] ${rp.name.toUpperCase()}`);
+    setLoad(18 + (i+1)/reposRaw.length*64, `MAPPING [${i+1}/${reposRaw.length}] ${rp.name.toUpperCase()}`);
   }
   out.sort((a, b) => b.commitCount - a.commitCount);
   setLoad(84, 'CONSTRUCTING CITY GRID...');
@@ -666,9 +668,26 @@ function hideTip() {
 //  MAIN
 // ═══════════════════════════════════════════════
 async function main() {
-  let repos=[], user={};
+  // ── FALLBACK REPOS (always shown even if API fails/rate-limits)
+  const FALLBACK = [
+    {name:'BlockChain',     commitCount:48, language:'Solidity',    stargazers_count:1, forks_count:0, description:'Full-stack DApp with Solidity, React & Web3.js. Wallet connection, on-chain transactions.', html_url:'https://github.com/Jeevan9898/BlockChain'},
+    {name:'Jeevan9898',     commitCount:22, language:'Markdown',    stargazers_count:0, forks_count:0, description:'GitHub profile README — pixel city portfolio.', html_url:'https://github.com/Jeevan9898/Jeevan9898'},
+    {name:'Space-Portfolio',commitCount:35, language:'JavaScript',  stargazers_count:0, forks_count:0, description:'3D space-themed portfolio built with Three.js and GSAP. Live on Vercel.', html_url:'https://github.com/Jeevan9898'},
+    {name:'Greeter-DApp',   commitCount:18, language:'Solidity',    stargazers_count:0, forks_count:0, description:'Decentralized Greeter App — Solidity contract + React + Web3.js on Ganache.', html_url:'https://github.com/Jeevan9898'},
+    {name:'B_Projects',     commitCount:12, language:'JavaScript',  stargazers_count:0, forks_count:0, description:'React + Smart Contract projects collection.', html_url:'https://github.com/Jeevan9898'},
+    {name:'DSA-Practice',   commitCount:60, language:'C++',         stargazers_count:0, forks_count:0, description:'Data Structures & Algorithms practice. Arrays, trees, recursion, linked lists.', html_url:'https://github.com/Jeevan9898'},
+    {name:'Python-OOP',     commitCount:14, language:'Python',      stargazers_count:0, forks_count:0, description:'Python OOP fundamentals — classes, inheritance, encapsulation.', html_url:'https://github.com/Jeevan9898'},
+  ];
+
+  let repos = FALLBACK, user = {};
   try { ({user, repos} = await fetchData()); }
-  catch(e) { setLoad(84,'API ERROR'); console.error(e); }
+  catch(e) {
+    setLoad(84,'USING DEMO DATA — GITHUB RATE LIMITED');
+    console.warn('GitHub API failed, using fallback:', e);
+    repos = FALLBACK;
+  }
+  // safety: if API returned empty array, use fallback
+  if (!repos || repos.length === 0) repos = FALLBACK;
 
   const totC = repos.reduce((s,r)=>s+r.commitCount,0);
   const totS = repos.reduce((s,r)=>s+(r.stargazers_count||0),0);
@@ -716,12 +735,14 @@ async function main() {
     groups.push(makeBuilding(scene, repo, cx, cz, maxC));
   });
 
-  setLoad(100,'ENTERING GIT CITY');
-  setTimeout(() => {
+  setLoad(100,'ENTERING GIT CITY ◈');
+  // always hide loader after short delay
+  const hideLoader = () => {
     const ld = document.getElementById('loader');
     ld.style.opacity = '0';
-    setTimeout(() => ld.style.display = 'none', 1000);
-  }, 500);
+    setTimeout(() => { ld.style.display = 'none'; }, 1000);
+  };
+  setTimeout(hideLoader, 600);
 
   // ── ORBIT CAMERA STATE ──────────────────────
   let theta    = 0.4;       // azimuth
