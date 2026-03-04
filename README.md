@@ -92,13 +92,8 @@ I'm a **Full Stack Developer** with a deep focus on **Blockchain**, **Web3**, an
 
 ---
 
-## 📊 GitHub Activity
-
-<div align="center">
-
-[![Jeevan's Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Jeevan9898&theme=tokyo-night&hide_border=true&area=true)](https://github.com/Jeevan9898)
-
-</div>
+## 🏙️ My GitHub City
+[**→ Explore my repos in 3D**](https://jeevanyadavportfolio.vercel.app/github-city.html)
 
 ---
 
