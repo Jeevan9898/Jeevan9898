@@ -3,154 +3,149 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Jeevan Yadav — GitHub City</title>
+<title>Jeevan Yadav — Git City</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000000;overflow:hidden;font-family:'Share Tech Mono','Courier New',monospace;color:#00f2ff}
-#c{display:block;width:100vw;height:100vh}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+#c{display:block;width:100vw;height:100vh;cursor:crosshair}
 
-/* LOADER */
-#loader{position:fixed;inset:0;background:#000000;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;z-index:200;gap:20px;
-  transition:opacity .8s}
-#loader-glow{
-  width:160px;height:160px;position:relative;display:flex;align-items:center;justify-content:center}
-#loader-ring{
-  position:absolute;inset:0;border:1px solid rgba(0,242,255,.15);border-radius:50%;
-  animation:spin 4s linear infinite}
-#loader-ring2{
-  position:absolute;inset:12px;border:1px solid rgba(0,242,255,.08);border-radius:50%;
-  animation:spin 6s linear infinite reverse}
-#loader-icon{font-size:36px;text-shadow:0 0 30px #00f2ff;animation:pulse 2s ease-in-out infinite}
-#loader h1{font-size:16px;letter-spacing:8px;text-shadow:0 0 20px #00f2ff;text-align:center}
-#bar-wrap{width:260px;height:2px;background:#040f1a;position:relative}
-#bar-wrap::before{content:'';position:absolute;top:-4px;left:0;right:0;height:10px;
-  background:linear-gradient(90deg,transparent,rgba(0,242,255,.05),transparent)}
-#bar{height:100%;background:linear-gradient(90deg,#003a4f,#00f2ff);width:0%;
-  transition:width .4s;box-shadow:0 0 12px #00f2ff,0 0 30px rgba(0,242,255,.3)}
-#load-msg{font-size:9px;letter-spacing:4px;color:rgba(0,242,255,.4);min-height:16px;text-align:center}
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:300;gap:18px;font-family:'Share Tech Mono',monospace;color:#00f2ff;
+  transition:opacity .9s
+}
+#loader h2{font-size:13px;letter-spacing:8px;text-shadow:0 0 20px #00f2ff}
+#lbar{width:240px;height:2px;background:#0a1a28}
+#lfill{height:100%;background:#00f2ff;width:0%;transition:width .35s;box-shadow:0 0 10px #00f2ff}
+#lmsg{font-size:9px;letter-spacing:3px;color:rgba(0,242,255,.45);text-align:center}
 
-/* HUD TOP */
-#hud{position:fixed;top:0;left:0;right:0;padding:16px 24px;
-  display:flex;justify-content:space-between;align-items:flex-start;
-  background:linear-gradient(180deg,rgba(0,3,8,.9) 0%,transparent 100%);
-  pointer-events:none;z-index:10}
-#hud-left{}
-#hud-title{font-size:14px;letter-spacing:6px;text-shadow:0 0 16px #00f2ff,0 0 40px rgba(0,242,255,.2);
-  margin-bottom:4px}
-#hud-sub{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.35)}
-#hud-right{display:flex;gap:24px}
-.hud-stat{text-align:right}
-.hud-stat-val{font-size:22px;color:#fff;text-shadow:0 0 12px rgba(0,242,255,.5);letter-spacing:2px;line-height:1}
-.hud-stat-label{font-size:7px;letter-spacing:3px;color:rgba(0,242,255,.35);margin-top:2px}
+/* ── CROSSHAIR ── */
+#xhair{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;z-index:20;opacity:0;transition:opacity .4s
+}
+#xhair::before,#xhair::after{
+  content:'';position:absolute;background:rgba(255,255,255,.7)
+}
+#xhair::before{width:18px;height:1px;top:50%;left:50%;transform:translate(-50%,-50%)}
+#xhair::after{width:1px;height:18px;top:50%;left:50%;transform:translate(-50%,-50%)}
+#xhair.dot::before{display:none}
+#xhair.dot::after{display:none}
+body.locked #xhair{opacity:1}
 
-/* TOOLTIP */
-#tip{position:fixed;pointer-events:none;z-index:20;display:none;
-  background:rgba(0,3,8,.96);border:1px solid rgba(0,242,255,.3);
-  padding:16px 20px;min-width:240px;backdrop-filter:blur(4px)}
-#tip-bar{position:absolute;top:0;left:0;right:0;height:2px;background:#00f2ff;
-  box-shadow:0 0 8px #00f2ff}
-#tip-name{font-size:13px;letter-spacing:3px;color:#fff;margin-bottom:10px}
-#tip-big{display:flex;align-items:baseline;gap:6px;margin-bottom:3px}
-#tip-commits{font-size:28px;color:#00f2ff;text-shadow:0 0 14px #00f2ff;letter-spacing:1px;line-height:1}
-#tip-commits-label{font-size:8px;color:rgba(0,242,255,.4);letter-spacing:2px}
-#tip-divider{height:1px;background:rgba(0,242,255,.1);margin:10px 0}
-#tip-lang{font-size:9px;letter-spacing:2px;margin-bottom:5px}
-#tip-desc{font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.5px;line-height:1.7;
-  margin-bottom:8px;font-family:sans-serif;max-width:200px}
-#tip-meta{font-size:8px;letter-spacing:2px;color:rgba(255,215,0,.6)}
-#tip-cta{font-size:7px;color:rgba(0,242,255,.35);letter-spacing:2px;
-  margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,242,255,.08)}
-.tip-corner{position:absolute;width:5px;height:5px}
-.tip-corner.tl{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid}
-.tip-corner.tr{top:-1px;right:-1px;border-top:2px solid;border-right:2px solid}
-.tip-corner.bl{bottom:-1px;left:-1px;border-bottom:2px solid;border-left:2px solid}
-.tip-corner.br{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid}
+/* ── HUD ── */
+#hud{
+  position:fixed;top:0;left:0;right:0;height:52px;
+  background:linear-gradient(180deg,rgba(0,0,0,.75) 0%,transparent 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;pointer-events:none;z-index:20;
+  font-family:'Share Tech Mono',monospace;color:#00f2ff
+}
+#hud-l{display:flex;flex-direction:column;gap:2px}
+#hud-name{font-size:12px;letter-spacing:5px;text-shadow:0 0 14px #00f2ff}
+#hud-sub{font-size:7px;letter-spacing:3px;color:rgba(0,242,255,.4)}
+#hud-r{display:flex;gap:20px;align-items:center}
+.hstat{text-align:center}
+.hval{font-size:16px;color:#fff;text-shadow:0 0 8px rgba(0,242,255,.5)}
+.hlbl{font-size:6px;letter-spacing:2px;color:rgba(0,242,255,.35)}
 
-/* LEGEND */
-#legend{position:fixed;bottom:24px;left:24px;z-index:10;
-  background:rgba(0,3,8,.85);border:1px solid rgba(0,242,255,.1);
-  padding:14px 18px;display:none;backdrop-filter:blur(4px)}
-#legend h3{font-size:7px;letter-spacing:4px;color:rgba(0,242,255,.35);margin-bottom:10px}
-.leg-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:8px;letter-spacing:2px;cursor:pointer}
-.leg-swatch{width:10px;height:10px;flex-shrink:0;position:relative}
-.leg-swatch::after{content:'';position:absolute;inset:-3px;opacity:.3}
+/* ── TOOLTIP ── */
+#tip{
+  position:fixed;pointer-events:none;z-index:50;display:none;
+  font-family:'Share Tech Mono',monospace;
+  background:rgba(0,0,0,.92);border:1px solid rgba(0,242,255,.35);
+  padding:14px 18px;min-width:220px;
+  backdrop-filter:blur(6px)
+}
+#tip-accent{position:absolute;top:0;left:0;right:0;height:2px}
+.tc{position:absolute;width:5px;height:5px}
+.tc.tl{top:0;left:0} .tc.tr{top:0;right:0} .tc.bl{bottom:0;left:0} .tc.br{bottom:0;right:0}
+#tip-name{font-size:11px;letter-spacing:2px;color:#fff;margin-bottom:6px}
+#tip-commits{font-size:26px;letter-spacing:1px;line-height:1;text-shadow:0 0 12px currentColor}
+#tip-clabel{font-size:7px;letter-spacing:3px;color:rgba(255,255,255,.4);margin-bottom:8px}
+#tip-sep{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
+#tip-lang{font-size:8px;letter-spacing:2px;margin-bottom:4px}
+#tip-desc{font-size:8px;color:rgba(255,255,255,.4);font-family:sans-serif;line-height:1.6;margin-bottom:6px;max-width:190px}
+#tip-meta{font-size:8px;letter-spacing:1px;color:rgba(255,215,0,.65)}
+#tip-foot{font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.35);margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,242,255,.08)}
 
-/* BOTTOM TICKER */
-#ticker{position:fixed;bottom:0;left:0;right:0;height:28px;overflow:hidden;
-  background:rgba(0,3,8,.9);border-top:1px solid rgba(0,242,255,.08);
-  display:none;align-items:center;z-index:10}
-#ticker-inner{white-space:nowrap;font-size:8px;letter-spacing:3px;
-  color:rgba(0,242,255,.25);animation:ticker 40s linear infinite}
+/* ── CONTROLS HINT ── */
+#hint{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;
+  color:rgba(255,255,255,.35);background:rgba(0,0,0,.6);
+  padding:8px 20px;border:1px solid rgba(255,255,255,.08);
+  pointer-events:none;z-index:20;white-space:nowrap;display:none
+}
 
-/* CONTROLS */
-#controls{position:fixed;bottom:36px;right:24px;z-index:10;
-  font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.2);text-align:right;line-height:2.2}
-
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-@keyframes ticker{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+/* ── CLICK TO START ── */
+#start{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  z-index:30;cursor:pointer;flex-direction:column;gap:16px;
+  font-family:'Share Tech Mono',monospace
+}
+#start-box{
+  border:1px solid rgba(0,242,255,.4);padding:24px 40px;text-align:center;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(8px)
+}
+#start h3{font-size:13px;letter-spacing:5px;color:#00f2ff;margin-bottom:10px;text-shadow:0 0 14px #00f2ff}
+#start p{font-size:9px;letter-spacing:2px;color:rgba(0,242,255,.5);line-height:2}
 </style>
 </head>
 <body>
 
 <!-- LOADER -->
 <div id="loader">
-  <div id="loader-glow">
-    <div id="loader-ring"></div>
-    <div id="loader-ring2"></div>
-    <div id="loader-icon">🏙</div>
-  </div>
-  <h1>GITHUB CITY</h1>
-  <div id="bar-wrap"><div id="bar"></div></div>
-  <div id="load-msg">INITIALISING SYSTEMS...</div>
+  <h2>◈ GIT CITY — JEEVAN9898 ◈</h2>
+  <div id="lbar"><div id="lfill"></div></div>
+  <div id="lmsg">CONNECTING TO GITHUB...</div>
 </div>
 
+<!-- CANVAS -->
 <canvas id="c"></canvas>
+
+<!-- CROSSHAIR -->
+<div id="xhair"></div>
 
 <!-- HUD -->
 <div id="hud">
-  <div id="hud-left">
-    <div id="hud-title">◈ JEEVAN YADAV — GITHUB CITY</div>
+  <div id="hud-l">
+    <div id="hud-name">JEEVAN YADAV</div>
     <div id="hud-sub">FULL STACK · BLOCKCHAIN · WEB3 · B.TECH CSE 2028</div>
   </div>
-  <div id="hud-right">
-    <div class="hud-stat"><div class="hud-stat-val" id="s-repos">—</div><div class="hud-stat-label">SKYSCRAPERS</div></div>
-    <div class="hud-stat"><div class="hud-stat-val" id="s-commits">—</div><div class="hud-stat-label">COMMITS</div></div>
-    <div class="hud-stat"><div class="hud-stat-val" id="s-stars">—</div><div class="hud-stat-label">STARS</div></div>
+  <div id="hud-r">
+    <div class="hstat"><div class="hval" id="h-repos">—</div><div class="hlbl">BUILDINGS</div></div>
+    <div class="hstat"><div class="hval" id="h-commits">—</div><div class="hlbl">COMMITS</div></div>
+    <div class="hstat"><div class="hval" id="h-stars">—</div><div class="hlbl">STARS</div></div>
   </div>
 </div>
 
 <!-- TOOLTIP -->
 <div id="tip">
-  <div id="tip-bar"></div>
-  <div class="tip-corner tl"></div><div class="tip-corner tr"></div>
-  <div class="tip-corner bl"></div><div class="tip-corner br"></div>
+  <div id="tip-accent"></div>
+  <div class="tc tl"></div><div class="tc tr"></div>
+  <div class="tc bl"></div><div class="tc br"></div>
   <div id="tip-name"></div>
-  <div id="tip-big">
-    <div id="tip-commits"></div>
-    <div id="tip-commits-label">COMMITS</div>
-  </div>
-  <div id="tip-divider"></div>
+  <div id="tip-commits"></div>
+  <div id="tip-clabel">TOTAL COMMITS</div>
+  <div id="tip-sep"></div>
   <div id="tip-lang"></div>
   <div id="tip-desc"></div>
   <div id="tip-meta"></div>
-  <div id="tip-cta">▶ CLICK TO OPEN REPOSITORY ON GITHUB</div>
+  <div id="tip-foot">▶ CLICK TO OPEN REPOSITORY</div>
 </div>
-
-<!-- LEGEND -->
-<div id="legend">
-  <h3>LANGUAGE DISTRICTS</h3>
-  <div id="leg-items"></div>
-</div>
-
-<!-- TICKER -->
-<div id="ticker"><div id="ticker-inner"></div></div>
 
 <!-- CONTROLS -->
-<div id="controls">
-  DRAG — ORBIT &nbsp;·&nbsp; SCROLL — ZOOM<br>
-  HOVER — INSPECT &nbsp;·&nbsp; CLICK — OPEN REPO
+<div id="hint">WASD — FLY &nbsp;·&nbsp; MOUSE — LOOK &nbsp;·&nbsp; SHIFT — FAST &nbsp;·&nbsp; ESC — UNLOCK &nbsp;·&nbsp; HOVER — INFO</div>
+
+<!-- CLICK TO START -->
+<div id="start">
+  <div id="start-box">
+    <h3>◈ ENTER CITY ◈</h3>
+    <p>CLICK TO LOCK MOUSE &amp; FLY<br>WASD TO MOVE · MOUSE TO LOOK<br>SHIFT TO SPRINT · ESC TO UNLOCK</p>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -160,612 +155,366 @@ body{background:#000000;overflow:hidden;font-family:'Share Tech Mono','Courier N
 // ═══════════════════════════════════════════════════════
 const USERNAME = 'Jeevan9898';
 
-const LANG_COLORS = {
-  JavaScript:'#f1e05a', Solidity:'#e4824a', Python:'#3572A5',
+const LANG_PAL = {
+  JavaScript:'#f1e05a', Solidity:'#e4824a', Python:'#4584b6',
   HTML:'#e34c26', CSS:'#7659a8', TypeScript:'#3178c6',
-  'C++':'#f34b7d', C:'#555599', Rust:'#dea584', Go:'#00acd7',
+  'C++':'#f34b7d', C:'#5a6baa', Rust:'#dea584', Go:'#00acd7',
   Java:'#b07219', PHP:'#4f5d95', Ruby:'#cc342d', Shell:'#89e051',
-  Vue:'#41b883', Swift:'#F05138', Kotlin:'#A97BFF',
   default:'#00f2ff'
 };
 
 // ═══════════════════════════════════════════════════════
 //  LOAD UI
 // ═══════════════════════════════════════════════════════
-function setLoad(pct, msg){
-  document.getElementById('bar').style.width = pct + '%';
-  document.getElementById('load-msg').textContent = msg;
+function setLoad(p, m){
+  document.getElementById('lfill').style.width = p+'%';
+  document.getElementById('lmsg').textContent = m;
 }
 
 // ═══════════════════════════════════════════════════════
-//  GITHUB FETCH
+//  GITHUB
 // ═══════════════════════════════════════════════════════
-async function getCommitCount(repo){
+async function getCommits(name){
   try{
     const r = await fetch(
-      `https://api.github.com/repos/${USERNAME}/${repo}/commits?per_page=1`,
+      `https://api.github.com/repos/${USERNAME}/${name}/commits?per_page=1`,
       {headers:{Accept:'application/vnd.github.v3+json'}}
     );
-    const link = r.headers.get('link') || '';
-    const m = link.match(/page=(\d+)>; rel="last"/);
-    return m ? parseInt(m[1]) : 1;
-  } catch(e){ return 1; }
+    const lk = r.headers.get('link')||'';
+    const m = lk.match(/page=(\d+)>; rel="last"/);
+    return m ? +m[1] : 1;
+  }catch{return 1;}
 }
 
-async function fetchGitHub(){
-  setLoad(5, 'CONNECTING TO GITHUB API...');
+async function fetchData(){
+  setLoad(5,'CONNECTING TO GITHUB API...');
   const user = await fetch(`https://api.github.com/users/${USERNAME}`)
     .then(r=>r.json()).catch(()=>({}));
 
-  setLoad(18, 'SCANNING REPOSITORIES...');
+  setLoad(18,'LOADING REPOSITORIES...');
   let repos = await fetch(
     `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`,
     {headers:{Accept:'application/vnd.github.v3+json'}}
   ).then(r=>r.json()).catch(()=>[]);
+  if(!Array.isArray(repos)) repos=[];
 
-  if(!Array.isArray(repos)) repos = [];
-  repos = repos.filter(r=>!r.archived && !r.fork || r.stargazers_count>0);
-
-  setLoad(30, 'MEASURING COMMIT HEIGHTS...');
-  const enriched = [];
+  setLoad(30,'COUNTING COMMITS PER REPO...');
+  const out=[];
   for(let i=0;i<repos.length;i++){
-    const repo = repos[i];
-    const commits = await getCommitCount(repo.name);
-    enriched.push({...repo, commitCount: commits});
-    const pct = 30 + ((i+1)/repos.length)*55;
-    setLoad(pct, `SCANNING: ${repo.name.toUpperCase()} [${i+1}/${repos.length}]`);
+    const rp=repos[i];
+    const c=await getCommits(rp.name);
+    out.push({...rp,commitCount:c});
+    setLoad(30+(i+1)/repos.length*55,
+      `SCANNING [${i+1}/${repos.length}] ${rp.name.toUpperCase()}`);
   }
-
-  // sort by commits descending — tallest buildings get prime spots
-  enriched.sort((a,b)=>b.commitCount - a.commitCount);
-  setLoad(88, 'CONSTRUCTING SKYSCRAPERS...');
-  return {user, repos: enriched};
+  out.sort((a,b)=>b.commitCount-a.commitCount);
+  setLoad(88,'BUILDING CITY BLOCKS...');
+  return {user,repos:out};
 }
 
 // ═══════════════════════════════════════════════════════
-//  WINDOW TEXTURE
+//  PIXEL / VOXEL BUILDING
+//  exactly like thegitcity — chunky stacked pixel blocks
 // ═══════════════════════════════════════════════════════
-function makeWindowTex(color, rows=20, cols=4, density=0.62){
-  const W=128, H=512;
-  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
-  const ctx=cv.getContext('2d');
-  ctx.fillStyle='#010810'; ctx.fillRect(0,0,W,H);
-  const cw=W/cols, ch=H/rows;
-  const c3=new THREE.Color(color);
-  for(let r=0;r<rows;r++){
-    for(let c=0;c<cols;c++){
-      if(Math.random()<density){
-        const alpha=0.3+Math.random()*0.6;
-        // slight warmth variation
-        const warm = Math.random()>.7 ? '#ffe8a0' : color;
-        ctx.globalAlpha=alpha;
-        ctx.fillStyle=warm;
-        ctx.fillRect(c*cw+2, r*ch+2, cw-4, ch-4);
-        // window reflection glint
-        if(Math.random()>.6){
-          ctx.globalAlpha=alpha*.4;
-          ctx.fillStyle='#ffffff';
-          ctx.fillRect(c*cw+2, r*ch+2, 3, 3);
+const VOXEL = 1.0;   // size of one pixel block
+
+function makePixelBuilding(scene, repo, cx, cz, maxCommits){
+  const color   = LANG_PAL[repo.language]||LANG_PAL.default;
+  const col3    = new THREE.Color(color);
+
+  // floor count = commits mapped to 4–60 floors
+  const logRatio = Math.log(repo.commitCount+1)/Math.log(maxCommits+1);
+  const floors   = Math.max(4, Math.round(4 + logRatio*56));
+
+  // building footprint: 3×3 to 6×6 voxels (bigger = more stars)
+  const stars  = repo.stargazers_count||0;
+  const footW  = Math.min(6, Math.max(3, 3 + Math.floor(Math.log(stars+1)/Math.log(5))));
+  const footD  = footW;
+
+  // setback thresholds
+  const setback1Floor = Math.floor(floors * 0.55);
+  const setback2Floor = Math.floor(floors * 0.80);
+
+  const group = new THREE.Group();
+  group.position.set(cx, 0, cz);
+
+  // ── shared materials (pixel flat shading)
+  const wallMat = new THREE.MeshLambertMaterial({color: col3.clone().multiplyScalar(0.18)});
+  const darkMat = new THREE.MeshLambertMaterial({color: col3.clone().multiplyScalar(0.10)});
+
+  // window canvas texture
+  function makeWinTex(w, h, density){
+    const S=16;
+    const cv=document.createElement('canvas');
+    cv.width=w*S; cv.height=h*S;
+    const ctx=cv.getContext('2d');
+    ctx.fillStyle='#010812'; ctx.fillRect(0,0,cv.width,cv.height);
+    for(let wy=0;wy<h;wy++){
+      for(let wx=0;wx<w;wx++){
+        if(Math.random()<density){
+          const warm = Math.random()>.65 ? '#ffc84a' : color;
+          ctx.globalAlpha=0.5+Math.random()*.45;
+          ctx.fillStyle=warm;
+          ctx.fillRect(wx*S+1,wy*S+1,S-2,S-2);
+          // glint
+          if(Math.random()>.55){
+            ctx.globalAlpha=.3;
+            ctx.fillStyle='#fff';
+            ctx.fillRect(wx*S+1,wy*S+1,S/3,S/3);
+          }
         }
       }
     }
+    ctx.globalAlpha=1;
+    const t=new THREE.CanvasTexture(cv);
+    t.magFilter=THREE.NearestFilter; // pixel-crisp
+    t.minFilter=THREE.NearestFilter;
+    return t;
   }
-  ctx.globalAlpha=1;
-  return new THREE.CanvasTexture(cv);
-}
 
-// ═══════════════════════════════════════════════════════
-//  LABEL SPRITE
-// ═══════════════════════════════════════════════════════
-function makeLabel(name, commits, color){
-  const W=340, H=90;
-  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
-  const ctx=cv.getContext('2d');
-  // bg
-  ctx.fillStyle='rgba(0,4,14,0.88)'; ctx.fillRect(0,0,W,H);
-  // top accent
-  ctx.fillStyle=color; ctx.fillRect(0,0,W,2);
-  // corner dots
-  [[0,0],[W-6,0],[0,H-6],[W-6,H-6]].forEach(([x,y])=>{
-    ctx.fillStyle=color; ctx.fillRect(x,y,6,6);
-  });
-  // name
-  ctx.font='bold 16px monospace'; ctx.fillStyle='#ffffff';
-  ctx.textAlign='center';
-  ctx.shadowColor=color; ctx.shadowBlur=8;
-  ctx.fillText(name, W/2, 28);
-  // commits
-  ctx.font='12px monospace'; ctx.fillStyle=color;
-  ctx.shadowBlur=12;
-  ctx.fillText(commits.toLocaleString()+' COMMITS', W/2, 52);
-  ctx.shadowBlur=0;
-  // bar
-  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(20,62); ctx.lineTo(W-20,62); ctx.stroke();
+  // ── BUILD FLOOR BY FLOOR (setbacks create stepped pyramid)
+  for(let fl=0;fl<floors;fl++){
+    let fw=footW, fd=footD;
+    if(fl>=setback2Floor){ fw=Math.max(2,footW-2); fd=Math.max(2,footD-2); }
+    else if(fl>=setback1Floor){ fw=Math.max(2,footW-1); fd=Math.max(2,footD-1); }
 
-  const tex=new THREE.CanvasTexture(cv);
-  const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false,sizeAttenuation:true});
-  const sp=new THREE.Sprite(mat);
-  sp.scale.set(14,3.5,1);
-  return sp;
-}
+    const ox=-(fw*VOXEL)/2, oz=-(fd*VOXEL)/2;
+    const y = fl*VOXEL + VOXEL/2;
 
-// ═══════════════════════════════════════════════════════
-//  BUILD SKYSCRAPERS
-// ═══════════════════════════════════════════════════════
-function buildCity(scene, repos){
-  const maxC = Math.max(...repos.map(r=>r.commitCount), 1);
-  const COLS = Math.ceil(Math.sqrt(repos.length));
-  const SPACING = 11;
-  const MAX_H = 120;   // tallest possible skyscraper
-  const MIN_H = 8;     // shortest building
+    // one slab per floor
+    const geo=new THREE.BoxGeometry(fw*VOXEL, VOXEL, fd*VOXEL);
 
-  const meshes = [];
+    // window density increases with floor height (more activity near top)
+    const density=0.35+logRatio*0.35+(fl/floors)*0.15;
+    const winTex=makeWinTex(fw*2, 2, density);
 
-  repos.forEach((repo, i)=>{
-    const col = i % COLS;
-    const row = Math.floor(i / COLS);
-    const cx = (col - (COLS-1)/2) * SPACING;
-    const cz = (row - (Math.ceil(repos.length/COLS)-1)/2) * SPACING;
-
-    // height based on commits (log scale for dramatic effect)
-    const logScale = Math.log(repo.commitCount+1) / Math.log(maxC+1);
-    const H = MIN_H + logScale * (MAX_H - MIN_H);
-
-    const color = LANG_COLORS[repo.language] || LANG_COLORS.default;
-    const colObj = new THREE.Color(color);
-
-    // ── SKYSCRAPER GEOMETRY: setbacks at different heights
-    const group = new THREE.Group();
-    group.position.set(cx, 0, cz);
-
-    // base block (wide)
-    const baseW = 4.0, baseH = H * 0.45;
-    const baseTex = makeWindowTex(color, Math.floor(baseH*2), 4, 0.60);
-    const baseMats = [
-      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
-      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
-      new THREE.MeshStandardMaterial({color:0x080f1a, roughness:0.4, metalness:0.7}),
-      new THREE.MeshStandardMaterial({color:0x020810}),
-      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
-      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
-    ];
-    const baseGeo = new THREE.BoxGeometry(baseW, baseH, baseW);
-    const baseMesh = new THREE.Mesh(baseGeo, baseMats);
-    baseMesh.position.y = baseH/2;
-    baseMesh.castShadow = true; baseMesh.receiveShadow = true;
-    group.add(baseMesh);
-
-    // setback 1 (slightly narrower)
-    const s1W = baseW * 0.78, s1H = H * 0.32;
-    const s1Tex = makeWindowTex(color, Math.floor(s1H*2), 3, 0.58);
-    const s1Mat = new THREE.MeshStandardMaterial({color:0x040c16, map:s1Tex, emissiveMap:s1Tex, emissive:colObj.clone().multiplyScalar(0.35), emissiveIntensity:0.75, roughness:0.2, metalness:0.65});
-    const s1Geo = new THREE.BoxGeometry(s1W, s1H, s1W);
-    const s1Mesh = new THREE.Mesh(s1Geo, s1Mat);
-    s1Mesh.position.y = baseH + s1H/2;
-    s1Mesh.castShadow = true;
-    group.add(s1Mesh);
-
-    // setback 2 (tower, narrow)
-    if(H > 25){
-      const s2W = s1W * 0.65, s2H = H * 0.23;
-      const s2Tex = makeWindowTex(color, Math.floor(s2H*2), 2, 0.55);
-      const s2Mat = new THREE.MeshStandardMaterial({color:0x030b14, map:s2Tex, emissiveMap:s2Tex, emissive:colObj.clone().multiplyScalar(0.4), emissiveIntensity:0.85, roughness:0.18, metalness:0.7});
-      const s2Geo = new THREE.BoxGeometry(s2W, s2H, s2W);
-      const s2Mesh = new THREE.Mesh(s2Geo, s2Mat);
-      s2Mesh.position.y = baseH + s1H + s2H/2;
-      s2Mesh.castShadow = true;
-      group.add(s2Mesh);
-    }
-
-    // glowing roof slab
-    const roofY = H;
-    const roofGeo = new THREE.BoxGeometry(baseW+0.1, 0.15, baseW+0.1);
-    const roofMat = new THREE.MeshStandardMaterial({
-      color: colObj, emissive: colObj, emissiveIntensity: 1.2,
-      transparent:true, opacity:0.7
+    const mat=new THREE.MeshLambertMaterial({
+      color: col3.clone().multiplyScalar(0.15),
+      map: winTex,
+      emissiveMap: winTex,
+      emissive: col3.clone(),
+      emissiveIntensity: 0.55+logRatio*0.3,
     });
-    const roof = new THREE.Mesh(roofGeo, roofMat);
-    roof.position.y = baseH; // roof of first setback
-    group.add(roof);
 
-    // ── SPIRE / ANTENNA (on tall buildings)
-    const spireY = H;
-    if(H > 15){
-      const spireH = H * 0.18;
-      const spireGeo = new THREE.CylinderGeometry(0.04, 0.12, spireH, 6);
-      const spireMat = new THREE.MeshStandardMaterial({color:0x1a2e42, metalness:0.9, roughness:0.2});
-      const spire = new THREE.Mesh(spireGeo, spireMat);
-      spire.position.y = spireY + spireH/2;
-      group.add(spire);
+    const mesh=new THREE.Mesh(geo, mat);
+    mesh.position.set(0, y, 0);
+    mesh.castShadow=true;
+    mesh.receiveShadow=true;
+    group.add(mesh);
+  }
 
-      // blinking beacon at tip
-      const beaconGeo = new THREE.SphereGeometry(0.22, 8, 8);
-      const beaconMat = new THREE.MeshStandardMaterial({
-        color:colObj, emissive:colObj, emissiveIntensity:2.0, transparent:true, opacity:0.95
-      });
-      const beacon = new THREE.Mesh(beaconGeo, beaconMat);
-      beacon.position.y = spireY + spireH + 0.22;
-      beacon.userData._beacon = {mat:beaconMat, color:colObj.clone(), id:i};
-      group.add(beacon);
+  // ── ROOF CAP (glowing slab)
+  const capH = floors*VOXEL;
+  const capW = (floors>=setback2Floor ? Math.max(2,footW-2) : floors>=setback1Floor ? Math.max(2,footW-1) : footW)*VOXEL;
+  const capGeo=new THREE.BoxGeometry(capW+0.05, 0.12, capW+0.05);
+  const capMat=new THREE.MeshBasicMaterial({color:col3,transparent:true,opacity:0.75});
+  const cap=new THREE.Mesh(capGeo,capMat);
+  cap.position.y=capH+0.06;
+  group.add(cap);
 
-      // beacon halo
-      const haloGeo = new THREE.SphereGeometry(0.8, 8, 8);
-      const haloMat = new THREE.MeshStandardMaterial({
-        color:colObj, emissive:colObj, emissiveIntensity:0.5,
-        transparent:true, opacity:0.08
-      });
-      const halo = new THREE.Mesh(haloGeo, haloMat);
-      halo.position.y = spireY + spireH + 0.22;
-      halo.userData._halo = {mat:haloMat, id:i};
-      group.add(halo);
-    }
+  // ── PIXEL ANTENNA (tall buildings)
+  if(floors>18){
+    const antH=VOXEL*Math.floor(floors*0.15);
+    const antGeo=new THREE.BoxGeometry(VOXEL*.3,antH,VOXEL*.3);
+    const antMat=new THREE.MeshLambertMaterial({color:0x1a2a3a});
+    const ant=new THREE.Mesh(antGeo,antMat);
+    ant.position.y=capH+antH/2;
+    group.add(ant);
 
-    // ── EDGES (wireframe outline for sci-fi look)
-    const edgeGeo = new THREE.BoxGeometry(baseW+0.05, H+0.05, baseW+0.05);
-    const edgeMat = new THREE.LineBasicMaterial({color:colObj, transparent:true, opacity:0.4});
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(edgeGeo), edgeMat);
-    edges.position.y = H/2;
-    group.add(edges);
+    // blinking pixel beacon
+    const bGeo=new THREE.BoxGeometry(VOXEL*.55,VOXEL*.55,VOXEL*.55);
+    const bMat=new THREE.MeshBasicMaterial({color:col3});
+    const beacon=new THREE.Mesh(bGeo,bMat);
+    beacon.position.y=capH+antH+VOXEL*.3;
+    beacon.userData._beacon={mat:bMat,col:col3.clone()};
+    group.add(beacon);
+  }
 
-    // ── POINT LIGHT on rooftop
-    const pl = new THREE.PointLight(colObj, 0.8, 22, 2);
-    pl.position.y = H + 3;
-    group.add(pl);
+  // ── ROOFTOP POINT LIGHT
+  const pl=new THREE.PointLight(col3,0.9+logRatio*.8,floors*VOXEL*2.4,2);
+  pl.position.y=capH+2;
+  group.add(pl);
 
-    // ── LABEL
-    const label = makeLabel(repo.name, repo.commitCount, color);
-    label.position.y = H + (H>15 ? H*0.18 : 0) + 5;
-    label.userData._baseY = label.position.y;
-    group.add(label);
-
-    group.userData = {
-      ...repo, _color:color, _H:H,
-      _edgeMat:edgeMat, _roofMat:roofMat,
-      _label:label, _isBuilding:true
-    };
-
-    scene.add(group);
-    meshes.push({group, repo, color, H});
-  });
-
-  return meshes;
+  // store metadata on group
+  group.userData={...repo, _color:color, _floors:floors, _isBuilding:true};
+  scene.add(group);
+  return group;
 }
 
 // ═══════════════════════════════════════════════════════
-//  SHOOTING STARS SYSTEM
+//  GROUND — pure flat dark plane, no grid pixel mess
 // ═══════════════════════════════════════════════════════
-function createShootingStars(scene){
-  const shooters = [];
-  const TRAIL_LEN = 32;
+function buildGround(scene){
+  // base dark plane
+  const geo=new THREE.PlaneGeometry(1000,1000);
+  const mat=new THREE.MeshLambertMaterial({color:0x010710});
+  const m=new THREE.Mesh(geo,mat);
+  m.rotation.x=-Math.PI/2; m.position.y=-0.01;
+  m.receiveShadow=true;
+  scene.add(m);
 
-  function newShooter(){
-    // random start in upper sky
-    const startX = (Math.random()-0.5)*800;
-    const startY = 80 + Math.random()*120;
-    const startZ = (Math.random()-0.5)*800;
-
-    // direction: mostly horizontal with slight downward angle
-    const angle = Math.random()*Math.PI*2;
-    const speed = 3 + Math.random()*5;
-    const vx = Math.cos(angle)*speed;
-    const vy = -(0.3+Math.random()*0.8);
-    const vz = Math.sin(angle)*speed;
-
-    // trail positions
-    const positions = new Float32Array(TRAIL_LEN*3);
-    for(let i=0;i<TRAIL_LEN;i++){
-      positions[i*3]   = startX;
-      positions[i*3+1] = startY;
-      positions[i*3+2] = startZ;
-    }
-
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
-
-    // color: white with slight blue/cyan tint
-    const trailColor = Math.random()>.5 ? 0xffffff : 0x88ddff;
-    const mat = new THREE.LineBasicMaterial({
-      color:trailColor, transparent:true, opacity:0.9,
-      blending:THREE.AdditiveBlending, depthWrite:false
+  // neon road lines — just 4 main arteries, no pixelated grid
+  const lm=new THREE.LineBasicMaterial({color:0x002a44,transparent:true,opacity:0.35});
+  [-5,5].forEach(offset=>{
+    [
+      [new THREE.Vector3(offset,-0.005,-500),new THREE.Vector3(offset,-0.005,500)],
+      [new THREE.Vector3(-500,-0.005,offset),new THREE.Vector3(500,-0.005,offset)],
+    ].forEach(pts=>{
+      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lm));
     });
-    const line = new THREE.Line(geo, mat);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  SKY — stars + shooting stars + moon
+// ═══════════════════════════════════════════════════════
+function buildSky(scene){
+  // ── STARS (sprite-based, circular, pixel crisp)
+  const starCount=7000;
+  const sPos=new Float32Array(starCount*3);
+  for(let i=0;i<starCount;i++){
+    const th=Math.random()*Math.PI*2;
+    const ph=Math.acos(2*Math.random()-1);
+    const r=500+Math.random()*200;
+    sPos[i*3]=r*Math.sin(ph)*Math.cos(th);
+    sPos[i*3+1]=Math.abs(r*Math.cos(ph))+10;
+    sPos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+  }
+  const sGeo=new THREE.BufferGeometry();
+  sGeo.setAttribute('position',new THREE.Float32BufferAttribute(sPos,3));
+
+  const sCv=document.createElement('canvas');sCv.width=16;sCv.height=16;
+  const sCtx=sCv.getContext('2d');
+  const sg=sCtx.createRadialGradient(8,8,0,8,8,8);
+  sg.addColorStop(0,'rgba(255,255,255,1)');
+  sg.addColorStop(0.4,'rgba(220,235,255,0.8)');
+  sg.addColorStop(1,'rgba(180,200,255,0)');
+  sCtx.fillStyle=sg; sCtx.fillRect(0,0,16,16);
+
+  const sMat=new THREE.PointsMaterial({
+    map:new THREE.CanvasTexture(sCv),size:1.1,sizeAttenuation:true,
+    transparent:true,opacity:0.88,
+    blending:THREE.AdditiveBlending,depthWrite:false
+  });
+  const starPoints=new THREE.Points(sGeo,sMat);
+  scene.add(starPoints);
+
+  // ── MOON
+  const moonGeo=new THREE.SphereGeometry(20,32,32);
+  const moonMat=new THREE.MeshBasicMaterial({color:0xf5efdc});
+  const moon=new THREE.Mesh(moonGeo,moonMat);
+  moon.position.set(220,280,-400);
+  scene.add(moon);
+
+  // moon halo sprite
+  const mhCv=document.createElement('canvas');mhCv.width=128;mhCv.height=128;
+  const mhCtx=mhCv.getContext('2d');
+  const mhG=mhCtx.createRadialGradient(64,64,0,64,64,64);
+  mhG.addColorStop(0,'rgba(245,239,220,0.22)');
+  mhG.addColorStop(0.4,'rgba(200,220,255,0.06)');
+  mhG.addColorStop(1,'transparent');
+  mhCtx.fillStyle=mhG;mhCtx.fillRect(0,0,128,128);
+  const mhSp=new THREE.Sprite(new THREE.SpriteMaterial({
+    map:new THREE.CanvasTexture(mhCv),transparent:true,
+    depthWrite:false,blending:THREE.AdditiveBlending
+  }));
+  mhSp.position.copy(moon.position);
+  mhSp.scale.set(140,140,1);
+  scene.add(mhSp);
+
+  // ── SHOOTING STARS
+  const shooters=[];
+  const TRAIL=28;
+
+  function spawnShooter(){
+    const sx=(Math.random()-.5)*600, sy=100+Math.random()*200, sz=(Math.random()-.5)*600;
+    const ang=Math.random()*Math.PI*2;
+    const spd=4+Math.random()*7;
+    const vx=Math.cos(ang)*spd, vy=-(0.4+Math.random()),  vz=Math.sin(ang)*spd;
+    const trail=Array(TRAIL).fill(0).map(()=>({x:sx,y:sy,z:sz}));
+    const pos=new Float32Array(TRAIL*3);
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    const col=Math.random()>.5?0xffffff:0xaaddff;
+    const mat=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.9,
+      blending:THREE.AdditiveBlending,depthWrite:false});
+    const line=new THREE.Line(geo,mat);
     scene.add(line);
-
-    // head glow sphere
-    const headGeo = new THREE.SphereGeometry(0.6,6,6);
-    const headMat = new THREE.MeshBasicMaterial({
-      color:trailColor, transparent:true, opacity:1.0,
-      blending:THREE.AdditiveBlending, depthWrite:false
-    });
-    const head = new THREE.Mesh(headGeo, headMat);
-    head.position.set(startX, startY, startZ);
+    // glow head
+    const hGeo=new THREE.SphereGeometry(.5,4,4);
+    const hMat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:1,
+      blending:THREE.AdditiveBlending,depthWrite:false});
+    const head=new THREE.Mesh(hGeo,hMat);
+    head.position.set(sx,sy,sz);
     scene.add(head);
-
-    return {
-      line, head, geo, mat, headMat,
-      x:startX, y:startY, z:startZ,
-      vx, vy, vz,
-      trail: Array.from({length:TRAIL_LEN},()=>({x:startX,y:startY,z:startZ})),
-      life:0, maxLife:60+Math.random()*80, active:true
-    };
+    return{line,head,geo,mat,hMat,trail,x:sx,y:sy,z:sz,vx,vy,vz,life:0,maxLife:55+Math.random()*70};
   }
 
-  // spawn initial set
-  for(let i=0;i<3;i++){
-    const s = newShooter();
-    s.life = Math.random()*s.maxLife; // stagger
+  for(let i=0;i<4;i++){
+    const s=spawnShooter();
+    s.life=Math.random()*s.maxLife;
     shooters.push(s);
   }
 
   function updateShooters(){
-    // randomly spawn new ones
-    if(Math.random()<0.008 && shooters.filter(s=>s.active).length<6){
-      shooters.push(newShooter());
-    }
+    if(Math.random()<.007&&shooters.filter(s=>s.active!==false).length<7)
+      shooters.push(spawnShooter());
 
-    shooters.forEach((s,si)=>{
-      if(!s.active) return;
+    for(let i=shooters.length-1;i>=0;i--){
+      const s=shooters[i];
+      if(s.active===false)continue;
       s.life++;
-      const t = s.life / s.maxLife;
-
-      // move head
-      s.x += s.vx; s.y += s.vy; s.z += s.vz;
-      s.head.position.set(s.x, s.y, s.z);
-
-      // update trail
+      s.x+=s.vx; s.y+=s.vy; s.z+=s.vz;
+      s.head.position.set(s.x,s.y,s.z);
       s.trail.unshift({x:s.x,y:s.y,z:s.z});
-      if(s.trail.length>TRAIL_LEN) s.trail.pop();
-
-      // write to buffer
-      const pos = s.geo.attributes.position.array;
-      s.trail.forEach((pt,pi)=>{
-        pos[pi*3]=pt.x; pos[pi*3+1]=pt.y; pos[pi*3+2]=pt.z;
-      });
+      if(s.trail.length>TRAIL)s.trail.pop();
+      const pa=s.geo.attributes.position.array;
+      s.trail.forEach((p,pi)=>{pa[pi*3]=p.x;pa[pi*3+1]=p.y;pa[pi*3+2]=p.z;});
       s.geo.attributes.position.needsUpdate=true;
-
-      // fade out at end
-      const alpha = t < 0.2 ? t/0.2 : t > 0.8 ? (1-t)/0.2 : 1.0;
-      s.mat.opacity = 0.85 * alpha;
-      s.headMat.opacity = alpha;
-      s.head.scale.setScalar(0.5 + alpha*0.8);
-
-      if(s.life >= s.maxLife){
-        scene.remove(s.line); scene.remove(s.head);
-        s.line.geometry.dispose(); s.mat.dispose(); s.headMat.dispose();
-        shooters.splice(si,1);
+      const t=s.life/s.maxLife;
+      const a=t<.2?t/.2:t>.75?(1-t)/.25:1;
+      s.mat.opacity=.85*a; s.hMat.opacity=a;
+      if(s.life>=s.maxLife){
+        scene.remove(s.line);scene.remove(s.head);
+        s.active=false;shooters.splice(i,1);
       }
-    });
+    }
   }
 
-  return {updateShooters};
-}
-
-// ═══════════════════════════════════════════════════════
-//  STARS
-// ═══════════════════════════════════════════════════════
-function createStarField(scene){
-  const COUNT = 8000;
-  const geo = new THREE.BufferGeometry();
-  const pos = new Float32Array(COUNT*3);
-  const sizes = new Float32Array(COUNT);
-  const alphas = new Float32Array(COUNT);
-  const speeds = new Float32Array(COUNT);
-
-  for(let i=0;i<COUNT;i++){
-    // distribute on sphere shell
-    const theta = Math.random()*Math.PI*2;
-    const phi = Math.acos(2*Math.random()-1);
-    const r = 400 + Math.random()*100;
-    pos[i*3]   = r*Math.sin(phi)*Math.cos(theta);
-    pos[i*3+1] = Math.abs(r*Math.cos(phi)); // upper hemisphere only
-    pos[i*3+2] = r*Math.sin(phi)*Math.sin(theta);
-    sizes[i]  = 0.3 + Math.random()*1.8;
-    alphas[i] = 0.4 + Math.random()*0.6;
-    speeds[i] = 0.5 + Math.random()*2.5;
+  // star gentle rotate
+  function updateSky(frame){
+    starPoints.rotation.y+=0.00006;
+    sMat.opacity=.82+.06*Math.sin(frame*.015);
+    updateShooters();
   }
 
-  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
-
-  // use canvas for circular star sprite
-  const sc=document.createElement('canvas'); sc.width=32; sc.height=32;
-  const sctx=sc.getContext('2d');
-  const sg=sctx.createRadialGradient(16,16,0,16,16,16);
-  sg.addColorStop(0,'rgba(255,255,255,1)');
-  sg.addColorStop(0.3,'rgba(200,220,255,0.8)');
-  sg.addColorStop(1,'rgba(100,150,255,0)');
-  sctx.fillStyle=sg; sctx.fillRect(0,0,32,32);
-
-  const starMat = new THREE.PointsMaterial({
-    map: new THREE.CanvasTexture(sc),
-    size: 1.4,
-    sizeAttenuation: true,
-    transparent: true,
-    opacity: 0.85,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    vertexColors: false,
-    color: 0xffffff
-  });
-
-  const stars = new THREE.Points(geo, starMat);
-  scene.add(stars);
-
-  // twinkle via opacity animation
-  let frame=0;
-  function updateStars(){
-    frame++;
-    // gentle rotate star field
-    stars.rotation.y += 0.00008;
-    // twinkle: modulate opacity on sine
-    const t = frame*0.02;
-    starMat.opacity = 0.75 + 0.12*Math.sin(t);
-  }
-
-  return {updateStars};
-}
-
-// ═══════════════════════════════════════════════════════
-//  ENVIRONMENT
-// ═══════════════════════════════════════════════════════
-function buildEnvironment(scene){
-  // ground — smooth dark asphalt with canvas texture
-  const gCv=document.createElement('canvas'); gCv.width=512; gCv.height=512;
-  const gCtx=gCv.getContext('2d');
-  // base dark
-  gCtx.fillStyle='#020810'; gCtx.fillRect(0,0,512,512);
-  // subtle noise grain
-  for(let i=0;i<6000;i++){
-    const x=Math.random()*512, y=Math.random()*512;
-    const a=Math.random()*0.035;
-    gCtx.fillStyle=`rgba(0,180,255,${a})`;
-    gCtx.fillRect(x,y,1,1);
-  }
-  // faint lane lines
-  gCtx.strokeStyle='rgba(0,80,120,0.18)'; gCtx.lineWidth=1;
-  for(let i=0;i<512;i+=64){
-    gCtx.beginPath(); gCtx.moveTo(i,0); gCtx.lineTo(i,512); gCtx.stroke();
-    gCtx.beginPath(); gCtx.moveTo(0,i); gCtx.lineTo(512,i); gCtx.stroke();
-  }
-  const gTex=new THREE.CanvasTexture(gCv);
-  gTex.wrapS=gTex.wrapT=THREE.RepeatWrapping; gTex.repeat.set(12,12);
-
-  const gGeo = new THREE.PlaneGeometry(500,500,1,1);
-  const gMat = new THREE.MeshStandardMaterial({
-    color:0x020810,
-    map:gTex,
-    roughness:0.92,
-    metalness:0.08,
-  });
-  const ground = new THREE.Mesh(gGeo, gMat);
-  ground.rotation.x=-Math.PI/2; ground.receiveShadow=true;
-  scene.add(ground);
-
-  // subtle neon road lines (fewer, cleaner)
-  const roadMat = new THREE.LineBasicMaterial({color:0x002a40,transparent:true,opacity:0.18});
-  for(let i=-8;i<=8;i++){
-    const pts=[new THREE.Vector3(i*11+5.5,0.02,-100),new THREE.Vector3(i*11+5.5,0.02,100)];
-    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),roadMat));
-    const pts2=[new THREE.Vector3(-100,0.02,i*11+5.5),new THREE.Vector3(100,0.02,i*11+5.5)];
-    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts2),roadMat));
-  }
-
-  // moon
-  const moonGeo = new THREE.SphereGeometry(18,32,32);
-  const moonMat = new THREE.MeshStandardMaterial({
-    color:0xf0ead8, roughness:0.85,
-    emissive:0xf0ead8, emissiveIntensity:0.18
-  });
-  const moon = new THREE.Mesh(moonGeo, moonMat);
-  moon.position.set(180, 220, -280);
-  scene.add(moon);
-
-  // moon glow halo
-  const mhCv=document.createElement('canvas'); mhCv.width=128;mhCv.height=128;
-  const mhCtx=mhCv.getContext('2d');
-  const mhG=mhCtx.createRadialGradient(64,64,0,64,64,64);
-  mhG.addColorStop(0,'rgba(240,232,200,0.4)');
-  mhG.addColorStop(0.5,'rgba(200,210,240,0.12)');
-  mhG.addColorStop(1,'rgba(180,200,255,0)');
-  mhCtx.fillStyle=mhG; mhCtx.fillRect(0,0,128,128);
-  const mhMat=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(mhCv),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
-  const mhSp=new THREE.Sprite(mhMat);
-  mhSp.position.copy(moon.position);
-  mhSp.scale.set(120,120,1);
-  scene.add(mhSp);
-
-  // distant city silhouette (flat quads at horizon)
-  for(let i=0;i<28;i++){
-    const angle=(i/28)*Math.PI*2;
-    const dist=160+Math.random()*30;
-    const h=4+Math.random()*24;
-    const w=3+Math.random()*6;
-    const bgGeo=new THREE.BoxGeometry(w,h,0.5);
-    const bgMat=new THREE.MeshBasicMaterial({color:0x020a16});
-    const bgMesh=new THREE.Mesh(bgGeo,bgMat);
-    bgMesh.position.set(Math.cos(angle)*dist,h/2,Math.sin(angle)*dist);
-    scene.add(bgMesh);
-  }
-
-  // nebula/aurora (large plane sprites)
-  const nebulas=[
-    {col:'rgba(0,100,255,0.035)',x:-80,y:120,z:-200,rx:140,ry:80},
-    {col:'rgba(100,0,200,0.025)',x:100,y:160,z:-180,rx:100,ry:60},
-    {col:'rgba(0,200,150,0.02)',x:-20,y:90, z:-220,rx:160,ry:50},
-  ];
-  nebulas.forEach(n=>{
-    const nc=document.createElement('canvas'); nc.width=256;nc.height=128;
-    const nctx=nc.getContext('2d');
-    const ng=nctx.createRadialGradient(128,64,0,128,64,128);
-    ng.addColorStop(0,n.col); ng.addColorStop(1,'transparent');
-    nctx.fillStyle=ng; nctx.fillRect(0,0,256,128);
-    const nMat=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(nc),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
-    const nSp=new THREE.Sprite(nMat);
-    nSp.position.set(n.x,n.y,n.z);
-    nSp.scale.set(n.rx,n.ry,1);
-    scene.add(nSp);
-  });
-
-  // LIGHTS
-  scene.add(new THREE.AmbientLight(0x000408, 0.8));
-  scene.add(new THREE.HemisphereLight(0x000e20, 0x000000, 0.4));
-
-  const moon_light = new THREE.DirectionalLight(0x6699cc, 0.5);
-  moon_light.position.set(180,220,-280);
-  moon_light.castShadow=true;
-  moon_light.shadow.mapSize.set(2048,2048);
-  moon_light.shadow.camera.left=-120; moon_light.shadow.camera.right=120;
-  moon_light.shadow.camera.top=120; moon_light.shadow.camera.bottom=-120;
-  moon_light.shadow.camera.far=600;
-  scene.add(moon_light);
-
-  // ground glow fill lights
-  [0x001428, 0x080028, 0x002818].forEach((c,i)=>{
-    const fl=new THREE.PointLight(c,0.6,80);
-    const a=(i/3)*Math.PI*2;
-    fl.position.set(Math.cos(a)*40,0.5,Math.sin(a)*40);
-    scene.add(fl);
-  });
-
-  scene.fog = new THREE.FogExp2(0x000000, 0.007);
+  return {updateSky};
 }
 
 // ═══════════════════════════════════════════════════════
 //  MAIN
 // ═══════════════════════════════════════════════════════
 async function main(){
-  let user={}, repos=[];
+  let repos=[], user={};
   try{
-    ({user, repos} = await fetchGitHub());
-  } catch(e){
-    setLoad(88,'API ERROR — BUILDING WITH SAMPLE DATA...');
+    ({user,repos}=await fetchData());
+  }catch(e){
+    setLoad(88,'API ERROR — USING DEMO DATA');
+    repos=[
+      {name:'BlockChain',commitCount:45,language:'Solidity',stargazers_count:1,forks_count:0,description:'DApp',html_url:'#'},
+      {name:'Portfolio',commitCount:30,language:'JavaScript',stargazers_count:0,forks_count:0,description:'Portfolio',html_url:'#'},
+    ];
   }
 
-  // ── stats
-  const totalCommits = repos.reduce((s,r)=>s+r.commitCount,0);
-  const totalStars   = repos.reduce((s,r)=>s+(r.stargazers_count||0),0);
-  document.getElementById('s-repos').textContent   = repos.length;
-  document.getElementById('s-commits').textContent = totalCommits.toLocaleString();
-  document.getElementById('s-stars').textContent   = totalStars;
+  const totalCommits=repos.reduce((s,r)=>s+r.commitCount,0);
+  const totalStars=repos.reduce((s,r)=>s+(r.stargazers_count||0),0);
+  document.getElementById('h-repos').textContent=repos.length;
+  document.getElementById('h-commits').textContent=totalCommits.toLocaleString();
+  document.getElementById('h-stars').textContent=totalStars;
 
-  // ── legend
-  const langs=[...new Set(repos.map(r=>r.language).filter(Boolean))];
-  const legEl=document.getElementById('leg-items');
-  langs.forEach(l=>{
-    const c=LANG_COLORS[l]||LANG_COLORS.default;
-    legEl.innerHTML+=`<div class="leg-item">
-      <div class="leg-swatch" style="background:${c};box-shadow:0 0 6px ${c},0 0 12px ${c}40"></div>
-      <span style="color:${c};text-shadow:0 0 8px ${c}60">${l.toUpperCase()}</span>
-    </div>`;
-  });
+  setLoad(92,'RENDERING...');
 
-  // ── ticker
-  const tickerText = repos.map(r=>`${r.name.toUpperCase()} [${r.commitCount} COMMITS]`).join('  ·  ');
-  document.getElementById('ticker-inner').textContent = '  ·  ' + tickerText + '  ·  ';
-
-  setLoad(92,'RENDERING SCENE...');
-
-  // ── THREE
+  // ── THREE SETUP ──────────────────────────────────────
   const canvas=document.getElementById('c');
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
@@ -773,188 +522,228 @@ async function main(){
   renderer.shadowMap.enabled=true;
   renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.5;
+  renderer.toneMappingExposure=1.2;
 
   const scene=new THREE.Scene();
   scene.background=new THREE.Color(0x000000);
+  scene.fog=new THREE.FogExp2(0x000000,0.009);
 
-  const camera=new THREE.PerspectiveCamera(52,window.innerWidth/window.innerHeight,0.1,1200);
+  const camera=new THREE.PerspectiveCamera(72,window.innerWidth/window.innerHeight,0.1,1200);
+  camera.position.set(0,8,40);
+  camera.lookAt(0,5,0);
 
-  buildEnvironment(scene);
-  const cityMeshes = buildCity(scene, repos);
-  const {updateShooters} = createShootingStars(scene);
-  const {updateStars} = createStarField(scene);
+  // ── LIGHTS ──────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0x020a18,1.6));
+  scene.add(new THREE.HemisphereLight(0x001428,0x000000,0.5));
+  const moonLight=new THREE.DirectionalLight(0x445566,0.4);
+  moonLight.position.set(5,10,-8);
+  moonLight.castShadow=true;
+  moonLight.shadow.mapSize.set(1024,1024);
+  scene.add(moonLight);
+
+  // ── BUILD ─────────────────────────────────────────
+  buildGround(scene);
+  const {updateSky}=buildSky(scene);
+
+  const maxC=Math.max(...repos.map(r=>r.commitCount),1);
+  const COLS=Math.ceil(Math.sqrt(repos.length));
+  const SPACING=14;
+  const buildingGroups=[];
+
+  repos.forEach((repo,i)=>{
+    const col=i%COLS;
+    const row=Math.floor(i/COLS);
+    const cx=(col-(COLS-1)/2)*SPACING;
+    const cz=(row-(Math.ceil(repos.length/COLS)-1)/2)*SPACING;
+    const grp=makePixelBuilding(scene,repo,cx,cz,maxC);
+    buildingGroups.push(grp);
+  });
 
   setLoad(100,'WELCOME TO YOUR CITY');
 
-  // ── show UI
+  // ── HIDE LOADER, SHOW START ─────────────────────────
   setTimeout(()=>{
     const ld=document.getElementById('loader');
     ld.style.opacity='0';
     setTimeout(()=>{
       ld.style.display='none';
-      document.getElementById('legend').style.display='block';
-      document.getElementById('ticker').style.display='flex';
-    },800);
-  },600);
+      document.getElementById('start').style.display='flex';
+      document.getElementById('hint').style.display='block';
+    },900);
+  },500);
 
-  // ── CAMERA ORBIT
-  let theta=0.5, phi=0.52, radius=120;
-  let targetTheta=theta, targetPhi=phi, targetRadius=radius;
-  let autoRotate=true, isDrag=false, prevMX=0, prevMY=0;
+  // ── POINTER LOCK (FPS fly) ──────────────────────────
+  let locked=false;
+  const euler=new THREE.Euler(0,0,0,'YXZ');
+  euler.setFromQuaternion(camera.quaternion);
 
-  canvas.addEventListener('mousedown',e=>{isDrag=true;prevMX=e.clientX;prevMY=e.clientY;autoRotate=false;});
-  window.addEventListener('mouseup',()=>isDrag=false);
-  window.addEventListener('mousemove',e=>{
-    if(!isDrag)return;
-    targetTheta-=(e.clientX-prevMX)*0.007;
-    targetPhi=Math.max(0.1,Math.min(1.45,targetPhi-(e.clientY-prevMY)*0.006));
-    prevMX=e.clientX;prevMY=e.clientY;
+  document.getElementById('start').addEventListener('click',()=>{
+    canvas.requestPointerLock();
   });
-  canvas.addEventListener('wheel',e=>{
-    targetRadius=Math.max(20,Math.min(200,targetRadius+e.deltaY*0.12));
-    e.preventDefault();
-  },{passive:false});
-  // double click to re-enable autorotate
-  canvas.addEventListener('dblclick',()=>autoRotate=!autoRotate);
+  canvas.addEventListener('click',()=>{
+    if(!locked) canvas.requestPointerLock();
+  });
 
-  // touch
-  let prevTD=0,prevTX=0,prevTY=0;
-  canvas.addEventListener('touchstart',e=>{
-    if(e.touches.length===1){isDrag=true;autoRotate=false;prevTX=e.touches[0].clientX;prevTY=e.touches[0].clientY;}
-    if(e.touches.length===2)prevTD=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-  },{passive:true});
-  canvas.addEventListener('touchmove',e=>{
-    if(e.touches.length===1&&isDrag){
-      targetTheta-=(e.touches[0].clientX-prevTX)*0.01;
-      targetPhi=Math.max(0.1,Math.min(1.45,targetPhi-(e.touches[0].clientY-prevTY)*0.009));
-      prevTX=e.touches[0].clientX;prevTY=e.touches[0].clientY;
-    }
-    if(e.touches.length===2){
-      const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-      targetRadius=Math.max(20,Math.min(200,targetRadius-(d-prevTD)*0.25));
-      prevTD=d;
-    }
-  },{passive:true});
-  canvas.addEventListener('touchend',()=>isDrag=false,{passive:true});
+  document.addEventListener('pointerlockchange',()=>{
+    locked=document.pointerLockElement===canvas;
+    document.body.classList.toggle('locked',locked);
+    document.getElementById('start').style.display='none';
+    document.getElementById('hint').style.display=locked?'block':'none';
+  });
 
-  // ── RAYCASTER
+  document.addEventListener('mousemove',e=>{
+    if(!locked)return;
+    const sens=0.0018;
+    euler.y-=e.movementX*sens;
+    euler.x=Math.max(-Math.PI/2+.01,Math.min(Math.PI/2-.01,euler.x-e.movementY*sens));
+    camera.quaternion.setFromEuler(euler);
+  });
+
+  // ── KEYBOARD ─────────────────────────────────────────
+  const keys={};
+  document.addEventListener('keydown',e=>keys[e.code]=true);
+  document.addEventListener('keyup',e=>keys[e.code]=false);
+  document.addEventListener('keydown',e=>{
+    if(e.code==='Escape'&&locked){document.exitPointerLock();}
+  });
+
+  // ── RAYCASTER / HOVER ────────────────────────────────
   const raycaster=new THREE.Raycaster();
-  const mouse2d=new THREE.Vector2();
-  let hoveredGroup=null;
+  const center=new THREE.Vector2(0,0);
   const tip=document.getElementById('tip');
-  const corners=tip.querySelectorAll('.tip-corner');
+  let hoveredGroup=null;
+  let mx=window.innerWidth/2, my=window.innerHeight/2;
 
-  // collect all clickable groups
-  const allGroups=[];
-  scene.traverse(obj=>{if(obj.isGroup&&obj.userData._isBuilding)allGroups.push(obj);});
+  // collect all meshes that are children of building groups
+  function getBuildingMeshes(){
+    const out=[];
+    buildingGroups.forEach(g=>{
+      g.traverse(c=>{if(c.isMesh&&!c.userData._beacon)out.push(c);});
+    });
+    return out;
+  }
+  let buildMeshes=getBuildingMeshes();
 
   canvas.addEventListener('mousemove',e=>{
-    mouse2d.x=(e.clientX/window.innerWidth)*2-1;
-    mouse2d.y=-(e.clientY/window.innerHeight)*2+1;
-    raycaster.setFromCamera(mouse2d,camera);
-
-    // raycast against all children of building groups
-    const testMeshes=[];
-    allGroups.forEach(g=>{g.traverse(c=>{if(c.isMesh&&!c.userData._beacon)testMeshes.push(c);});});
-    const hits=raycaster.intersectObjects(testMeshes);
-
+    if(locked)return; // in flight mode skip tooltip
+    mx=e.clientX; my=e.clientY;
+    const nx=(e.clientX/window.innerWidth)*2-1;
+    const ny=-(e.clientY/window.innerHeight)*2+1;
+    raycaster.setFromCamera({x:nx,y:ny},camera);
+    const hits=raycaster.intersectObjects(buildMeshes);
     if(hits.length){
-      const hitMesh=hits[0].object;
-      // find parent group
-      let g=hitMesh;
+      let g=hits[0].object;
       while(g&&!g.userData._isBuilding)g=g.parent;
       if(!g)return;
-
       if(g!==hoveredGroup){
-        if(hoveredGroup){
-          hoveredGroup.userData._edgeMat.opacity=0.4;
-          hoveredGroup.userData._roofMat.emissiveIntensity=1.2;
-        }
         hoveredGroup=g;
-        g.userData._edgeMat.opacity=1.0;
-        g.userData._roofMat.emissiveIntensity=3.0;
-
-        const r=g.userData;
-        const sc=r._color;
-        document.getElementById('tip-bar').style.background=sc;
-        document.getElementById('tip-bar').style.boxShadow=`0 0 10px ${sc}`;
-        corners.forEach(c=>{ c.style.borderColor=sc; });
-        tip.style.borderColor=`${sc}40`;
-        document.getElementById('tip-name').textContent=r.name.toUpperCase();
-        document.getElementById('tip-commits').textContent=r.commitCount.toLocaleString();
-        document.getElementById('tip-commits').style.color=sc;
-        document.getElementById('tip-commits').style.textShadow=`0 0 16px ${sc}`;
-        const lang=(r.language||'UNKNOWN').toUpperCase();
-        document.getElementById('tip-lang').innerHTML=`<span style="color:${sc};letter-spacing:2px">● ${lang}</span>`;
-        document.getElementById('tip-desc').textContent=r.description||'No description provided.';
-        document.getElementById('tip-meta').textContent=`★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
-        tip.style.display='block';
+        showTip(g.userData,e.clientX,e.clientY);
+      } else {
+        moveTip(e.clientX,e.clientY);
       }
-      const pad=16;
-      tip.style.left=Math.min(e.clientX+24,window.innerWidth-260-pad)+'px';
-      tip.style.top=Math.min(e.clientY-20,window.innerHeight-200-pad)+'px';
       canvas.style.cursor='pointer';
     } else {
-      if(hoveredGroup){
-        hoveredGroup.userData._edgeMat.opacity=0.4;
-        hoveredGroup.userData._roofMat.emissiveIntensity=1.2;
-        hoveredGroup=null;
-      }
+      hoveredGroup=null;
       tip.style.display='none';
-      canvas.style.cursor='default';
+      canvas.style.cursor='crosshair';
     }
   });
 
-  canvas.addEventListener('click',()=>{
+  canvas.addEventListener('click',e=>{
+    if(locked)return;
     if(hoveredGroup&&hoveredGroup.userData.html_url)
       window.open(hoveredGroup.userData.html_url,'_blank');
   });
 
+  function showTip(r,x,y){
+    const sc=r._color||'#00f2ff';
+    document.getElementById('tip-accent').style.cssText=`background:${sc};box-shadow:0 0 8px ${sc}`;
+    document.querySelectorAll('.tc').forEach(c=>c.style.cssText=`background:${sc}`);
+    tip.style.borderColor=sc+'55';
+    document.getElementById('tip-name').textContent=r.name.toUpperCase();
+    document.getElementById('tip-commits').textContent=r.commitCount.toLocaleString();
+    document.getElementById('tip-commits').style.color=sc;
+    document.getElementById('tip-commits').style.textShadow=`0 0 14px ${sc}`;
+    const lang=(r.language||'UNKNOWN').toUpperCase();
+    document.getElementById('tip-lang').innerHTML=`<span style="color:${sc};letter-spacing:2px">● ${lang}</span>`;
+    document.getElementById('tip-desc').textContent=r.description||'No description.';
+    document.getElementById('tip-meta').textContent=
+      `★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
+    tip.style.display='block';
+    moveTip(x,y);
+  }
+  function moveTip(x,y){
+    const pw=tip.offsetWidth||230, ph=tip.offsetHeight||180, pad=16;
+    tip.style.left=Math.min(x+20,window.innerWidth-pw-pad)+'px';
+    tip.style.top=Math.max(pad,Math.min(y-20,window.innerHeight-ph-pad))+'px';
+  }
+
+  // ── IN-FLIGHT RAYCASTER (centre of screen) ──────────
+  let centreHover=null;
+  function docentreRaycast(){
+    raycaster.setFromCamera(center,camera);
+    const hits=raycaster.intersectObjects(buildMeshes);
+    if(hits.length){
+      let g=hits[0].object;
+      while(g&&!g.userData._isBuilding)g=g.parent;
+      if(g&&g!==centreHover){
+        centreHover=g;
+        showTip(g.userData,window.innerWidth/2+20,window.innerHeight/2);
+        tip.style.display='block';
+      }
+    } else {
+      centreHover=null;
+      tip.style.display='none';
+    }
+  }
+
+  // ── RESIZE ───────────────────────────────────────────
   window.addEventListener('resize',()=>{
     camera.aspect=window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth,window.innerHeight);
   });
 
-  // ── ANIMATE
+  // ── ANIMATE ─────────────────────────────────────────
+  const dir=new THREE.Vector3();
+  const right=new THREE.Vector3();
+  const up2=new THREE.Vector3(0,1,0);
   let frame=0;
+
   function animate(){
     requestAnimationFrame(animate);
     frame++;
 
-    if(autoRotate) targetTheta+=0.0025;
-    theta+=(targetTheta-theta)*0.055;
-    phi+=(targetPhi-phi)*0.055;
-    radius+=(targetRadius-radius)*0.055;
+    // ── MOVE (FPS flight)
+    if(locked){
+      const speed=(keys['ShiftLeft']||keys['ShiftRight'])?0.55:0.18;
+      camera.getWorldDirection(dir); dir.y=0; dir.normalize();
+      right.crossVectors(dir,up2).normalize();
 
-    camera.position.x=radius*Math.sin(phi)*Math.cos(theta);
-    camera.position.y=radius*Math.cos(phi);
-    camera.position.z=radius*Math.sin(phi)*Math.sin(theta);
-    camera.lookAt(0, 14, 0);
+      if(keys['KeyW']||keys['ArrowUp'])   camera.position.addScaledVector(dir,speed);
+      if(keys['KeyS']||keys['ArrowDown']) camera.position.addScaledVector(dir,-speed);
+      if(keys['KeyA']||keys['ArrowLeft']) camera.position.addScaledVector(right,-speed);
+      if(keys['KeyD']||keys['ArrowRight'])camera.position.addScaledVector(right,speed);
+      if(keys['Space'])   camera.position.y+=speed;
+      if(keys['KeyC'])    camera.position.y-=speed;
 
-    // animate beacons + halos + labels
+      // floor clamp
+      if(camera.position.y<1.5)camera.position.y=1.5;
+
+      // centre raycast every 8 frames
+      if(frame%8===0)docentreRaycast();
+    }
+
+    // ── BEACON BLINK
     scene.traverse(obj=>{
       if(obj.userData._beacon){
-        const {mat,color,id}=obj.userData._beacon;
-        const t=Math.sin(frame*0.07+id*1.3)*0.5+0.5;
-        mat.emissiveIntensity=0.8+t*3.0;
-        mat.opacity=0.7+t*0.3;
-      }
-      if(obj.userData._halo){
-        const {mat,id}=obj.userData._halo;
-        const t=Math.sin(frame*0.07+id*1.3)*0.5+0.5;
-        mat.opacity=0.04+t*0.14;
-        obj.scale.setScalar(1+t*1.2);
-      }
-      if(obj.isSprite&&obj.userData._baseY!==undefined){
-        obj.position.y=obj.userData._baseY+Math.sin(frame*0.025+obj.id*0.5)*0.3;
+        const {mat,col}=obj.userData._beacon;
+        const t=Math.sin(frame*.09+obj.id*.7)*.5+.5;
+        mat.color.lerpColors(col,new THREE.Color(0xffffff),t*.4);
       }
     });
 
-    updateShooters();
-    updateStars();
-
+    updateSky(frame);
     renderer.render(scene,camera);
   }
   animate();
@@ -962,7 +751,7 @@ async function main(){
 
 main().catch(e=>{
   console.error(e);
-  document.getElementById('load-msg').textContent='ERROR: '+e.message;
+  document.getElementById('lmsg').textContent='ERROR: '+e.message;
 });
 </script>
 </body>
