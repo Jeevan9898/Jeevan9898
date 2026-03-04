@@ -5,201 +5,248 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Jeevan Yadav — GitHub City</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:#000814;overflow:hidden;font-family:'Share Tech Mono','Courier New',monospace;color:#00f2ff}
-  #c{display:block;width:100vw;height:100vh}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000308;overflow:hidden;font-family:'Share Tech Mono','Courier New',monospace;color:#00f2ff}
+#c{display:block;width:100vw;height:100vh}
 
-  /* ── LOADING ── */
-  #loader{position:fixed;inset:0;background:#000814;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;z-index:100;gap:18px}
-  #loader h1{font-size:22px;letter-spacing:8px;text-shadow:0 0 20px #00f2ff}
-  #bar-wrap{width:280px;height:3px;background:#0a1f30;border:1px solid #0a3050}
-  #bar{height:100%;background:#00f2ff;width:0%;transition:width .3s;box-shadow:0 0 8px #00f2ff}
-  #load-msg{font-size:10px;letter-spacing:3px;color:rgba(0,242,255,.5);min-height:16px}
+/* LOADER */
+#loader{position:fixed;inset:0;background:#000308;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:200;gap:20px;
+  transition:opacity .8s}
+#loader-glow{
+  width:160px;height:160px;position:relative;display:flex;align-items:center;justify-content:center}
+#loader-ring{
+  position:absolute;inset:0;border:1px solid rgba(0,242,255,.15);border-radius:50%;
+  animation:spin 4s linear infinite}
+#loader-ring2{
+  position:absolute;inset:12px;border:1px solid rgba(0,242,255,.08);border-radius:50%;
+  animation:spin 6s linear infinite reverse}
+#loader-icon{font-size:36px;text-shadow:0 0 30px #00f2ff;animation:pulse 2s ease-in-out infinite}
+#loader h1{font-size:16px;letter-spacing:8px;text-shadow:0 0 20px #00f2ff;text-align:center}
+#bar-wrap{width:260px;height:2px;background:#040f1a;position:relative}
+#bar-wrap::before{content:'';position:absolute;top:-4px;left:0;right:0;height:10px;
+  background:linear-gradient(90deg,transparent,rgba(0,242,255,.05),transparent)}
+#bar{height:100%;background:linear-gradient(90deg,#003a4f,#00f2ff);width:0%;
+  transition:width .4s;box-shadow:0 0 12px #00f2ff,0 0 30px rgba(0,242,255,.3)}
+#load-msg{font-size:9px;letter-spacing:4px;color:rgba(0,242,255,.4);min-height:16px;text-align:center}
 
-  /* ── HUD ── */
-  #hud{position:fixed;top:0;left:0;right:0;padding:12px 20px;
-    display:flex;justify-content:space-between;align-items:center;
-    background:linear-gradient(180deg,rgba(0,8,20,.85) 0%,transparent 100%);
-    pointer-events:none;z-index:10}
-  #hud-left{display:flex;flex-direction:column;gap:4px}
-  #hud-title{font-size:13px;letter-spacing:5px;text-shadow:0 0 14px #00f2ff}
-  #hud-sub{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.4)}
-  #hud-right{text-align:right;font-size:8px;letter-spacing:2px;color:rgba(0,242,255,.4);line-height:1.8}
+/* HUD TOP */
+#hud{position:fixed;top:0;left:0;right:0;padding:16px 24px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  background:linear-gradient(180deg,rgba(0,3,8,.9) 0%,transparent 100%);
+  pointer-events:none;z-index:10}
+#hud-left{}
+#hud-title{font-size:14px;letter-spacing:6px;text-shadow:0 0 16px #00f2ff,0 0 40px rgba(0,242,255,.2);
+  margin-bottom:4px}
+#hud-sub{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.35)}
+#hud-right{display:flex;gap:24px}
+.hud-stat{text-align:right}
+.hud-stat-val{font-size:22px;color:#fff;text-shadow:0 0 12px rgba(0,242,255,.5);letter-spacing:2px;line-height:1}
+.hud-stat-label{font-size:7px;letter-spacing:3px;color:rgba(0,242,255,.35);margin-top:2px}
 
-  /* ── TOOLTIP ── */
-  #tip{position:fixed;pointer-events:none;z-index:20;display:none;
-    background:rgba(2,12,24,.95);border:1px solid #00f2ff;padding:14px 18px;
-    min-width:220px;max-width:280px}
-  #tip::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#00f2ff}
-  #tip-name{font-size:12px;letter-spacing:2px;color:#fff;margin-bottom:6px;font-weight:bold}
-  #tip-commits{font-size:20px;color:#00f2ff;text-shadow:0 0 10px #00f2ff;letter-spacing:2px}
-  #tip-commits-label{font-size:8px;color:rgba(0,242,255,.5);letter-spacing:2px;margin-bottom:8px}
-  #tip-lang{font-size:9px;letter-spacing:2px;margin-bottom:4px}
-  #tip-desc{font-size:8px;color:rgba(255,255,255,.5);letter-spacing:1px;line-height:1.5;margin-bottom:8px;font-family:sans-serif}
-  #tip-stars{font-size:8px;color:rgba(255,215,0,.7);letter-spacing:2px}
-  #tip-click{font-size:7px;color:rgba(0,242,255,.4);letter-spacing:2px;margin-top:8px;border-top:1px solid rgba(0,242,255,.1);padding-top:8px}
+/* TOOLTIP */
+#tip{position:fixed;pointer-events:none;z-index:20;display:none;
+  background:rgba(0,3,8,.96);border:1px solid rgba(0,242,255,.3);
+  padding:16px 20px;min-width:240px;backdrop-filter:blur(4px)}
+#tip-bar{position:absolute;top:0;left:0;right:0;height:2px;background:#00f2ff;
+  box-shadow:0 0 8px #00f2ff}
+#tip-name{font-size:13px;letter-spacing:3px;color:#fff;margin-bottom:10px}
+#tip-big{display:flex;align-items:baseline;gap:6px;margin-bottom:3px}
+#tip-commits{font-size:28px;color:#00f2ff;text-shadow:0 0 14px #00f2ff;letter-spacing:1px;line-height:1}
+#tip-commits-label{font-size:8px;color:rgba(0,242,255,.4);letter-spacing:2px}
+#tip-divider{height:1px;background:rgba(0,242,255,.1);margin:10px 0}
+#tip-lang{font-size:9px;letter-spacing:2px;margin-bottom:5px}
+#tip-desc{font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.5px;line-height:1.7;
+  margin-bottom:8px;font-family:sans-serif;max-width:200px}
+#tip-meta{font-size:8px;letter-spacing:2px;color:rgba(255,215,0,.6)}
+#tip-cta{font-size:7px;color:rgba(0,242,255,.35);letter-spacing:2px;
+  margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,242,255,.08)}
+.tip-corner{position:absolute;width:5px;height:5px}
+.tip-corner.tl{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid}
+.tip-corner.tr{top:-1px;right:-1px;border-top:2px solid;border-right:2px solid}
+.tip-corner.bl{bottom:-1px;left:-1px;border-bottom:2px solid;border-left:2px solid}
+.tip-corner.br{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid}
 
-  /* ── LEGEND ── */
-  #legend{position:fixed;bottom:20px;left:20px;z-index:10;
-    background:rgba(0,8,20,.8);border:1px solid rgba(0,242,255,.15);
-    padding:12px 16px;display:none}
-  #legend h3{font-size:8px;letter-spacing:3px;color:rgba(0,242,255,.5);margin-bottom:10px}
-  .leg-item{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:8px;letter-spacing:1.5px}
-  .leg-dot{width:8px;height:8px;flex-shrink:0}
+/* LEGEND */
+#legend{position:fixed;bottom:24px;left:24px;z-index:10;
+  background:rgba(0,3,8,.85);border:1px solid rgba(0,242,255,.1);
+  padding:14px 18px;display:none;backdrop-filter:blur(4px)}
+#legend h3{font-size:7px;letter-spacing:4px;color:rgba(0,242,255,.35);margin-bottom:10px}
+.leg-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:8px;letter-spacing:2px;cursor:pointer}
+.leg-swatch{width:10px;height:10px;flex-shrink:0;position:relative}
+.leg-swatch::after{content:'';position:absolute;inset:-3px;opacity:.3}
 
-  /* ── CONTROLS ── */
-  #controls{position:fixed;bottom:20px;right:20px;z-index:10;
-    font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.3);text-align:right;line-height:2}
+/* BOTTOM TICKER */
+#ticker{position:fixed;bottom:0;left:0;right:0;height:28px;overflow:hidden;
+  background:rgba(0,3,8,.9);border-top:1px solid rgba(0,242,255,.08);
+  display:none;align-items:center;z-index:10}
+#ticker-inner{white-space:nowrap;font-size:8px;letter-spacing:3px;
+  color:rgba(0,242,255,.25);animation:ticker 40s linear infinite}
 
-  /* ── STATS ── */
-  #stats{position:fixed;top:60px;right:20px;z-index:10;
-    background:rgba(0,8,20,.8);border:1px solid rgba(0,242,255,.12);
-    padding:12px 16px;font-size:8px;letter-spacing:2px;line-height:2.2;display:none}
-  #stats .val{color:#fff;text-shadow:0 0 8px rgba(0,242,255,.4)}
+/* CONTROLS */
+#controls{position:fixed;bottom:36px;right:24px;z-index:10;
+  font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.2);text-align:right;line-height:2.2}
 
-  /* ── CORNER ACCENTS ── */
-  #tip .c{position:absolute;width:6px;height:6px;background:#00f2ff}
-  #tip .c.tl{top:0;left:0} #tip .c.tr{top:0;right:0}
-  #tip .c.bl{bottom:0;left:0} #tip .c.br{bottom:0;right:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes ticker{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 </style>
 </head>
 <body>
 
+<!-- LOADER -->
 <div id="loader">
-  <h1>◈ GITHUB CITY ◈</h1>
+  <div id="loader-glow">
+    <div id="loader-ring"></div>
+    <div id="loader-ring2"></div>
+    <div id="loader-icon">🏙</div>
+  </div>
+  <h1>GITHUB CITY</h1>
   <div id="bar-wrap"><div id="bar"></div></div>
-  <div id="load-msg">INITIALISING...</div>
+  <div id="load-msg">INITIALISING SYSTEMS...</div>
 </div>
 
 <canvas id="c"></canvas>
 
+<!-- HUD -->
 <div id="hud">
   <div id="hud-left">
     <div id="hud-title">◈ JEEVAN YADAV — GITHUB CITY</div>
-    <div id="hud-sub">FULL STACK DEVELOPER · BLOCKCHAIN · WEB3 · B.TECH CSE 2028</div>
+    <div id="hud-sub">FULL STACK · BLOCKCHAIN · WEB3 · B.TECH CSE 2028</div>
   </div>
   <div id="hud-right">
-    <div id="hud-repos">— REPOS</div>
-    <div id="hud-commits">— COMMITS</div>
-    <div id="hud-stars">— STARS</div>
+    <div class="hud-stat"><div class="hud-stat-val" id="s-repos">—</div><div class="hud-stat-label">SKYSCRAPERS</div></div>
+    <div class="hud-stat"><div class="hud-stat-val" id="s-commits">—</div><div class="hud-stat-label">COMMITS</div></div>
+    <div class="hud-stat"><div class="hud-stat-val" id="s-stars">—</div><div class="hud-stat-label">STARS</div></div>
   </div>
 </div>
 
+<!-- TOOLTIP -->
 <div id="tip">
-  <div class="c tl"></div><div class="c tr"></div>
-  <div class="c bl"></div><div class="c br"></div>
+  <div id="tip-bar"></div>
+  <div class="tip-corner tl"></div><div class="tip-corner tr"></div>
+  <div class="tip-corner bl"></div><div class="tip-corner br"></div>
   <div id="tip-name"></div>
-  <div id="tip-commits"></div>
-  <div id="tip-commits-label">TOTAL COMMITS</div>
+  <div id="tip-big">
+    <div id="tip-commits"></div>
+    <div id="tip-commits-label">COMMITS</div>
+  </div>
+  <div id="tip-divider"></div>
   <div id="tip-lang"></div>
   <div id="tip-desc"></div>
-  <div id="tip-stars"></div>
-  <div id="tip-click">▶ CLICK TO OPEN REPO</div>
+  <div id="tip-meta"></div>
+  <div id="tip-cta">▶ CLICK TO OPEN REPOSITORY ON GITHUB</div>
 </div>
 
+<!-- LEGEND -->
 <div id="legend">
-  <h3>LANGUAGE</h3>
+  <h3>LANGUAGE DISTRICTS</h3>
   <div id="leg-items"></div>
 </div>
 
-<div id="stats">
-  <div>REPOSITORIES <span class="val" id="s-repos">—</span></div>
-  <div>TOTAL COMMITS <span class="val" id="s-commits">—</span></div>
-  <div>TOTAL STARS   <span class="val" id="s-stars">—</span></div>
-  <div>FOLLOWERS     <span class="val" id="s-follow">—</span></div>
-</div>
+<!-- TICKER -->
+<div id="ticker"><div id="ticker-inner"></div></div>
 
+<!-- CONTROLS -->
 <div id="controls">
-  DRAG — ORBIT &nbsp;|&nbsp; SCROLL — ZOOM<br>
-  HOVER — INSPECT &nbsp;|&nbsp; CLICK — OPEN REPO
+  DRAG — ORBIT &nbsp;·&nbsp; SCROLL — ZOOM<br>
+  HOVER — INSPECT &nbsp;·&nbsp; CLICK — OPEN REPO
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
 //  CONFIG
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
 const USERNAME = 'Jeevan9898';
 
 const LANG_COLORS = {
-  JavaScript:'#f1e05a', Solidity:'#e4824a', Python:'#3b8bbf',
+  JavaScript:'#f1e05a', Solidity:'#e4824a', Python:'#3572A5',
   HTML:'#e34c26', CSS:'#7659a8', TypeScript:'#3178c6',
   'C++':'#f34b7d', C:'#555599', Rust:'#dea584', Go:'#00acd7',
   Java:'#b07219', PHP:'#4f5d95', Ruby:'#cc342d', Shell:'#89e051',
+  Vue:'#41b883', Swift:'#F05138', Kotlin:'#A97BFF',
   default:'#00f2ff'
 };
 
-// ─────────────────────────────────────────────────────────
-//  LOADING UI
-// ─────────────────────────────────────────────────────────
-let loadStep = 0;
+// ═══════════════════════════════════════════════════════
+//  LOAD UI
+// ═══════════════════════════════════════════════════════
 function setLoad(pct, msg){
-  document.getElementById('bar').style.width = pct+'%';
+  document.getElementById('bar').style.width = pct + '%';
   document.getElementById('load-msg').textContent = msg;
 }
 
-// ─────────────────────────────────────────────────────────
-//  GITHUB API
-// ─────────────────────────────────────────────────────────
-async function getCommits(repoName){
+// ═══════════════════════════════════════════════════════
+//  GITHUB FETCH
+// ═══════════════════════════════════════════════════════
+async function getCommitCount(repo){
   try{
     const r = await fetch(
-      `https://api.github.com/repos/${USERNAME}/${repoName}/commits?per_page=1`,
-      {headers:{'Accept':'application/vnd.github.v3+json'}}
+      `https://api.github.com/repos/${USERNAME}/${repo}/commits?per_page=1`,
+      {headers:{Accept:'application/vnd.github.v3+json'}}
     );
-    const link = r.headers.get('link');
-    if(!link) return 1;
+    const link = r.headers.get('link') || '';
     const m = link.match(/page=(\d+)>; rel="last"/);
     return m ? parseInt(m[1]) : 1;
   } catch(e){ return 1; }
 }
 
-async function fetchAll(){
-  setLoad(5,'CONNECTING TO GITHUB...');
-  const user = await fetch(`https://api.github.com/users/${USERNAME}`).then(r=>r.json());
-  setLoad(20,'SCANNING REPOSITORIES...');
+async function fetchGitHub(){
+  setLoad(5, 'CONNECTING TO GITHUB API...');
+  const user = await fetch(`https://api.github.com/users/${USERNAME}`)
+    .then(r=>r.json()).catch(()=>({}));
 
+  setLoad(18, 'SCANNING REPOSITORIES...');
   let repos = await fetch(
     `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`,
-    {headers:{'Accept':'application/vnd.github.v3+json'}}
-  ).then(r=>r.json());
+    {headers:{Accept:'application/vnd.github.v3+json'}}
+  ).then(r=>r.json()).catch(()=>[]);
 
   if(!Array.isArray(repos)) repos = [];
-  // filter out empty system repos
-  repos = repos.filter(r => !r.archived);
+  repos = repos.filter(r=>!r.archived && !r.fork || r.stargazers_count>0);
 
-  setLoad(35,'COUNTING COMMITS...');
-  const total = repos.length;
+  setLoad(30, 'MEASURING COMMIT HEIGHTS...');
   const enriched = [];
   for(let i=0;i<repos.length;i++){
     const repo = repos[i];
-    const commits = await getCommits(repo.name);
+    const commits = await getCommitCount(repo.name);
     enriched.push({...repo, commitCount: commits});
-    setLoad(35 + ((i+1)/total)*50,
-      `ANALYSING ${repo.name.toUpperCase()} [${i+1}/${total}]`);
+    const pct = 30 + ((i+1)/repos.length)*55;
+    setLoad(pct, `SCANNING: ${repo.name.toUpperCase()} [${i+1}/${repos.length}]`);
   }
-  setLoad(90,'CONSTRUCTING CITY...');
+
+  // sort by commits descending — tallest buildings get prime spots
+  enriched.sort((a,b)=>b.commitCount - a.commitCount);
+  setLoad(88, 'CONSTRUCTING SKYSCRAPERS...');
   return {user, repos: enriched};
 }
 
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
 //  WINDOW TEXTURE
-// ─────────────────────────────────────────────────────────
-function makeWindowTex(height, color, density=0.55){
-  const W=128, H=Math.max(128, Math.ceil(height/25*512));
+// ═══════════════════════════════════════════════════════
+function makeWindowTex(color, rows=20, cols=4, density=0.62){
+  const W=128, H=512;
   const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
   const ctx=cv.getContext('2d');
-  ctx.fillStyle='#030d18'; ctx.fillRect(0,0,W,H);
-  const COLS=4, ROWS=Math.floor(H/32);
-  const cw=W/COLS, ch=H/ROWS;
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
+  ctx.fillStyle='#010810'; ctx.fillRect(0,0,W,H);
+  const cw=W/cols, ch=H/rows;
+  const c3=new THREE.Color(color);
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
       if(Math.random()<density){
-        const alpha = 0.35 + Math.random()*0.55;
-        ctx.fillStyle = color;
-        ctx.globalAlpha = alpha;
-        ctx.fillRect(c*cw+3, r*ch+3, cw-6, ch-6);
+        const alpha=0.3+Math.random()*0.6;
+        // slight warmth variation
+        const warm = Math.random()>.7 ? '#ffe8a0' : color;
+        ctx.globalAlpha=alpha;
+        ctx.fillStyle=warm;
+        ctx.fillRect(c*cw+2, r*ch+2, cw-4, ch-4);
+        // window reflection glint
+        if(Math.random()>.6){
+          ctx.globalAlpha=alpha*.4;
+          ctx.fillStyle='#ffffff';
+          ctx.fillRect(c*cw+2, r*ch+2, 3, 3);
+        }
       }
     }
   }
@@ -207,36 +254,53 @@ function makeWindowTex(height, color, density=0.55){
   return new THREE.CanvasTexture(cv);
 }
 
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
 //  LABEL SPRITE
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
 function makeLabel(name, commits, color){
-  const cv=document.createElement('canvas'); cv.width=320; cv.height=80;
+  const W=340, H=90;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
   const ctx=cv.getContext('2d');
-  ctx.clearRect(0,0,320,80);
-  ctx.fillStyle='rgba(1,10,20,0.82)'; ctx.fillRect(0,0,320,80);
-  ctx.fillStyle=color; ctx.fillRect(0,0,320,2);
-  ctx.font='bold 18px monospace'; ctx.fillStyle='#ffffff';
-  ctx.textAlign='center'; ctx.fillText(name,160,26);
-  ctx.font='13px monospace'; ctx.fillStyle=color;
-  ctx.fillText(commits+' COMMITS',160,50);
+  // bg
+  ctx.fillStyle='rgba(0,4,14,0.88)'; ctx.fillRect(0,0,W,H);
+  // top accent
+  ctx.fillStyle=color; ctx.fillRect(0,0,W,2);
+  // corner dots
+  [[0,0],[W-6,0],[0,H-6],[W-6,H-6]].forEach(([x,y])=>{
+    ctx.fillStyle=color; ctx.fillRect(x,y,6,6);
+  });
+  // name
+  ctx.font='bold 16px monospace'; ctx.fillStyle='#ffffff';
+  ctx.textAlign='center';
+  ctx.shadowColor=color; ctx.shadowBlur=8;
+  ctx.fillText(name, W/2, 28);
+  // commits
+  ctx.font='12px monospace'; ctx.fillStyle=color;
+  ctx.shadowBlur=12;
+  ctx.fillText(commits.toLocaleString()+' COMMITS', W/2, 52);
+  ctx.shadowBlur=0;
+  // bar
+  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(20,62); ctx.lineTo(W-20,62); ctx.stroke();
+
   const tex=new THREE.CanvasTexture(cv);
-  const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
-  const sp=new THREE.Sprite(mat); sp.scale.set(10,2.5,1);
+  const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false,sizeAttenuation:true});
+  const sp=new THREE.Sprite(mat);
+  sp.scale.set(14,3.5,1);
   return sp;
 }
 
-// ─────────────────────────────────────────────────────────
-//  BUILD CITY
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+//  BUILD SKYSCRAPERS
+// ═══════════════════════════════════════════════════════
 function buildCity(scene, repos){
   const maxC = Math.max(...repos.map(r=>r.commitCount), 1);
-  const COLS = Math.ceil(Math.sqrt(repos.length + 1));
-  const SPACING = 9;
-  const HEIGHT_SCALE = 28;
+  const COLS = Math.ceil(Math.sqrt(repos.length));
+  const SPACING = 11;
+  const MAX_H = 120;   // tallest possible skyscraper
+  const MIN_H = 8;     // shortest building
 
-  // road material
-  const roadMat = new THREE.MeshStandardMaterial({color:0x04101c,roughness:0.95,metalness:0.1});
+  const meshes = [];
 
   repos.forEach((repo, i)=>{
     const col = i % COLS;
@@ -244,410 +308,644 @@ function buildCity(scene, repos){
     const cx = (col - (COLS-1)/2) * SPACING;
     const cz = (row - (Math.ceil(repos.length/COLS)-1)/2) * SPACING;
 
-    const rawH = Math.max(1.5, (repo.commitCount / maxC) * HEIGHT_SCALE);
-    const H = parseFloat(rawH.toFixed(2));
+    // height based on commits (log scale for dramatic effect)
+    const logScale = Math.log(repo.commitCount+1) / Math.log(maxC+1);
+    const H = MIN_H + logScale * (MAX_H - MIN_H);
+
     const color = LANG_COLORS[repo.language] || LANG_COLORS.default;
     const colObj = new THREE.Color(color);
 
-    // ── window texture (shared per side)
-    const winTex = makeWindowTex(H, color, 0.5 + Math.random()*0.25);
+    // ── SKYSCRAPER GEOMETRY: setbacks at different heights
+    const group = new THREE.Group();
+    group.position.set(cx, 0, cz);
 
-    // ── materials: sides with window tex, top solid dark
-    const sideMat = new THREE.MeshStandardMaterial({
-      color: 0x060e1c,
-      map: winTex,
-      emissiveMap: winTex,
-      emissive: colObj.clone().multiplyScalar(0.35),
-      emissiveIntensity: 0.6,
-      roughness: 0.3, metalness: 0.5
-    });
-    const topMat = new THREE.MeshStandardMaterial({
-      color: 0x080f1a, roughness:0.4, metalness:0.6,
-      emissive: colObj.clone().multiplyScalar(0.08)
-    });
-    const mats = [sideMat, sideMat, topMat, new THREE.MeshStandardMaterial({color:0x020810}), sideMat, sideMat];
+    // base block (wide)
+    const baseW = 4.0, baseH = H * 0.45;
+    const baseTex = makeWindowTex(color, Math.floor(baseH*2), 4, 0.60);
+    const baseMats = [
+      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
+      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
+      new THREE.MeshStandardMaterial({color:0x080f1a, roughness:0.4, metalness:0.7}),
+      new THREE.MeshStandardMaterial({color:0x020810}),
+      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
+      new THREE.MeshStandardMaterial({color:0x050d18, map:baseTex, emissiveMap:baseTex, emissive:colObj.clone().multiplyScalar(0.3), emissiveIntensity:0.7, roughness:0.25, metalness:0.6}),
+    ];
+    const baseGeo = new THREE.BoxGeometry(baseW, baseH, baseW);
+    const baseMesh = new THREE.Mesh(baseGeo, baseMats);
+    baseMesh.position.y = baseH/2;
+    baseMesh.castShadow = true; baseMesh.receiveShadow = true;
+    group.add(baseMesh);
 
-    // ── building mesh
-    const geo = new THREE.BoxGeometry(5.2, H, 5.2);
-    const mesh = new THREE.Mesh(geo, mats);
-    mesh.position.set(cx, H/2, cz);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.userData = {...repo, _color: color};
-    scene.add(mesh);
+    // setback 1 (slightly narrower)
+    const s1W = baseW * 0.78, s1H = H * 0.32;
+    const s1Tex = makeWindowTex(color, Math.floor(s1H*2), 3, 0.58);
+    const s1Mat = new THREE.MeshStandardMaterial({color:0x040c16, map:s1Tex, emissiveMap:s1Tex, emissive:colObj.clone().multiplyScalar(0.35), emissiveIntensity:0.75, roughness:0.2, metalness:0.65});
+    const s1Geo = new THREE.BoxGeometry(s1W, s1H, s1W);
+    const s1Mesh = new THREE.Mesh(s1Geo, s1Mat);
+    s1Mesh.position.y = baseH + s1H/2;
+    s1Mesh.castShadow = true;
+    group.add(s1Mesh);
 
-    // ── glowing edges
-    const edges = new THREE.EdgesGeometry(geo);
-    const lineMat = new THREE.LineBasicMaterial({color: colObj, transparent:true, opacity:0.55});
-    const lines = new THREE.LineSegments(edges, lineMat);
-    lines.position.copy(mesh.position);
-    scene.add(lines);
-
-    // ── roof accent (flat emissive top)
-    const roofGeo = new THREE.BoxGeometry(5.4, 0.12, 5.4);
-    const roofMat = new THREE.MeshStandardMaterial({
-      color: colObj, emissive: colObj, emissiveIntensity: 0.8,
-      transparent:true, opacity:0.6
-    });
-    const roof = new THREE.Mesh(roofGeo, roofMat);
-    roof.position.set(cx, H+0.06, cz);
-    scene.add(roof);
-
-    // ── antenna for tall buildings
-    if(H > 12){
-      const antGeo = new THREE.CylinderGeometry(0.05, 0.05, H*0.22, 4);
-      const antMat = new THREE.MeshStandardMaterial({color:0x112233});
-      const ant = new THREE.Mesh(antGeo, antMat);
-      ant.position.set(cx, H + H*0.11, cz);
-      scene.add(ant);
-
-      // blinking tip light
-      const tipGeo = new THREE.SphereGeometry(0.18, 6, 6);
-      const tipMat = new THREE.MeshStandardMaterial({
-        color: colObj, emissive: colObj, emissiveIntensity: 1.5
-      });
-      const tip = new THREE.Mesh(tipGeo, tipMat);
-      tip.position.set(cx, H + H*0.22+0.18, cz);
-      tip.userData._blink = {mat: tipMat, base: colObj.clone()};
-      scene.add(tip);
+    // setback 2 (tower, narrow)
+    if(H > 25){
+      const s2W = s1W * 0.65, s2H = H * 0.23;
+      const s2Tex = makeWindowTex(color, Math.floor(s2H*2), 2, 0.55);
+      const s2Mat = new THREE.MeshStandardMaterial({color:0x030b14, map:s2Tex, emissiveMap:s2Tex, emissive:colObj.clone().multiplyScalar(0.4), emissiveIntensity:0.85, roughness:0.18, metalness:0.7});
+      const s2Geo = new THREE.BoxGeometry(s2W, s2H, s2W);
+      const s2Mesh = new THREE.Mesh(s2Geo, s2Mat);
+      s2Mesh.position.y = baseH + s1H + s2H/2;
+      s2Mesh.castShadow = true;
+      group.add(s2Mesh);
     }
 
-    // ── roof point light
-    const pl = new THREE.PointLight(colObj, 0.55 + Math.random()*0.4, 16);
-    pl.position.set(cx, H+2.5, cz);
-    scene.add(pl);
+    // glowing roof slab
+    const roofY = H;
+    const roofGeo = new THREE.BoxGeometry(baseW+0.1, 0.15, baseW+0.1);
+    const roofMat = new THREE.MeshStandardMaterial({
+      color: colObj, emissive: colObj, emissiveIntensity: 1.2,
+      transparent:true, opacity:0.7
+    });
+    const roof = new THREE.Mesh(roofGeo, roofMat);
+    roof.position.y = baseH; // roof of first setback
+    group.add(roof);
 
-    // ── label sprite
+    // ── SPIRE / ANTENNA (on tall buildings)
+    const spireY = H;
+    if(H > 15){
+      const spireH = H * 0.18;
+      const spireGeo = new THREE.CylinderGeometry(0.04, 0.12, spireH, 6);
+      const spireMat = new THREE.MeshStandardMaterial({color:0x1a2e42, metalness:0.9, roughness:0.2});
+      const spire = new THREE.Mesh(spireGeo, spireMat);
+      spire.position.y = spireY + spireH/2;
+      group.add(spire);
+
+      // blinking beacon at tip
+      const beaconGeo = new THREE.SphereGeometry(0.22, 8, 8);
+      const beaconMat = new THREE.MeshStandardMaterial({
+        color:colObj, emissive:colObj, emissiveIntensity:2.0, transparent:true, opacity:0.95
+      });
+      const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+      beacon.position.y = spireY + spireH + 0.22;
+      beacon.userData._beacon = {mat:beaconMat, color:colObj.clone(), id:i};
+      group.add(beacon);
+
+      // beacon halo
+      const haloGeo = new THREE.SphereGeometry(0.8, 8, 8);
+      const haloMat = new THREE.MeshStandardMaterial({
+        color:colObj, emissive:colObj, emissiveIntensity:0.5,
+        transparent:true, opacity:0.08
+      });
+      const halo = new THREE.Mesh(haloGeo, haloMat);
+      halo.position.y = spireY + spireH + 0.22;
+      halo.userData._halo = {mat:haloMat, id:i};
+      group.add(halo);
+    }
+
+    // ── EDGES (wireframe outline for sci-fi look)
+    const edgeGeo = new THREE.BoxGeometry(baseW+0.05, H+0.05, baseW+0.05);
+    const edgeMat = new THREE.LineBasicMaterial({color:colObj, transparent:true, opacity:0.4});
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(edgeGeo), edgeMat);
+    edges.position.y = H/2;
+    group.add(edges);
+
+    // ── POINT LIGHT on rooftop
+    const pl = new THREE.PointLight(colObj, 0.8, 22, 2);
+    pl.position.y = H + 3;
+    group.add(pl);
+
+    // ── LABEL
     const label = makeLabel(repo.name, repo.commitCount, color);
-    label.position.set(cx, H + 3.8 + (H > 12 ? H*0.22 : 0), cz);
+    label.position.y = H + (H>15 ? H*0.18 : 0) + 5;
     label.userData._baseY = label.position.y;
-    scene.add(label);
+    group.add(label);
 
-    mesh.userData._label = label;
-    mesh.userData._edges = lines;
-    mesh.userData._lineMat = lineMat;
-    mesh.userData._roofMat = roofMat;
+    group.userData = {
+      ...repo, _color:color, _H:H,
+      _edgeMat:edgeMat, _roofMat:roofMat,
+      _label:label, _isBuilding:true
+    };
+
+    scene.add(group);
+    meshes.push({group, repo, color, H});
   });
+
+  return meshes;
 }
 
-// ─────────────────────────────────────────────────────────
-//  GROUND & ENVIRONMENT
-// ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+//  SHOOTING STARS SYSTEM
+// ═══════════════════════════════════════════════════════
+function createShootingStars(scene){
+  const shooters = [];
+  const TRAIL_LEN = 32;
+
+  function newShooter(){
+    // random start in upper sky
+    const startX = (Math.random()-0.5)*800;
+    const startY = 80 + Math.random()*120;
+    const startZ = (Math.random()-0.5)*800;
+
+    // direction: mostly horizontal with slight downward angle
+    const angle = Math.random()*Math.PI*2;
+    const speed = 3 + Math.random()*5;
+    const vx = Math.cos(angle)*speed;
+    const vy = -(0.3+Math.random()*0.8);
+    const vz = Math.sin(angle)*speed;
+
+    // trail positions
+    const positions = new Float32Array(TRAIL_LEN*3);
+    for(let i=0;i<TRAIL_LEN;i++){
+      positions[i*3]   = startX;
+      positions[i*3+1] = startY;
+      positions[i*3+2] = startZ;
+    }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+
+    // color: white with slight blue/cyan tint
+    const trailColor = Math.random()>.5 ? 0xffffff : 0x88ddff;
+    const mat = new THREE.LineBasicMaterial({
+      color:trailColor, transparent:true, opacity:0.9,
+      blending:THREE.AdditiveBlending, depthWrite:false
+    });
+    const line = new THREE.Line(geo, mat);
+    scene.add(line);
+
+    // head glow sphere
+    const headGeo = new THREE.SphereGeometry(0.6,6,6);
+    const headMat = new THREE.MeshBasicMaterial({
+      color:trailColor, transparent:true, opacity:1.0,
+      blending:THREE.AdditiveBlending, depthWrite:false
+    });
+    const head = new THREE.Mesh(headGeo, headMat);
+    head.position.set(startX, startY, startZ);
+    scene.add(head);
+
+    return {
+      line, head, geo, mat, headMat,
+      x:startX, y:startY, z:startZ,
+      vx, vy, vz,
+      trail: Array.from({length:TRAIL_LEN},()=>({x:startX,y:startY,z:startZ})),
+      life:0, maxLife:60+Math.random()*80, active:true
+    };
+  }
+
+  // spawn initial set
+  for(let i=0;i<3;i++){
+    const s = newShooter();
+    s.life = Math.random()*s.maxLife; // stagger
+    shooters.push(s);
+  }
+
+  function updateShooters(){
+    // randomly spawn new ones
+    if(Math.random()<0.008 && shooters.filter(s=>s.active).length<6){
+      shooters.push(newShooter());
+    }
+
+    shooters.forEach((s,si)=>{
+      if(!s.active) return;
+      s.life++;
+      const t = s.life / s.maxLife;
+
+      // move head
+      s.x += s.vx; s.y += s.vy; s.z += s.vz;
+      s.head.position.set(s.x, s.y, s.z);
+
+      // update trail
+      s.trail.unshift({x:s.x,y:s.y,z:s.z});
+      if(s.trail.length>TRAIL_LEN) s.trail.pop();
+
+      // write to buffer
+      const pos = s.geo.attributes.position.array;
+      s.trail.forEach((pt,pi)=>{
+        pos[pi*3]=pt.x; pos[pi*3+1]=pt.y; pos[pi*3+2]=pt.z;
+      });
+      s.geo.attributes.position.needsUpdate=true;
+
+      // fade out at end
+      const alpha = t < 0.2 ? t/0.2 : t > 0.8 ? (1-t)/0.2 : 1.0;
+      s.mat.opacity = 0.85 * alpha;
+      s.headMat.opacity = alpha;
+      s.head.scale.setScalar(0.5 + alpha*0.8);
+
+      if(s.life >= s.maxLife){
+        scene.remove(s.line); scene.remove(s.head);
+        s.line.geometry.dispose(); s.mat.dispose(); s.headMat.dispose();
+        shooters.splice(si,1);
+      }
+    });
+  }
+
+  return {updateShooters};
+}
+
+// ═══════════════════════════════════════════════════════
+//  STARS
+// ═══════════════════════════════════════════════════════
+function createStarField(scene){
+  const COUNT = 8000;
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(COUNT*3);
+  const sizes = new Float32Array(COUNT);
+  const alphas = new Float32Array(COUNT);
+  const speeds = new Float32Array(COUNT);
+
+  for(let i=0;i<COUNT;i++){
+    // distribute on sphere shell
+    const theta = Math.random()*Math.PI*2;
+    const phi = Math.acos(2*Math.random()-1);
+    const r = 400 + Math.random()*100;
+    pos[i*3]   = r*Math.sin(phi)*Math.cos(theta);
+    pos[i*3+1] = Math.abs(r*Math.cos(phi)); // upper hemisphere only
+    pos[i*3+2] = r*Math.sin(phi)*Math.sin(theta);
+    sizes[i]  = 0.3 + Math.random()*1.8;
+    alphas[i] = 0.4 + Math.random()*0.6;
+    speeds[i] = 0.5 + Math.random()*2.5;
+  }
+
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+
+  // use canvas for circular star sprite
+  const sc=document.createElement('canvas'); sc.width=32; sc.height=32;
+  const sctx=sc.getContext('2d');
+  const sg=sctx.createRadialGradient(16,16,0,16,16,16);
+  sg.addColorStop(0,'rgba(255,255,255,1)');
+  sg.addColorStop(0.3,'rgba(200,220,255,0.8)');
+  sg.addColorStop(1,'rgba(100,150,255,0)');
+  sctx.fillStyle=sg; sctx.fillRect(0,0,32,32);
+
+  const starMat = new THREE.PointsMaterial({
+    map: new THREE.CanvasTexture(sc),
+    size: 1.4,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 0.85,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    vertexColors: false,
+    color: 0xffffff
+  });
+
+  const stars = new THREE.Points(geo, starMat);
+  scene.add(stars);
+
+  // twinkle via opacity animation
+  let frame=0;
+  function updateStars(){
+    frame++;
+    // gentle rotate star field
+    stars.rotation.y += 0.00008;
+    // twinkle: modulate opacity on sine
+    const t = frame*0.02;
+    starMat.opacity = 0.75 + 0.12*Math.sin(t);
+  }
+
+  return {updateStars};
+}
+
+// ═══════════════════════════════════════════════════════
+//  ENVIRONMENT
+// ═══════════════════════════════════════════════════════
 function buildEnvironment(scene){
-  // ground plane
-  const gGeo = new THREE.PlaneGeometry(300, 300, 1, 1);
+  // ground — wet dark asphalt
+  const gGeo = new THREE.PlaneGeometry(500,500);
   const gMat = new THREE.MeshStandardMaterial({
-    color:0x03080f, roughness:0.9, metalness:0.15,
-    envMapIntensity: 0.3
+    color:0x030a14, roughness:0.05, metalness:0.9,
+    envMapIntensity:0.5
   });
   const ground = new THREE.Mesh(gGeo, gMat);
-  ground.rotation.x = -Math.PI/2;
-  ground.receiveShadow = true;
+  ground.rotation.x=-Math.PI/2; ground.receiveShadow=true;
   scene.add(ground);
 
-  // grid lines
-  const grid = new THREE.GridHelper(280, 56, 0x0a2540, 0x061830);
-  grid.position.y = 0.02;
-  scene.add(grid);
-
-  // neon road lines between building rows
-  const roadLineMat = new THREE.LineBasicMaterial({color:0x00f2ff,transparent:true,opacity:0.06});
-  for(let i=-6;i<=6;i++){
-    const pts=[new THREE.Vector3(i*9+4.5, 0.05, -80), new THREE.Vector3(i*9+4.5, 0.05, 80)];
-    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), roadLineMat));
-    const pts2=[new THREE.Vector3(-80, 0.05, i*9+4.5), new THREE.Vector3(80, 0.05, i*9+4.5)];
-    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts2), roadLineMat));
+  // city grid lines (neon road)
+  const roadMat = new THREE.LineBasicMaterial({color:0x003a55,transparent:true,opacity:0.12});
+  for(let i=-10;i<=10;i++){
+    const pts=[new THREE.Vector3(i*11+5.5,-0.01,-120),new THREE.Vector3(i*11+5.5,-0.01,120)];
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),roadMat));
+    const pts2=[new THREE.Vector3(-120,-0.01,i*11+5.5),new THREE.Vector3(120,-0.01,i*11+5.5)];
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts2),roadMat));
   }
 
-  // stars
-  const starPos = [];
-  for(let i=0;i<3000;i++){
-    starPos.push(
-      (Math.random()-0.5)*600,
-      50 + Math.random()*250,
-      (Math.random()-0.5)*600
-    );
-  }
-  const starGeo = new THREE.BufferGeometry();
-  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
-  const starMat = new THREE.PointsMaterial({color:0xffffff, size:0.35, sizeAttenuation:true,
-    transparent:true, opacity:0.8});
-  scene.add(new THREE.Points(starGeo, starMat));
+  // subtle grid helper
+  const grid = new THREE.GridHelper(400,80,0x041828,0x020f1c);
+  grid.position.y=0.01; scene.add(grid);
 
   // moon
-  const moonGeo = new THREE.SphereGeometry(14, 24, 24);
+  const moonGeo = new THREE.SphereGeometry(18,32,32);
   const moonMat = new THREE.MeshStandardMaterial({
-    color:0xf0e8c0, roughness:0.9, metalness:0.0,
-    emissive:0xf0e8c0, emissiveIntensity:0.12
+    color:0xf0ead8, roughness:0.85,
+    emissive:0xf0ead8, emissiveIntensity:0.18
   });
   const moon = new THREE.Mesh(moonGeo, moonMat);
-  moon.position.set(120, 160, -200);
+  moon.position.set(180, 220, -280);
   scene.add(moon);
 
-  // moon glow (sprite)
-  const moonGlowCv=document.createElement('canvas');moonGlowCv.width=128;moonGlowCv.height=128;
-  const mgCtx=moonGlowCv.getContext('2d');
-  const mgGrad=mgCtx.createRadialGradient(64,64,0,64,64,64);
-  mgGrad.addColorStop(0,'rgba(240,232,192,0.35)');
-  mgGrad.addColorStop(1,'rgba(240,232,192,0)');
-  mgCtx.fillStyle=mgGrad; mgCtx.fillRect(0,0,128,128);
-  const moonGlowMat=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(moonGlowCv),transparent:true,depthWrite:false});
-  const moonGlow=new THREE.Sprite(moonGlowMat);
-  moonGlow.position.copy(moon.position);
-  moonGlow.scale.set(60,60,1);
-  scene.add(moonGlow);
+  // moon glow halo
+  const mhCv=document.createElement('canvas'); mhCv.width=128;mhCv.height=128;
+  const mhCtx=mhCv.getContext('2d');
+  const mhG=mhCtx.createRadialGradient(64,64,0,64,64,64);
+  mhG.addColorStop(0,'rgba(240,232,200,0.4)');
+  mhG.addColorStop(0.5,'rgba(200,210,240,0.12)');
+  mhG.addColorStop(1,'rgba(180,200,255,0)');
+  mhCtx.fillStyle=mhG; mhCtx.fillRect(0,0,128,128);
+  const mhMat=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(mhCv),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  const mhSp=new THREE.Sprite(mhMat);
+  mhSp.position.copy(moon.position);
+  mhSp.scale.set(120,120,1);
+  scene.add(mhSp);
 
-  // ambient moonlight from moon direction
-  const moonLight = new THREE.DirectionalLight(0x6688bb, 0.45);
-  moonLight.position.set(120, 160, -200);
-  moonLight.castShadow = true;
-  moonLight.shadow.mapSize.set(2048,2048);
-  moonLight.shadow.camera.near = 0.5;
-  moonLight.shadow.camera.far = 600;
-  moonLight.shadow.camera.left = -100;
-  moonLight.shadow.camera.right = 100;
-  moonLight.shadow.camera.top = 100;
-  moonLight.shadow.camera.bottom = -100;
-  scene.add(moonLight);
-
-  // ambient
-  scene.add(new THREE.AmbientLight(0x020810, 1.2));
-
-  // hemisphere
-  scene.add(new THREE.HemisphereLight(0x001428, 0x000408, 0.5));
-
-  // fog
-  scene.fog = new THREE.FogExp2(0x000814, 0.008);
-}
-
-// ─────────────────────────────────────────────────────────
-//  MAIN
-// ─────────────────────────────────────────────────────────
-async function main(){
-  // ── fetch
-  let user, repos;
-  try{
-    ({user, repos} = await fetchAll());
-  } catch(e){
-    document.getElementById('load-msg').textContent = 'API RATE LIMITED — RETRYING...';
-    // fallback minimal data
-    user = {login:USERNAME, public_repos:0, followers:0};
-    repos = [];
+  // distant city silhouette (flat quads at horizon)
+  for(let i=0;i<28;i++){
+    const angle=(i/28)*Math.PI*2;
+    const dist=160+Math.random()*30;
+    const h=4+Math.random()*24;
+    const w=3+Math.random()*6;
+    const bgGeo=new THREE.BoxGeometry(w,h,0.5);
+    const bgMat=new THREE.MeshBasicMaterial({color:0x020a16});
+    const bgMesh=new THREE.Mesh(bgGeo,bgMat);
+    bgMesh.position.set(Math.cos(angle)*dist,h/2,Math.sin(angle)*dist);
+    scene.add(bgMesh);
   }
 
-  // ── update HUD stats
+  // nebula/aurora (large plane sprites)
+  const nebulas=[
+    {col:'rgba(0,100,255,0.035)',x:-80,y:120,z:-200,rx:140,ry:80},
+    {col:'rgba(100,0,200,0.025)',x:100,y:160,z:-180,rx:100,ry:60},
+    {col:'rgba(0,200,150,0.02)',x:-20,y:90, z:-220,rx:160,ry:50},
+  ];
+  nebulas.forEach(n=>{
+    const nc=document.createElement('canvas'); nc.width=256;nc.height=128;
+    const nctx=nc.getContext('2d');
+    const ng=nctx.createRadialGradient(128,64,0,128,64,128);
+    ng.addColorStop(0,n.col); ng.addColorStop(1,'transparent');
+    nctx.fillStyle=ng; nctx.fillRect(0,0,256,128);
+    const nMat=new THREE.SpriteMaterial({map:new THREE.CanvasTexture(nc),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+    const nSp=new THREE.Sprite(nMat);
+    nSp.position.set(n.x,n.y,n.z);
+    nSp.scale.set(n.rx,n.ry,1);
+    scene.add(nSp);
+  });
+
+  // LIGHTS
+  scene.add(new THREE.AmbientLight(0x020810, 1.4));
+  scene.add(new THREE.HemisphereLight(0x001830, 0x000408, 0.6));
+
+  const moon_light = new THREE.DirectionalLight(0x6699cc, 0.5);
+  moon_light.position.set(180,220,-280);
+  moon_light.castShadow=true;
+  moon_light.shadow.mapSize.set(2048,2048);
+  moon_light.shadow.camera.left=-120; moon_light.shadow.camera.right=120;
+  moon_light.shadow.camera.top=120; moon_light.shadow.camera.bottom=-120;
+  moon_light.shadow.camera.far=600;
+  scene.add(moon_light);
+
+  // ground glow fill lights
+  [0x001428, 0x080028, 0x002818].forEach((c,i)=>{
+    const fl=new THREE.PointLight(c,0.6,80);
+    const a=(i/3)*Math.PI*2;
+    fl.position.set(Math.cos(a)*40,0.5,Math.sin(a)*40);
+    scene.add(fl);
+  });
+
+  scene.fog = new THREE.FogExp2(0x000308, 0.006);
+}
+
+// ═══════════════════════════════════════════════════════
+//  MAIN
+// ═══════════════════════════════════════════════════════
+async function main(){
+  let user={}, repos=[];
+  try{
+    ({user, repos} = await fetchGitHub());
+  } catch(e){
+    setLoad(88,'API ERROR — BUILDING WITH SAMPLE DATA...');
+  }
+
+  // ── stats
   const totalCommits = repos.reduce((s,r)=>s+r.commitCount,0);
-  const totalStars   = repos.reduce((s,r)=>s+r.stargazers_count,0);
-  document.getElementById('hud-repos').textContent   = repos.length + ' REPOS';
-  document.getElementById('hud-commits').textContent = totalCommits + ' COMMITS';
-  document.getElementById('hud-stars').textContent   = totalStars   + ' STARS';
-  document.getElementById('s-repos').textContent     = repos.length;
-  document.getElementById('s-commits').textContent   = totalCommits;
-  document.getElementById('s-stars').textContent     = totalStars;
-  document.getElementById('s-follow').textContent    = user.followers || 0;
+  const totalStars   = repos.reduce((s,r)=>s+(r.stargazers_count||0),0);
+  document.getElementById('s-repos').textContent   = repos.length;
+  document.getElementById('s-commits').textContent = totalCommits.toLocaleString();
+  document.getElementById('s-stars').textContent   = totalStars;
 
   // ── legend
-  const langs = [...new Set(repos.map(r=>r.language).filter(Boolean))];
-  const legEl = document.getElementById('leg-items');
+  const langs=[...new Set(repos.map(r=>r.language).filter(Boolean))];
+  const legEl=document.getElementById('leg-items');
   langs.forEach(l=>{
-    const c = LANG_COLORS[l]||LANG_COLORS.default;
-    legEl.innerHTML += `<div class="leg-item">
-      <div class="leg-dot" style="background:${c};box-shadow:0 0 5px ${c}"></div>
-      <span style="color:${c}">${l.toUpperCase()}</span>
+    const c=LANG_COLORS[l]||LANG_COLORS.default;
+    legEl.innerHTML+=`<div class="leg-item">
+      <div class="leg-swatch" style="background:${c};box-shadow:0 0 6px ${c},0 0 12px ${c}40"></div>
+      <span style="color:${c};text-shadow:0 0 8px ${c}60">${l.toUpperCase()}</span>
     </div>`;
   });
 
-  // ── THREE SETUP
-  const canvas = document.getElementById('c');
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, powerPreference:'high-performance'});
+  // ── ticker
+  const tickerText = repos.map(r=>`${r.name.toUpperCase()} [${r.commitCount} COMMITS]`).join('  ·  ');
+  document.getElementById('ticker-inner').textContent = '  ·  ' + tickerText + '  ·  ';
+
+  setLoad(92,'RENDERING SCENE...');
+
+  // ── THREE
+  const canvas=document.getElementById('c');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.4;
-  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.5;
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000814);
+  const scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x000308);
 
-  const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const camera=new THREE.PerspectiveCamera(52,window.innerWidth/window.innerHeight,0.1,1200);
 
-  // ── environment + city
   buildEnvironment(scene);
-  buildCity(scene, repos);
+  const cityMeshes = buildCity(scene, repos);
+  const {updateShooters} = createShootingStars(scene);
+  const {updateStars} = createStarField(scene);
 
-  setLoad(100, 'CITY READY');
+  setLoad(100,'WELCOME TO YOUR CITY');
 
-  // ── collect building meshes for raycasting
-  const buildingMeshes = [];
-  scene.traverse(obj=>{
-    if(obj.isMesh && obj.userData.name && obj.userData.commitCount !== undefined)
-      buildingMeshes.push(obj);
-  });
-
-  // ── hide loader
+  // ── show UI
   setTimeout(()=>{
-    document.getElementById('loader').style.transition='opacity .6s';
-    document.getElementById('loader').style.opacity=0;
+    const ld=document.getElementById('loader');
+    ld.style.opacity='0';
     setTimeout(()=>{
-      document.getElementById('loader').style.display='none';
+      ld.style.display='none';
       document.getElementById('legend').style.display='block';
-      document.getElementById('stats').style.display='block';
-    },600);
-  },400);
+      document.getElementById('ticker').style.display='flex';
+    },800);
+  },600);
 
-  // ─── CAMERA ORBIT ──────────────────────────────────────
-  let theta = 0.4, phi = 0.55, radius = 90;
-  let autoRotate = true;
-  let isDrag = false, prevMX = 0, prevMY = 0;
-  let targetTheta = theta, targetPhi = phi, targetRadius = radius;
+  // ── CAMERA ORBIT
+  let theta=0.5, phi=0.52, radius=120;
+  let targetTheta=theta, targetPhi=phi, targetRadius=radius;
+  let autoRotate=true, isDrag=false, prevMX=0, prevMY=0;
 
-  canvas.addEventListener('mousedown', e=>{
-    isDrag=true; prevMX=e.clientX; prevMY=e.clientY;
-    autoRotate=false;
+  canvas.addEventListener('mousedown',e=>{isDrag=true;prevMX=e.clientX;prevMY=e.clientY;autoRotate=false;});
+  window.addEventListener('mouseup',()=>isDrag=false);
+  window.addEventListener('mousemove',e=>{
+    if(!isDrag)return;
+    targetTheta-=(e.clientX-prevMX)*0.007;
+    targetPhi=Math.max(0.1,Math.min(1.45,targetPhi-(e.clientY-prevMY)*0.006));
+    prevMX=e.clientX;prevMY=e.clientY;
   });
-  window.addEventListener('mouseup', ()=>isDrag=false);
-  window.addEventListener('mousemove', e=>{
-    if(!isDrag) return;
-    targetTheta -= (e.clientX-prevMX)*0.008;
-    targetPhi = Math.max(0.15, Math.min(Math.PI/2-0.05, targetPhi-(e.clientY-prevMY)*0.007));
-    prevMX=e.clientX; prevMY=e.clientY;
-  });
-  canvas.addEventListener('wheel', e=>{
-    targetRadius = Math.max(18, Math.min(160, targetRadius + e.deltaY*0.1));
+  canvas.addEventListener('wheel',e=>{
+    targetRadius=Math.max(20,Math.min(200,targetRadius+e.deltaY*0.12));
     e.preventDefault();
-  }, {passive:false});
+  },{passive:false});
+  // double click to re-enable autorotate
+  canvas.addEventListener('dblclick',()=>autoRotate=!autoRotate);
 
   // touch
-  let prevTouchDist=0, prevTouchX=0, prevTouchY=0;
-  canvas.addEventListener('touchstart', e=>{
-    if(e.touches.length===1){isDrag=true;autoRotate=false;prevTouchX=e.touches[0].clientX;prevTouchY=e.touches[0].clientY;}
-    if(e.touches.length===2){
-      prevTouchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-    }
+  let prevTD=0,prevTX=0,prevTY=0;
+  canvas.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){isDrag=true;autoRotate=false;prevTX=e.touches[0].clientX;prevTY=e.touches[0].clientY;}
+    if(e.touches.length===2)prevTD=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
   },{passive:true});
-  canvas.addEventListener('touchmove', e=>{
+  canvas.addEventListener('touchmove',e=>{
     if(e.touches.length===1&&isDrag){
-      targetTheta-=(e.touches[0].clientX-prevTouchX)*0.01;
-      targetPhi=Math.max(0.15,Math.min(Math.PI/2-0.05,targetPhi-(e.touches[0].clientY-prevTouchY)*0.009));
-      prevTouchX=e.touches[0].clientX;prevTouchY=e.touches[0].clientY;
+      targetTheta-=(e.touches[0].clientX-prevTX)*0.01;
+      targetPhi=Math.max(0.1,Math.min(1.45,targetPhi-(e.touches[0].clientY-prevTY)*0.009));
+      prevTX=e.touches[0].clientX;prevTY=e.touches[0].clientY;
     }
     if(e.touches.length===2){
       const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-      targetRadius=Math.max(18,Math.min(160,targetRadius-(d-prevTouchDist)*0.2));
-      prevTouchDist=d;
+      targetRadius=Math.max(20,Math.min(200,targetRadius-(d-prevTD)*0.25));
+      prevTD=d;
     }
   },{passive:true});
   canvas.addEventListener('touchend',()=>isDrag=false,{passive:true});
 
-  // ─── RAYCASTER / TOOLTIP ───────────────────────────────
-  const raycaster = new THREE.Raycaster();
-  const mouse2d = new THREE.Vector2();
-  let hoveredMesh = null;
-  const tip = document.getElementById('tip');
+  // ── RAYCASTER
+  const raycaster=new THREE.Raycaster();
+  const mouse2d=new THREE.Vector2();
+  let hoveredGroup=null;
+  const tip=document.getElementById('tip');
+  const corners=tip.querySelectorAll('.tip-corner');
 
-  canvas.addEventListener('mousemove', e=>{
-    mouse2d.x = (e.clientX/window.innerWidth)*2-1;
-    mouse2d.y = -(e.clientY/window.innerHeight)*2+1;
-    raycaster.setFromCamera(mouse2d, camera);
-    const hits = raycaster.intersectObjects(buildingMeshes);
+  // collect all clickable groups
+  const allGroups=[];
+  scene.traverse(obj=>{if(obj.isGroup&&obj.userData._isBuilding)allGroups.push(obj);});
+
+  canvas.addEventListener('mousemove',e=>{
+    mouse2d.x=(e.clientX/window.innerWidth)*2-1;
+    mouse2d.y=-(e.clientY/window.innerHeight)*2+1;
+    raycaster.setFromCamera(mouse2d,camera);
+
+    // raycast against all children of building groups
+    const testMeshes=[];
+    allGroups.forEach(g=>{g.traverse(c=>{if(c.isMesh&&!c.userData._beacon)testMeshes.push(c);});});
+    const hits=raycaster.intersectObjects(testMeshes);
+
     if(hits.length){
-      const m = hits[0].object;
-      if(m !== hoveredMesh){
-        // restore prev
-        if(hoveredMesh){
-          hoveredMesh.userData._lineMat.opacity = 0.55;
-          hoveredMesh.userData._roofMat.emissiveIntensity = 0.8;
+      const hitMesh=hits[0].object;
+      // find parent group
+      let g=hitMesh;
+      while(g&&!g.userData._isBuilding)g=g.parent;
+      if(!g)return;
+
+      if(g!==hoveredGroup){
+        if(hoveredGroup){
+          hoveredGroup.userData._edgeMat.opacity=0.4;
+          hoveredGroup.userData._roofMat.emissiveIntensity=1.2;
         }
-        hoveredMesh = m;
-        m.userData._lineMat.opacity = 1.0;
-        m.userData._roofMat.emissiveIntensity = 2.0;
-        // populate tooltip
-        const r = m.userData;
-        document.getElementById('tip-name').textContent = r.name.toUpperCase();
-        document.getElementById('tip-commits').textContent = r.commitCount.toLocaleString();
-        const langColor = r._color;
-        document.getElementById('tip-lang').innerHTML =
-          `<span style="color:${langColor};text-shadow:0 0 6px ${langColor};letter-spacing:2px">
-           ● ${(r.language||'UNKNOWN').toUpperCase()}</span>`;
-        document.getElementById('tip-desc').textContent = r.description || 'No description.';
-        document.getElementById('tip-stars').textContent =
-          `★ ${r.stargazers_count} STARS  ·  ⑂ ${r.forks_count} FORKS`;
+        hoveredGroup=g;
+        g.userData._edgeMat.opacity=1.0;
+        g.userData._roofMat.emissiveIntensity=3.0;
+
+        const r=g.userData;
+        const sc=r._color;
+        document.getElementById('tip-bar').style.background=sc;
+        document.getElementById('tip-bar').style.boxShadow=`0 0 10px ${sc}`;
+        corners.forEach(c=>{ c.style.borderColor=sc; });
+        tip.style.borderColor=`${sc}40`;
+        document.getElementById('tip-name').textContent=r.name.toUpperCase();
+        document.getElementById('tip-commits').textContent=r.commitCount.toLocaleString();
+        document.getElementById('tip-commits').style.color=sc;
+        document.getElementById('tip-commits').style.textShadow=`0 0 16px ${sc}`;
+        const lang=(r.language||'UNKNOWN').toUpperCase();
+        document.getElementById('tip-lang').innerHTML=`<span style="color:${sc};letter-spacing:2px">● ${lang}</span>`;
+        document.getElementById('tip-desc').textContent=r.description||'No description provided.';
+        document.getElementById('tip-meta').textContent=`★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
         tip.style.display='block';
-        tip.style.borderColor = langColor;
-        tip.querySelector('::before') && null; // update top bar color via JS
-        tip.style.setProperty('--tc', langColor);
-        tip.querySelector('.c.tl').style.background = langColor;
-        tip.querySelector('.c.tr').style.background = langColor;
-        tip.querySelector('.c.bl').style.background = langColor;
-        tip.querySelector('.c.br').style.background = langColor;
       }
       const pad=16;
-      tip.style.left = Math.min(e.clientX+20, window.innerWidth-tip.offsetWidth-pad)+'px';
-      tip.style.top  = Math.min(e.clientY-20, window.innerHeight-tip.offsetHeight-pad)+'px';
+      tip.style.left=Math.min(e.clientX+24,window.innerWidth-260-pad)+'px';
+      tip.style.top=Math.min(e.clientY-20,window.innerHeight-200-pad)+'px';
       canvas.style.cursor='pointer';
     } else {
-      if(hoveredMesh){
-        hoveredMesh.userData._lineMat.opacity=0.55;
-        hoveredMesh.userData._roofMat.emissiveIntensity=0.8;
-        hoveredMesh=null;
+      if(hoveredGroup){
+        hoveredGroup.userData._edgeMat.opacity=0.4;
+        hoveredGroup.userData._roofMat.emissiveIntensity=1.2;
+        hoveredGroup=null;
       }
       tip.style.display='none';
       canvas.style.cursor='default';
     }
   });
 
-  canvas.addEventListener('click', ()=>{
-    if(hoveredMesh && hoveredMesh.userData.html_url)
-      window.open(hoveredMesh.userData.html_url,'_blank');
+  canvas.addEventListener('click',()=>{
+    if(hoveredGroup&&hoveredGroup.userData.html_url)
+      window.open(hoveredGroup.userData.html_url,'_blank');
   });
 
-  // ─── RESIZE ───────────────────────────────────────────
   window.addEventListener('resize',()=>{
     camera.aspect=window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth,window.innerHeight);
   });
 
-  // ─── ANIMATE ──────────────────────────────────────────
-  let frame = 0;
+  // ── ANIMATE
+  let frame=0;
   function animate(){
     requestAnimationFrame(animate);
     frame++;
 
-    // auto rotate
-    if(autoRotate) targetTheta += 0.003;
+    if(autoRotate) targetTheta+=0.0025;
+    theta+=(targetTheta-theta)*0.055;
+    phi+=(targetPhi-phi)*0.055;
+    radius+=(targetRadius-radius)*0.055;
 
-    // smooth camera
-    theta   += (targetTheta-theta)*0.06;
-    phi     += (targetPhi-phi)*0.06;
-    radius  += (targetRadius-radius)*0.06;
+    camera.position.x=radius*Math.sin(phi)*Math.cos(theta);
+    camera.position.y=radius*Math.cos(phi);
+    camera.position.z=radius*Math.sin(phi)*Math.sin(theta);
+    camera.lookAt(0, 14, 0);
 
-    camera.position.x = radius * Math.sin(phi) * Math.cos(theta);
-    camera.position.y = radius * Math.cos(phi);
-    camera.position.z = radius * Math.sin(phi) * Math.sin(theta);
-    camera.lookAt(0, 6, 0);
-
-    // blink antenna tips
+    // animate beacons + halos + labels
     scene.traverse(obj=>{
-      if(obj.isMesh && obj.userData._blink){
-        const {mat, base} = obj.userData._blink;
-        const t = Math.sin(frame*0.08)*0.5+0.5;
-        mat.emissiveIntensity = 0.8 + t*1.8;
+      if(obj.userData._beacon){
+        const {mat,color,id}=obj.userData._beacon;
+        const t=Math.sin(frame*0.07+id*1.3)*0.5+0.5;
+        mat.emissiveIntensity=0.8+t*3.0;
+        mat.opacity=0.7+t*0.3;
       }
-      // label bob
-      if(obj.isSprite && obj.userData._baseY !== undefined){
-        obj.position.y = obj.userData._baseY + Math.sin(frame*0.03 + obj.id)*0.18;
+      if(obj.userData._halo){
+        const {mat,id}=obj.userData._halo;
+        const t=Math.sin(frame*0.07+id*1.3)*0.5+0.5;
+        mat.opacity=0.04+t*0.14;
+        obj.scale.setScalar(1+t*1.2);
+      }
+      if(obj.isSprite&&obj.userData._baseY!==undefined){
+        obj.position.y=obj.userData._baseY+Math.sin(frame*0.025+obj.id*0.5)*0.3;
       }
     });
 
-    renderer.render(scene, camera);
+    updateShooters();
+    updateStars();
+
+    renderer.render(scene,camera);
   }
   animate();
 }
 
-main().catch(console.error);
+main().catch(e=>{
+  console.error(e);
+  document.getElementById('load-msg').textContent='ERROR: '+e.message;
+});
 </script>
 </body>
 </html>
