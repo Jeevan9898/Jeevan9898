@@ -6,11 +6,11 @@
 <title>Jeevan Yadav — GitHub City</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000308;overflow:hidden;font-family:'Share Tech Mono','Courier New',monospace;color:#00f2ff}
+body{background:#000000;overflow:hidden;font-family:'Share Tech Mono','Courier New',monospace;color:#00f2ff}
 #c{display:block;width:100vw;height:100vh}
 
 /* LOADER */
-#loader{position:fixed;inset:0;background:#000308;display:flex;flex-direction:column;
+#loader{position:fixed;inset:0;background:#000000;display:flex;flex-direction:column;
   align-items:center;justify-content:center;z-index:200;gap:20px;
   transition:opacity .8s}
 #loader-glow{
@@ -609,28 +609,46 @@ function createStarField(scene){
 //  ENVIRONMENT
 // ═══════════════════════════════════════════════════════
 function buildEnvironment(scene){
-  // ground — wet dark asphalt
-  const gGeo = new THREE.PlaneGeometry(500,500);
+  // ground — smooth dark asphalt with canvas texture
+  const gCv=document.createElement('canvas'); gCv.width=512; gCv.height=512;
+  const gCtx=gCv.getContext('2d');
+  // base dark
+  gCtx.fillStyle='#020810'; gCtx.fillRect(0,0,512,512);
+  // subtle noise grain
+  for(let i=0;i<6000;i++){
+    const x=Math.random()*512, y=Math.random()*512;
+    const a=Math.random()*0.035;
+    gCtx.fillStyle=`rgba(0,180,255,${a})`;
+    gCtx.fillRect(x,y,1,1);
+  }
+  // faint lane lines
+  gCtx.strokeStyle='rgba(0,80,120,0.18)'; gCtx.lineWidth=1;
+  for(let i=0;i<512;i+=64){
+    gCtx.beginPath(); gCtx.moveTo(i,0); gCtx.lineTo(i,512); gCtx.stroke();
+    gCtx.beginPath(); gCtx.moveTo(0,i); gCtx.lineTo(512,i); gCtx.stroke();
+  }
+  const gTex=new THREE.CanvasTexture(gCv);
+  gTex.wrapS=gTex.wrapT=THREE.RepeatWrapping; gTex.repeat.set(12,12);
+
+  const gGeo = new THREE.PlaneGeometry(500,500,1,1);
   const gMat = new THREE.MeshStandardMaterial({
-    color:0x030a14, roughness:0.05, metalness:0.9,
-    envMapIntensity:0.5
+    color:0x020810,
+    map:gTex,
+    roughness:0.92,
+    metalness:0.08,
   });
   const ground = new THREE.Mesh(gGeo, gMat);
   ground.rotation.x=-Math.PI/2; ground.receiveShadow=true;
   scene.add(ground);
 
-  // city grid lines (neon road)
-  const roadMat = new THREE.LineBasicMaterial({color:0x003a55,transparent:true,opacity:0.12});
-  for(let i=-10;i<=10;i++){
-    const pts=[new THREE.Vector3(i*11+5.5,-0.01,-120),new THREE.Vector3(i*11+5.5,-0.01,120)];
+  // subtle neon road lines (fewer, cleaner)
+  const roadMat = new THREE.LineBasicMaterial({color:0x002a40,transparent:true,opacity:0.18});
+  for(let i=-8;i<=8;i++){
+    const pts=[new THREE.Vector3(i*11+5.5,0.02,-100),new THREE.Vector3(i*11+5.5,0.02,100)];
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),roadMat));
-    const pts2=[new THREE.Vector3(-120,-0.01,i*11+5.5),new THREE.Vector3(120,-0.01,i*11+5.5)];
+    const pts2=[new THREE.Vector3(-100,0.02,i*11+5.5),new THREE.Vector3(100,0.02,i*11+5.5)];
     scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts2),roadMat));
   }
-
-  // subtle grid helper
-  const grid = new THREE.GridHelper(400,80,0x041828,0x020f1c);
-  grid.position.y=0.01; scene.add(grid);
 
   // moon
   const moonGeo = new THREE.SphereGeometry(18,32,32);
@@ -689,8 +707,8 @@ function buildEnvironment(scene){
   });
 
   // LIGHTS
-  scene.add(new THREE.AmbientLight(0x020810, 1.4));
-  scene.add(new THREE.HemisphereLight(0x001830, 0x000408, 0.6));
+  scene.add(new THREE.AmbientLight(0x000408, 0.8));
+  scene.add(new THREE.HemisphereLight(0x000e20, 0x000000, 0.4));
 
   const moon_light = new THREE.DirectionalLight(0x6699cc, 0.5);
   moon_light.position.set(180,220,-280);
@@ -709,7 +727,7 @@ function buildEnvironment(scene){
     scene.add(fl);
   });
 
-  scene.fog = new THREE.FogExp2(0x000308, 0.006);
+  scene.fog = new THREE.FogExp2(0x000000, 0.007);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -758,7 +776,7 @@ async function main(){
   renderer.toneMappingExposure=1.5;
 
   const scene=new THREE.Scene();
-  scene.background=new THREE.Color(0x000308);
+  scene.background=new THREE.Color(0x000000);
 
   const camera=new THREE.PerspectiveCamera(52,window.innerWidth/window.innerHeight,0.1,1200);
 
