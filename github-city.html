@@ -79,6 +79,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 .hval{font-family:'Orbitron',monospace;font-size:22px;color:#fff;text-shadow:0 0 10px rgba(0,242,255,.6);line-height:1.1}
 .hlbl{font-size:10px;letter-spacing:3px;color:rgba(0,242,255,.45);margin-top:3px}
 
+/* ORG LEGEND BAR */
+#org-legend{
+  position:fixed;top:72px;left:24px;z-index:30;
+  display:none;flex-direction:column;gap:5px;
+  font-family:'Share Tech Mono',monospace;font-size:8px;
+  letter-spacing:2px;pointer-events:none;
+}
+.org-legend-row{display:flex;align-items:center;gap:7px;color:rgba(0,242,255,.45)}
+.org-legend-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
+.org-personal-dot{background:#00f2ff;box-shadow:0 0 5px #00f2ff}
+.org-org-dot{background:#ff9f00;box-shadow:0 0 5px #ff9f00}
+
 #scanlines{position:fixed;inset:0;pointer-events:none;z-index:5;display:none;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
 #vignette{position:fixed;inset:0;pointer-events:none;z-index:6;display:none;
@@ -89,18 +101,25 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   position:fixed;pointer-events:none;z-index:100;display:none;
   font-family:'Share Tech Mono',monospace;
   background:rgba(0,2,12,.95);border:1px solid rgba(0,242,255,.2);
-  min-width:215px;max-width:265px;backdrop-filter:blur(8px);
+  min-width:215px;max-width:275px;backdrop-filter:blur(8px);
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))
 }
 .tip-head{padding:12px 16px 10px;border-bottom:1px solid rgba(0,242,255,.08)}
 .tip-accent-bar{height:2px;margin:-12px -16px 10px;box-shadow:0 0 10px currentColor}
 .tip-name{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:#fff}
+.tip-org-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  margin-top:4px;padding:2px 7px;
+  border-radius:2px;font-size:7px;letter-spacing:2px;
+  background:rgba(255,159,0,.12);border:1px solid rgba(255,159,0,.3);
+  color:#ff9f00;text-shadow:0 0 6px rgba(255,159,0,.6);
+}
 .tip-body{padding:10px 16px 12px}
 .tip-num{font-family:'Orbitron',monospace;font-size:28px;line-height:1}
 .tip-lbl{font-size:7px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:8px}
 .tip-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:8px;letter-spacing:1.5px}
 .tip-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
-.tip-desc{font-size:8px;color:rgba(255,255,255,.35);line-height:1.6;margin:6px 0;max-width:210px}
+.tip-desc{font-size:8px;color:rgba(255,255,255,.35);line-height:1.6;margin:6px 0;max-width:220px}
 .tip-meta{font-size:8px;letter-spacing:1.5px;color:rgba(255,215,0,.6);margin-top:4px}
 .tip-cta{font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.4);margin-top:8px;padding-top:7px;border-top:1px solid rgba(0,242,255,.06)}
 
@@ -182,9 +201,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   </div>
   <div class="hud-stats">
     <div class="hstat"><div class="hval" id="hv-b">—</div><div class="hlbl">REPOS</div></div>
+    <div class="hstat"><div class="hval" id="hv-o">—</div><div class="hlbl">ORGS</div></div>
     <div class="hstat"><div class="hval" id="hv-c">—</div><div class="hlbl">COMMITS</div></div>
     <div class="hstat"><div class="hval" id="hv-s">—</div><div class="hlbl">STARS</div></div>
   </div>
+</div>
+
+<!-- Org Legend -->
+<div id="org-legend">
+  <div class="org-legend-row"><div class="org-legend-dot org-personal-dot"></div>PERSONAL REPO</div>
+  <div class="org-legend-row"><div class="org-legend-dot org-org-dot"></div>ORGANISATION REPO</div>
 </div>
 
 <div id="apistatus"></div>
@@ -193,6 +219,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   <div class="tip-head">
     <div class="tip-accent-bar" id="tip-bar"></div>
     <div class="tip-name" id="tip-name"></div>
+    <div id="tip-org-badge" class="tip-org-badge" style="display:none">◈ ORG: <span id="tip-org-name"></span></div>
   </div>
   <div class="tip-body">
     <div class="tip-num" id="tip-commits"></div>
@@ -215,27 +242,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 <script>
 'use strict';
 
-// ── CURSOR: direct DOM update, no CSS transition ──
+// ── CURSOR ────────────────────────────────────────
 const curEl = document.getElementById('cursor');
 document.addEventListener('mousemove', e => {
   curEl.style.left = e.clientX + 'px';
   curEl.style.top  = e.clientY + 'px';
 }, {passive:true});
 
-// ── INTRO STARS (pure 2D, self-contained) ────────
+// ── INTRO STARS ───────────────────────────────────
 let introAlive = true;
 (function startIntroStars() {
   const cv  = document.getElementById('intro-canvas');
   const ctx = cv.getContext('2d');
   let W = 0, H = 0;
-
-  function resize() {
-    W = cv.width  = window.innerWidth;
-    H = cv.height = window.innerHeight;
-  }
+  function resize() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize, {passive:true});
-
   const stars = [];
   for (let i = 0; i < 800; i++) {
     stars.push({
@@ -246,51 +268,44 @@ let introAlive = true;
       c: Math.random() > 0.82 ? '#90c8ff' : '#ffffff'
     });
   }
-
   function frame() {
-    if (!introAlive) return;   // stop when intro dismissed
+    if (!introAlive) return;
     requestAnimationFrame(frame);
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
     for (const s of stars) {
       s.ph += s.sp;
       const a = 0.25 + (Math.sin(s.ph) * 0.5 + 0.5) * 0.75;
-      ctx.globalAlpha = a;
-      ctx.fillStyle = s.c;
-      ctx.beginPath();
-      ctx.arc(s.x * W, s.y * H, s.r, 0, 6.283);
-      ctx.fill();
+      ctx.globalAlpha = a; ctx.fillStyle = s.c;
+      ctx.beginPath(); ctx.arc(s.x*W, s.y*H, s.r, 0, 6.283); ctx.fill();
     }
     ctx.globalAlpha = 1;
   }
   frame();
 })();
 
-// ── INTRO DISMISS ────────────────────────────────
+// ── INTRO DISMISS ─────────────────────────────────
 let introDone = false;
 function dismissIntro() {
   if (introDone) return;
   introDone = true;
-  introAlive = false;           // kills star RAF loop
+  introAlive = false;
   const el = document.getElementById('intro');
   el.style.opacity = '0';
   el.style.pointerEvents = 'none';
   setTimeout(() => { el.style.display = 'none'; }, 1500);
-
-  // reveal 3D city elements
   document.getElementById('c').style.display         = 'block';
   document.getElementById('hud').style.display       = 'flex';
   document.getElementById('bbar').style.display      = 'flex';
   document.getElementById('scanlines').style.display = 'block';
   document.getElementById('vignette').style.display  = 'block';
+  document.getElementById('org-legend').style.display = 'flex';
 }
-// scroll / click / touch — all dismiss intro
 window.addEventListener('wheel',      () => { if (!introDone) dismissIntro(); }, {passive:true});
 window.addEventListener('touchstart', () => { if (!introDone) dismissIntro(); }, {passive:true});
 document.getElementById('intro').addEventListener('click', dismissIntro);
-setTimeout(dismissIntro, 9000);   // auto-dismiss after 9 s
+setTimeout(dismissIntro, 9000);
 
-// ── CONFIG ───────────────────────────────────────
+// ── CONFIG ────────────────────────────────────────
 const USERNAME = 'Jeevan9898';
 const LANG_PAL = {
   JavaScript:'#f1e05a', Solidity:'#e4824a', Python:'#4584b6',
@@ -300,18 +315,23 @@ const LANG_PAL = {
   Markdown:'#083fa1', Vue:'#41b883', Svelte:'#ff3e00', default:'#00f2ff'
 };
 
-// ── LOADER HELPER ────────────────────────────────
+// Org repos use a warm amber tint overlay to stand out in the city
+const ORG_TINT = new THREE.Color('#ff9f00');
+
+// ── LOADER HELPER ─────────────────────────────────
 function setLoad(pct, msg) {
   document.getElementById('ld-prog').style.width = pct + '%';
   document.getElementById('ld-msg').textContent  = msg;
 }
 
-// ── GITHUB API ───────────────────────────────────
-async function getCommitCount(repoName) {
+// ── GITHUB API ────────────────────────────────────
+const GH_HEADERS = { headers: { Accept: 'application/vnd.github.v3+json' } };
+
+async function getCommitCount(repoFullName) {
   try {
     const r = await fetch(
-      `https://api.github.com/repos/${USERNAME}/${repoName}/commits?per_page=1`,
-      { headers: { Accept: 'application/vnd.github.v3+json' } }
+      `https://api.github.com/repos/${repoFullName}/commits?per_page=1`,
+      GH_HEADERS
     );
     if (!r.ok) return 1;
     const link = r.headers.get('Link') || '';
@@ -322,67 +342,127 @@ async function getCommitCount(repoName) {
   } catch { return 1; }
 }
 
+async function fetchUserOrgs() {
+  try {
+    const r = await fetch(`https://api.github.com/users/${USERNAME}/orgs`, GH_HEADERS);
+    if (!r.ok) return [];
+    const orgs = await r.json();
+    return Array.isArray(orgs) ? orgs.map(o => o.login) : [];
+  } catch { return []; }
+}
+
+async function fetchOrgRepos(orgName) {
+  try {
+    const r = await fetch(
+      `https://api.github.com/orgs/${orgName}/repos?per_page=100&sort=pushed&type=public`,
+      GH_HEADERS
+    );
+    if (!r.ok) return [];
+    const repos = await r.json();
+    return Array.isArray(repos) ? repos : [];
+  } catch { return []; }
+}
+
 async function fetchData() {
   setLoad(5, 'CONTACTING GITHUB...');
 
   // Rate-limit pre-check
   let remaining = 60;
   try {
-    const rl = await fetch('https://api.github.com/rate_limit',
-      { headers: { Accept: 'application/vnd.github.v3+json' } });
+    const rl = await fetch('https://api.github.com/rate_limit', GH_HEADERS);
     if (rl.ok) { const d = await rl.json(); remaining = d.resources?.core?.remaining ?? 60; }
   } catch {}
-  if (remaining < 3) throw new Error('Rate limit exhausted');
+  if (remaining < 5) throw new Error('Rate limit exhausted');
 
-  setLoad(12, 'FETCHING REPO LIST...');
-  const r = await fetch(
+  // ── 1. Personal repos ──────────────────────────
+  setLoad(10, 'FETCHING PERSONAL REPOS...');
+  const rPersonal = await fetch(
     `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed&type=owner`,
-    { headers: { Accept: 'application/vnd.github.v3+json' } }
+    GH_HEADERS
   );
-  if (!r.ok) throw new Error('Repos fetch failed: ' + r.status);
-  const raw = await r.json();
-  if (!Array.isArray(raw) || raw.length === 0) throw new Error('No repos found');
+  if (!rPersonal.ok) throw new Error('Repos fetch failed: ' + rPersonal.status);
+  const rawPersonal = await rPersonal.json();
+  if (!Array.isArray(rawPersonal)) throw new Error('No personal repos found');
 
-  setLoad(20, `${raw.length} REPOS FOUND — COUNTING COMMITS...`);
+  setLoad(22, `${rawPersonal.length} PERSONAL REPOS — FETCHING ORGANISATIONS...`);
 
-  const budget = Math.min(raw.length, Math.max(0, remaining - 5));
+  // ── 2. Organisations ──────────────────────────
+  const orgs = await fetchUserOrgs();
+  setLoad(28, orgs.length > 0
+    ? `FOUND ${orgs.length} ORG(S): ${orgs.slice(0,3).join(', ')}...`
+    : 'NO PUBLIC ORGANISATIONS FOUND');
+
+  // Fetch org repos in parallel
+  let rawOrgRepos = [];
+  if (orgs.length > 0) {
+    const orgFetches = await Promise.all(orgs.map(o => fetchOrgRepos(o)));
+    orgFetches.forEach((repos, idx) => {
+      repos.forEach(r => {
+        rawOrgRepos.push({ ...r, _orgName: orgs[idx] });
+      });
+    });
+  }
+  setLoad(36, `${rawOrgRepos.length} ORG REPO(S) FETCHED — MERGING...`);
+
+  // ── 3. Deduplicate: org repo overrides personal if same name ─
+  const seenNames = new Set();
+  const allRaw = [];
+  // Org repos first (they carry richer context if duplicated)
+  for (const r of rawOrgRepos) {
+    const key = r.full_name || r.name;
+    if (!seenNames.has(key)) { seenNames.add(key); allRaw.push(r); }
+  }
+  for (const r of rawPersonal) {
+    const key = r.full_name || r.name;
+    if (!seenNames.has(key)) { seenNames.add(key); allRaw.push(r); }
+  }
+
+  setLoad(40, `TOTAL ${allRaw.length} REPOS — COUNTING COMMITS...`);
+
+  const budget = Math.min(allRaw.length, Math.max(0, remaining - 8));
   const out    = [];
 
-  for (let i = 0; i < raw.length; i++) {
-    const rp = raw[i];
+  for (let i = 0; i < allRaw.length; i++) {
+    const rp          = allRaw[i];
+    const isOrg       = !!rp._orgName;
+    const fullName    = rp.full_name || `${isOrg ? rp._orgName : USERNAME}/${rp.name}`;
     const commitCount = (i < budget)
-      ? await getCommitCount(rp.name)
+      ? await getCommitCount(fullName)
       : Math.max(1, Math.round((rp.size || 5) * 0.35));
 
     out.push({
-      name: rp.name, commitCount,
-      language: rp.language || null,
+      name:             rp.name,
+      fullName,
+      commitCount,
+      language:         rp.language || null,
       stargazers_count: rp.stargazers_count || 0,
-      forks_count: rp.forks_count || 0,
-      description: rp.description || '',
-      html_url: rp.html_url
+      forks_count:      rp.forks_count || 0,
+      description:      rp.description || '',
+      html_url:         rp.html_url,
+      isOrg,
+      orgName:          rp._orgName || null,
     });
-    setLoad(20 + (i / raw.length) * 60,
-      `[${i+1}/${raw.length}] ${rp.name.substring(0,22).toUpperCase()}`);
+    setLoad(40 + (i / allRaw.length) * 45,
+      `[${i+1}/${allRaw.length}] ${(isOrg ? `[${rp._orgName}] ` : '') + rp.name.substring(0,18).toUpperCase()}`);
   }
 
   out.sort((a, b) => b.commitCount - a.commitCount);
-  setLoad(84, 'BUILDING CITY...');
-  return { repos: out, fromAPI: true };
+  setLoad(88, 'BUILDING CITY...');
+  return { repos: out, orgs, fromAPI: true };
 }
 
 const FALLBACK = [
-  {name:'DSA-Practice',   commitCount:60, language:'C++',        stargazers_count:0, forks_count:0, description:'Data Structures & Algorithms — arrays, trees, recursion, linked lists.', html_url:'https://github.com/Jeevan9898'},
-  {name:'BlockChain',     commitCount:48, language:'Solidity',   stargazers_count:1, forks_count:0, description:'Full-stack DApp with Solidity, React & Web3.js.', html_url:'https://github.com/Jeevan9898/BlockChain'},
-  {name:'Space-Portfolio',commitCount:35, language:'JavaScript', stargazers_count:0, forks_count:0, description:'3D space-themed portfolio with Three.js and GSAP.', html_url:'https://github.com/Jeevan9898'},
-  {name:'Jeevan9898',     commitCount:22, language:'Markdown',   stargazers_count:0, forks_count:0, description:'GitHub profile README.', html_url:'https://github.com/Jeevan9898/Jeevan9898'},
-  {name:'Greeter-DApp',   commitCount:18, language:'Solidity',   stargazers_count:0, forks_count:0, description:'Decentralized Greeter App — Solidity + React + Web3.js.', html_url:'https://github.com/Jeevan9898'},
-  {name:'Python-OOP',     commitCount:14, language:'Python',     stargazers_count:0, forks_count:0, description:'Python OOP fundamentals.', html_url:'https://github.com/Jeevan9898'},
-  {name:'B_Projects',     commitCount:12, language:'JavaScript', stargazers_count:0, forks_count:0, description:'React + Smart Contract projects.', html_url:'https://github.com/Jeevan9898'},
+  {name:'DSA-Practice',   commitCount:60, language:'C++',        stargazers_count:0, forks_count:0, description:'Data Structures & Algorithms — arrays, trees, recursion, linked lists.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
+  {name:'BlockChain',     commitCount:48, language:'Solidity',   stargazers_count:1, forks_count:0, description:'Full-stack DApp with Solidity, React & Web3.js.', html_url:'https://github.com/Jeevan9898/BlockChain', isOrg:false, orgName:null},
+  {name:'Space-Portfolio',commitCount:35, language:'JavaScript', stargazers_count:0, forks_count:0, description:'3D space-themed portfolio with Three.js and GSAP.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
+  {name:'Jeevan9898',     commitCount:22, language:'Markdown',   stargazers_count:0, forks_count:0, description:'GitHub profile README.', html_url:'https://github.com/Jeevan9898/Jeevan9898', isOrg:false, orgName:null},
+  {name:'Greeter-DApp',   commitCount:18, language:'Solidity',   stargazers_count:0, forks_count:0, description:'Decentralized Greeter App — Solidity + React + Web3.js.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
+  {name:'Python-OOP',     commitCount:14, language:'Python',     stargazers_count:0, forks_count:0, description:'Python OOP fundamentals.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
+  {name:'B_Projects',     commitCount:12, language:'JavaScript', stargazers_count:0, forks_count:0, description:'React + Smart Contract projects.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
 ];
 
-// ── WINDOW TEXTURE ───────────────────────────────
-function makeWinTex(color, cols, rows, density) {
+// ── WINDOW TEXTURE ────────────────────────────────
+function makeWinTex(color, cols, rows, density, isOrg) {
   const S=12, cv=document.createElement('canvas');
   cv.width=cols*S; cv.height=rows*S;
   const ctx=cv.getContext('2d');
@@ -390,7 +470,9 @@ function makeWinTex(color, cols, rows, density) {
   for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
     if (Math.random()<density) {
       ctx.globalAlpha=.4+Math.random()*.55;
-      ctx.fillStyle=Math.random()>.65?'#ffc84a':color;
+      // Org repos get a warm amber tint on some windows
+      const useAmber = isOrg && Math.random() > .55;
+      ctx.fillStyle = useAmber ? '#ff9f00' : (Math.random()>.65?'#ffc84a':color);
       ctx.fillRect(c*S+1,r*S+1,S-2,S-2);
     }
   }
@@ -400,16 +482,34 @@ function makeWinTex(color, cols, rows, density) {
   return t;
 }
 
-// ── BUILD BUILDING ───────────────────────────────
+// ── BUILD BUILDING ────────────────────────────────
 function makeBuilding(scene, repo, cx, cz, maxC) {
-  const color = LANG_PAL[repo.language] || LANG_PAL.default;
-  const col3  = new THREE.Color(color);
+  const isOrg  = !!repo.isOrg;
+  const color  = LANG_PAL[repo.language] || LANG_PAL.default;
+  const col3   = new THREE.Color(color);
+
+  // Org buildings get a warm amber ground ring and slight emissive warmth
+  const orgRingCol = new THREE.Color(0xff9f00);
+
   const logR  = Math.log(repo.commitCount+1) / Math.log(maxC+1);
   const floors = Math.max(4, Math.round(4 + logR*68));
   const fw     = Math.min(7, Math.max(3, 3 + Math.floor(Math.log((repo.stargazers_count||0)+2)/Math.log(3))));
 
   const grp = new THREE.Group();
   grp.position.set(cx, 0, cz);
+
+  // ── Org: amber ground ring ──
+  if (isOrg) {
+    const ringGeo = new THREE.RingGeometry(fw*.7, fw*.9, 32);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: orgRingCol, transparent: true, opacity: .55,
+      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.04;
+    grp.add(ring);
+  }
 
   const tiers = [
     {y0:0,                     y1:Math.floor(floors*.5),  w:fw},
@@ -418,11 +518,18 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
   ];
   tiers.forEach(({y0,y1,w}) => {
     if (y0>=y1) return;
-    const h = y1-y0;
-    const wt = makeWinTex(color, w*2, h*2, .28+logR*.35);
+    const h   = y1-y0;
+    const wt  = makeWinTex(color, w*2, h*2, .28+logR*.35, isOrg);
+
+    // Org buildings: slightly warm emissive
+    const emissiveColor = isOrg
+      ? col3.clone().lerp(orgRingCol, .18)
+      : col3.clone();
+
     const sM = new THREE.MeshLambertMaterial({
       color:col3.clone().multiplyScalar(.1),
-      map:wt, emissiveMap:wt, emissive:col3.clone(), emissiveIntensity:.4+logR*.4
+      map:wt, emissiveMap:wt, emissive:emissiveColor,
+      emissiveIntensity: isOrg ? .55+logR*.45 : .4+logR*.4
     });
     const geo  = new THREE.BoxGeometry(w,h,w);
     const mesh = new THREE.Mesh(geo, [sM,sM,
@@ -431,15 +538,20 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     mesh.position.set(0,y0+h/2,0);
     mesh.castShadow = mesh.receiveShadow = true;
     grp.add(mesh);
+
+    const edgeColor = isOrg
+      ? orgRingCol.clone().multiplyScalar(1.4)
+      : col3.clone().multiplyScalar(1.6);
     const eL = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
-      new THREE.LineBasicMaterial({color:col3.clone().multiplyScalar(1.6),transparent:true,opacity:.22}));
+      new THREE.LineBasicMaterial({color:edgeColor,transparent:true,opacity: isOrg ? .35 : .22}));
     eL.position.copy(mesh.position); grp.add(eL);
   });
 
-  // Roof
-  const capW = Math.max(1, fw-2);
+  // Roof cap
+  const capW  = Math.max(1, fw-2);
+  const capCol = isOrg ? orgRingCol.clone().lerp(col3, .4) : col3;
   const cap = new THREE.Mesh(new THREE.BoxGeometry(capW+.1,.12,capW+.1),
-    new THREE.MeshBasicMaterial({color:col3,transparent:true,opacity:.8}));
+    new THREE.MeshBasicMaterial({color:capCol,transparent:true,opacity:.8}));
   cap.position.y = floors+.06; grp.add(cap);
 
   // Spire + beacon
@@ -448,14 +560,16 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     const sp = new THREE.Mesh(new THREE.CylinderGeometry(.04,.12,spH,6),
       new THREE.MeshLambertMaterial({color:0x112233}));
     sp.position.y = floors+spH/2; grp.add(sp);
-    const bMat = new THREE.MeshBasicMaterial({color:col3});
+    const beaconCol = isOrg ? orgRingCol.clone() : col3.clone();
+    const bMat = new THREE.MeshBasicMaterial({color:beaconCol});
     const beacon = new THREE.Mesh(new THREE.BoxGeometry(.34,.34,.34), bMat);
     beacon.position.y = floors+spH+.25;
-    beacon.userData._beacon = {mat:bMat, col:col3.clone()};
+    beacon.userData._beacon = {mat:bMat, col:beaconCol};
     grp.add(beacon);
   }
 
-  const pl = new THREE.PointLight(col3, .58+logR*.65, floors*2.6, 2);
+  const lightCol = isOrg ? orgRingCol.clone().lerp(col3,.5) : col3;
+  const pl = new THREE.PointLight(lightCol, .58+logR*.65, floors*2.6, 2);
   pl.position.y = floors+1; grp.add(pl);
 
   grp.userData = {...repo, _color:color, _isBuilding:true};
@@ -463,9 +577,8 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
   return grp;
 }
 
-// ── SPACE ENVIRONMENT ────────────────────────────
+// ── SPACE ENVIRONMENT ─────────────────────────────
 function buildSpace(scene) {
-  // Stars
   const starObjs = [];
   [[5000,380,650,1.0],[1800,200,380,1.4],[450,100,200,1.9]].forEach(([n,rMin,rMax,sz]) => {
     const pos = new Float32Array(n*3);
@@ -480,11 +593,9 @@ function buildSpace(scene) {
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
     const mat = new THREE.PointsMaterial({color:0xffffff,size:sz,sizeAttenuation:true,
       transparent:true,opacity:.85,blending:THREE.AdditiveBlending,depthWrite:false});
-    const pts = new THREE.Points(geo,mat);
-    scene.add(pts); starObjs.push(pts);
+    scene.add(new THREE.Points(geo,mat)); starObjs.push(new THREE.Points(geo,mat));
   });
 
-  // Moon
   const mCv=document.createElement('canvas'); mCv.width=mCv.height=128;
   const mC=mCv.getContext('2d');
   const mg=mC.createRadialGradient(64,64,0,64,64,64);
@@ -499,7 +610,6 @@ function buildSpace(scene) {
     new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(mCv)}));
   moon.position.set(200,230,-380); scene.add(moon);
 
-  // Ground
   const gCv=document.createElement('canvas'); gCv.width=gCv.height=256;
   const gC=gCv.getContext('2d');
   gC.fillStyle='#00040c'; gC.fillRect(0,0,256,256);
@@ -514,7 +624,6 @@ function buildSpace(scene) {
     new THREE.MeshLambertMaterial({color:0x00040c,map:gTex}));
   ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
 
-  // Shooting stars
   const TRAIL=22, shooters=[];
   function spawnShooter(){
     const sx=(Math.random()-.5)*500, sy=65+Math.random()*160, sz=(Math.random()-.5)*500;
@@ -559,62 +668,78 @@ function buildSpace(scene) {
   return {updateSpace};
 }
 
-// ── TOOLTIP ──────────────────────────────────────
+// ── TOOLTIP ───────────────────────────────────────
 const tip = document.getElementById('tip');
 let hoveredGroup = null;
-function showTip(r,x,y){
-  const sc=r._color||'#00f2ff';
-  document.getElementById('tip-bar').style.cssText=`background:${sc};box-shadow:0 0 10px ${sc}`;
-  document.getElementById('tip-name').textContent=r.name.toUpperCase();
-  const nc=document.getElementById('tip-commits');
-  nc.textContent=r.commitCount.toLocaleString();
-  nc.style.cssText=`color:${sc};text-shadow:0 0 16px ${sc};font-family:Orbitron,monospace;font-size:28px;line-height:1`;
-  document.getElementById('tip-dot').style.cssText=`background:${sc};box-shadow:0 0 5px ${sc};width:8px;height:8px;border-radius:1px;flex-shrink:0`;
-  document.getElementById('tip-lang').textContent=(r.language||'UNKNOWN').toUpperCase();
-  document.getElementById('tip-lang').style.color=sc;
-  document.getElementById('tip-desc').textContent=r.description||'No description.';
-  document.getElementById('tip-meta').textContent=`★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
-  tip.style.borderColor=sc+'28'; tip.style.display='block';
-  moveTip(x,y); curEl.classList.add('hover');
-}
-function moveTip(x,y){
-  const pw=tip.offsetWidth||225, ph=tip.offsetHeight||190, pad=14;
-  tip.style.left=(x+22+pw>window.innerWidth-pad ? x-pw-12 : x+22)+'px';
-  tip.style.top=Math.max(pad,Math.min(y-14,window.innerHeight-ph-pad))+'px';
-}
-function hideTip(){tip.style.display='none';hoveredGroup=null;curEl.classList.remove('hover');}
+function showTip(r, x, y) {
+  const sc = r._color || '#00f2ff';
+  document.getElementById('tip-bar').style.cssText = `background:${sc};box-shadow:0 0 10px ${sc}`;
+  document.getElementById('tip-name').textContent  = r.name.toUpperCase();
 
-// ── MAIN ─────────────────────────────────────────
-async function main(){
-  let repos=FALLBACK, fromAPI=false;
-  try{
-    const result=await fetchData();
-    repos=result.repos; fromAPI=true;
-    console.log(`GitHub API OK: ${repos.length} repos`);
-  }catch(e){
-    setLoad(84,'DEMO DATA — '+e.message.substring(0,28));
-    console.warn('API failed, using fallback:', e.message);
-    repos=FALLBACK;
+  // Org badge
+  const badge = document.getElementById('tip-org-badge');
+  if (r.isOrg && r.orgName) {
+    document.getElementById('tip-org-name').textContent = r.orgName.toUpperCase();
+    badge.style.display = 'inline-flex';
+  } else {
+    badge.style.display = 'none';
   }
-  if(!repos||repos.length===0) repos=FALLBACK;
 
-  const totC=repos.reduce((s,r)=>s+r.commitCount,0);
-  const totS=repos.reduce((s,r)=>s+(r.stargazers_count||0),0);
-  document.getElementById('hv-b').textContent=repos.length;
-  document.getElementById('hv-c').textContent=totC.toLocaleString();
-  document.getElementById('hv-s').textContent=totS;
+  const nc = document.getElementById('tip-commits');
+  nc.textContent = r.commitCount.toLocaleString();
+  nc.style.cssText = `color:${sc};text-shadow:0 0 16px ${sc};font-family:Orbitron,monospace;font-size:28px;line-height:1`;
+  document.getElementById('tip-dot').style.cssText = `background:${sc};box-shadow:0 0 5px ${sc};width:8px;height:8px;border-radius:1px;flex-shrink:0`;
+  document.getElementById('tip-lang').textContent  = (r.language || 'UNKNOWN').toUpperCase();
+  document.getElementById('tip-lang').style.color  = sc;
+  document.getElementById('tip-desc').textContent  = r.description || 'No description.';
+  document.getElementById('tip-meta').textContent  = `★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
+  tip.style.borderColor = sc+'28'; tip.style.display = 'block';
+  moveTip(x, y); curEl.classList.add('hover');
+}
+function moveTip(x, y) {
+  const pw=tip.offsetWidth||235, ph=tip.offsetHeight||200, pad=14;
+  tip.style.left = (x+22+pw>window.innerWidth-pad ? x-pw-12 : x+22)+'px';
+  tip.style.top  = Math.max(pad,Math.min(y-14,window.innerHeight-ph-pad))+'px';
+}
+function hideTip() { tip.style.display='none'; hoveredGroup=null; curEl.classList.remove('hover'); }
+
+// ── MAIN ──────────────────────────────────────────
+async function main() {
+  let repos = FALLBACK, orgs = [], fromAPI = false;
+  try {
+    const result = await fetchData();
+    repos = result.repos; orgs = result.orgs; fromAPI = true;
+    console.log(`GitHub API OK: ${repos.length} repos (${orgs.length} org(s): ${orgs.join(', ')})`);
+  } catch(e) {
+    setLoad(84, 'DEMO DATA — ' + e.message.substring(0,28));
+    console.warn('API failed, using fallback:', e.message);
+    repos = FALLBACK;
+  }
+  if (!repos || repos.length === 0) repos = FALLBACK;
+
+  const totC   = repos.reduce((s,r) => s + r.commitCount, 0);
+  const totS   = repos.reduce((s,r) => s + (r.stargazers_count||0), 0);
+  const orgCnt = repos.filter(r => r.isOrg).length;
+
+  document.getElementById('hv-b').textContent = repos.length;
+  document.getElementById('hv-o').textContent = orgs.length || (orgCnt > 0 ? '?' : 0);
+  document.getElementById('hv-c').textContent = totC.toLocaleString();
+  document.getElementById('hv-s').textContent = totS;
 
   // API badge
-  const apiEl=document.getElementById('apistatus');
-  apiEl.textContent=fromAPI?`✓ LIVE DATA · ${repos.length} REPOS`:'⚠ DEMO MODE · API RATE LIMITED';
-  apiEl.style.color=fromAPI?'rgba(0,255,110,.75)':'rgba(255,200,0,.75)';
-  apiEl.style.borderColor=fromAPI?'rgba(0,255,110,.3)':'rgba(255,200,0,.3)';
-  apiEl.style.display='block';
-  setTimeout(()=>{ apiEl.style.opacity='1'; }, 1600);
-  setTimeout(()=>{ apiEl.style.opacity='0'; }, 7000);
-  setTimeout(()=>{ apiEl.style.display='none'; }, 8000);
+  const apiEl = document.getElementById('apistatus');
+  const orgMsg = orgs.length > 0 ? ` · ${orgs.length} ORG(S)` : '';
+  apiEl.textContent  = fromAPI
+    ? `✓ LIVE DATA · ${repos.length} REPOS${orgMsg}`
+    : '⚠ DEMO MODE · API RATE LIMITED';
+  apiEl.style.color       = fromAPI ? 'rgba(0,255,110,.75)' : 'rgba(255,200,0,.75)';
+  apiEl.style.borderColor = fromAPI ? 'rgba(0,255,110,.3)' : 'rgba(255,200,0,.3)';
+  apiEl.style.display = 'block';
+  setTimeout(() => { apiEl.style.opacity = '1'; }, 1600);
+  setTimeout(() => { apiEl.style.opacity = '0'; }, 7000);
+  setTimeout(() => { apiEl.style.display = 'none'; }, 8000);
 
-  setLoad(90,'BUILDING CITY...');
+  setLoad(90, 'BUILDING CITY...');
 
   // THREE.JS SETUP
   const canvas   = document.getElementById('c');
@@ -638,66 +763,63 @@ async function main(){
   dl.position.set(4,12,-8); dl.castShadow=true;
   dl.shadow.mapSize.set(512,512); scene.add(dl);
 
-  const{updateSpace}=buildSpace(scene);
+  const{updateSpace} = buildSpace(scene);
 
-  const maxC  = Math.max(...repos.map(r=>r.commitCount), 1);
-  const COLS  = Math.ceil(Math.sqrt(repos.length));
-  const SP    = 17;
-  const groups=[];
-  repos.forEach((repo,i)=>{
-    const col=i%COLS, row=Math.floor(i/COLS);
+  const maxC = Math.max(...repos.map(r => r.commitCount), 1);
+  const COLS = Math.ceil(Math.sqrt(repos.length));
+  const SP   = 17;
+  const groups = [];
+  repos.forEach((repo, i) => {
+    const col = i % COLS, row = Math.floor(i / COLS);
     groups.push(makeBuilding(scene, repo,
       (col-(COLS-1)/2)*SP,
       (row-(Math.ceil(repos.length/COLS)-1)/2)*SP,
       maxC));
   });
 
-  setLoad(100,'ENTERING GIT CITY ◈');
-  setTimeout(()=>{
-    const ld=document.getElementById('loader');
-    ld.style.opacity='0';
-    setTimeout(()=>{ ld.style.display='none'; },800);
-  },350);
+  setLoad(100, 'ENTERING GIT CITY ◈');
+  setTimeout(() => {
+    const ld = document.getElementById('loader');
+    ld.style.opacity = '0';
+    setTimeout(() => { ld.style.display = 'none'; }, 800);
+  }, 350);
 
   // CAMERA ORBIT STATE
   let theta=0.4, phi=0.88, radius=110;
   let tTheta=theta, tPhi=phi, tRadius=radius;
   let autoRot=true, isDrag=false, dX=0, dY=0;
 
-  function setCam(){
-    camera.position.x=radius*Math.sin(phi)*Math.cos(theta);
-    camera.position.y=radius*Math.cos(phi);
-    camera.position.z=radius*Math.sin(phi)*Math.sin(theta);
+  function setCam() {
+    camera.position.x = radius*Math.sin(phi)*Math.cos(theta);
+    camera.position.y = radius*Math.cos(phi);
+    camera.position.z = radius*Math.sin(phi)*Math.sin(theta);
     camera.lookAt(0,8,0);
   }
   setCam();
 
-  // Drag
-  canvas.addEventListener('mousedown',e=>{
-    if(e.button!==0)return;
+  canvas.addEventListener('mousedown', e => {
+    if(e.button!==0) return;
     isDrag=true; autoRot=false; dX=e.clientX; dY=e.clientY;
   });
-  window.addEventListener('mouseup',()=>{ isDrag=false; },{passive:true});
-  window.addEventListener('mousemove',e=>{
+  window.addEventListener('mouseup', () => { isDrag=false; }, {passive:true});
+  window.addEventListener('mousemove', e => {
     if(!isDrag) return;
     tTheta -= (e.clientX-dX)*.007;
     tPhi    = Math.max(.12, Math.min(1.44, tPhi-(e.clientY-dY)*.005));
     dX=e.clientX; dY=e.clientY;
-  },{passive:true});
+  }, {passive:true});
 
-  // Zoom — passive:false so we can preventDefault (stops page scroll)
-  canvas.addEventListener('wheel',e=>{
-    tRadius=Math.max(20,Math.min(200,tRadius+e.deltaY*.1));
+  canvas.addEventListener('wheel', e => {
+    tRadius = Math.max(20, Math.min(200, tRadius+e.deltaY*.1));
     e.preventDefault();
-  },{passive:false});
+  }, {passive:false});
 
-  // Touch
   let ltx=0,lty=0,lpd=0,tdr=false;
-  canvas.addEventListener('touchstart',e=>{
+  canvas.addEventListener('touchstart', e => {
     if(e.touches.length===1){ tdr=true; autoRot=false; ltx=e.touches[0].clientX; lty=e.touches[0].clientY; }
     if(e.touches.length===2) lpd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-  },{passive:true});
-  canvas.addEventListener('touchmove',e=>{
+  }, {passive:true});
+  canvas.addEventListener('touchmove', e => {
     if(e.touches.length===1&&tdr){
       tTheta-=(e.touches[0].clientX-ltx)*.009;
       tPhi=Math.max(.12,Math.min(1.44,tPhi-(e.touches[0].clientY-lty)*.007));
@@ -707,68 +829,67 @@ async function main(){
       const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
       tRadius=Math.max(20,Math.min(200,tRadius-(d-lpd)*.25)); lpd=d;
     }
-  },{passive:true});
-  canvas.addEventListener('touchend',()=>{ tdr=false; },{passive:true});
+  }, {passive:true});
+  canvas.addEventListener('touchend', () => { tdr=false; }, {passive:true});
 
   // Raycaster / hover
   const raycaster = new THREE.Raycaster();
   const allMeshes = [];
-  groups.forEach(g=>g.traverse(c=>{ if(c.isMesh&&!c.userData._beacon) allMeshes.push(c); }));
+  groups.forEach(g => g.traverse(c => { if(c.isMesh && !c.userData._beacon) allMeshes.push(c); }));
 
-  canvas.addEventListener('mousemove',e=>{
+  canvas.addEventListener('mousemove', e => {
     if(isDrag) return;
     raycaster.setFromCamera(
       new THREE.Vector2((e.clientX/window.innerWidth)*2-1, -(e.clientY/window.innerHeight)*2+1),
       camera
     );
-    const hits=raycaster.intersectObjects(allMeshes);
+    const hits = raycaster.intersectObjects(allMeshes);
     if(hits.length){
-      let g=hits[0].object;
-      while(g&&!g.userData._isBuilding) g=g.parent;
+      let g = hits[0].object;
+      while(g && !g.userData._isBuilding) g = g.parent;
       if(!g){ hideTip(); return; }
-      if(g!==hoveredGroup){ hoveredGroup=g; showTip(g.userData,e.clientX,e.clientY); }
-      else moveTip(e.clientX,e.clientY);
+      if(g !== hoveredGroup){ hoveredGroup=g; showTip(g.userData, e.clientX, e.clientY); }
+      else moveTip(e.clientX, e.clientY);
     } else hideTip();
-  },{passive:true});
+  }, {passive:true});
 
-  canvas.addEventListener('click',()=>{
-    if(hoveredGroup?.userData?.html_url) window.open(hoveredGroup.userData.html_url,'_blank');
+  canvas.addEventListener('click', () => {
+    if(hoveredGroup?.userData?.html_url) window.open(hoveredGroup.userData.html_url, '_blank');
   });
 
-  window.addEventListener('resize',()=>{
-    camera.aspect=window.innerWidth/window.innerHeight;
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth,window.innerHeight);
-  },{passive:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }, {passive:true});
 
   // RENDER LOOP
-  let frame=0;
-  function animate(){
+  let frame = 0;
+  function animate() {
     requestAnimationFrame(animate);
     frame++;
-    if(autoRot) tTheta+=.0016;
-    theta  +=(tTheta-theta)*.06;
-    phi    +=(tPhi-phi)*.06;
-    radius +=(tRadius-radius)*.06;
+    if(autoRot) tTheta += .0016;
+    theta  += (tTheta-theta)*.06;
+    phi    += (tPhi-phi)*.06;
+    radius += (tRadius-radius)*.06;
     setCam();
-    // beacon blink every 2nd frame
     if(frame%2===0){
-      scene.traverse(o=>{
+      scene.traverse(o => {
         if(o.userData._beacon){
-          const{mat,col}=o.userData._beacon;
-          mat.color.lerpColors(col,new THREE.Color(1,1,1),(Math.sin(frame*.08+o.id*.6)*.5+.5)*.38);
+          const{mat,col} = o.userData._beacon;
+          mat.color.lerpColors(col, new THREE.Color(1,1,1), (Math.sin(frame*.08+o.id*.6)*.5+.5)*.38);
         }
       });
     }
     updateSpace();
-    renderer.render(scene,camera);
+    renderer.render(scene, camera);
   }
   animate();
 }
 
-main().catch(e=>{
+main().catch(e => {
   console.error(e);
-  document.getElementById('ld-msg').textContent='ERROR: '+e.message;
+  document.getElementById('ld-msg').textContent = 'ERROR: ' + e.message;
 });
 </script>
 </body>
