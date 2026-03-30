@@ -79,17 +79,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 .hval{font-family:'Orbitron',monospace;font-size:22px;color:#fff;text-shadow:0 0 10px rgba(0,242,255,.6);line-height:1.1}
 .hlbl{font-size:10px;letter-spacing:3px;color:rgba(0,242,255,.45);margin-top:3px}
 
-/* ORG LEGEND BAR */
+/* LEGEND BAR */
 #org-legend{
   position:fixed;top:72px;left:24px;z-index:30;
-  display:none;flex-direction:column;gap:5px;
+  display:none;flex-direction:column;gap:6px;
   font-family:'Share Tech Mono',monospace;font-size:8px;
   letter-spacing:2px;pointer-events:none;
+  background:rgba(0,0,0,.6);padding:10px 14px;border:1px solid rgba(0,242,255,.1);
 }
-.org-legend-row{display:flex;align-items:center;gap:7px;color:rgba(0,242,255,.45)}
-.org-legend-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
-.org-personal-dot{background:#00f2ff;box-shadow:0 0 5px #00f2ff}
-.org-org-dot{background:#ff9f00;box-shadow:0 0 5px #ff9f00}
+.org-legend-row{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.55)}
+.org-legend-dot{width:10px;height:10px;border-radius:1px;flex-shrink:0}
+.dot-personal{background:#00f2ff;box-shadow:0 0 5px #00f2ff}
+.dot-forked{background:#a855f7;box-shadow:0 0 5px #a855f7}
+.dot-org{background:#ff9f00;box-shadow:0 0 5px #ff9f00}
 
 #scanlines{position:fixed;inset:0;pointer-events:none;z-index:5;display:none;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
@@ -101,19 +103,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   position:fixed;pointer-events:none;z-index:100;display:none;
   font-family:'Share Tech Mono',monospace;
   background:rgba(0,2,12,.95);border:1px solid rgba(0,242,255,.2);
-  min-width:215px;max-width:275px;backdrop-filter:blur(8px);
+  min-width:215px;max-width:280px;backdrop-filter:blur(8px);
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))
 }
 .tip-head{padding:12px 16px 10px;border-bottom:1px solid rgba(0,242,255,.08)}
 .tip-accent-bar{height:2px;margin:-12px -16px 10px;box-shadow:0 0 10px currentColor}
 .tip-name{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:#fff}
-.tip-org-badge{
+.tip-type-badge{
   display:inline-flex;align-items:center;gap:4px;
   margin-top:4px;padding:2px 7px;
   border-radius:2px;font-size:7px;letter-spacing:2px;
-  background:rgba(255,159,0,.12);border:1px solid rgba(255,159,0,.3);
-  color:#ff9f00;text-shadow:0 0 6px rgba(255,159,0,.6);
 }
+.badge-personal{background:rgba(0,242,255,.1);border:1px solid rgba(0,242,255,.3);color:#00f2ff;text-shadow:0 0 6px rgba(0,242,255,.6)}
+.badge-forked{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:#a855f7;text-shadow:0 0 6px rgba(168,85,247,.6)}
+.badge-org{background:rgba(255,159,0,.12);border:1px solid rgba(255,159,0,.3);color:#ff9f00;text-shadow:0 0 6px rgba(255,159,0,.6)}
 .tip-body{padding:10px 16px 12px}
 .tip-num{font-family:'Orbitron',monospace;font-size:28px;line-height:1}
 .tip-lbl{font-size:7px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:8px}
@@ -121,6 +124,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
 .tip-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
 .tip-desc{font-size:8px;color:rgba(255,255,255,.35);line-height:1.6;margin:6px 0;max-width:220px}
 .tip-meta{font-size:8px;letter-spacing:1.5px;color:rgba(255,215,0,.6);margin-top:4px}
+.tip-parent{font-size:7px;letter-spacing:1.5px;color:rgba(168,85,247,.6);margin-top:3px}
 .tip-cta{font-size:7px;letter-spacing:2px;color:rgba(0,242,255,.4);margin-top:8px;padding-top:7px;border-top:1px solid rgba(0,242,255,.06)}
 
 /* BOTTOM BAR */
@@ -133,6 +137,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   color:rgba(0,242,255,.65);pointer-events:none;z-index:30;
   text-shadow:0 0 8px rgba(0,242,255,.3);
 }
+
+/* FILTER BUTTONS */
+#filter-bar{
+  position:fixed;bottom:42px;left:50%;transform:translateX(-50%);
+  z-index:35;display:none;gap:8px;
+  font-family:'Share Tech Mono',monospace;pointer-events:all;
+}
+.fbtn{
+  font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;
+  padding:5px 12px;border-radius:2px;cursor:pointer;transition:all .2s;
+  border:1px solid rgba(0,242,255,.3);background:rgba(0,0,0,.7);color:rgba(0,242,255,.6);
+}
+.fbtn:hover{background:rgba(0,242,255,.1);color:#00f2ff}
+.fbtn.active{background:rgba(0,242,255,.15);color:#00f2ff;border-color:#00f2ff;box-shadow:0 0 8px rgba(0,242,255,.3)}
+.fbtn.f-fork.active{background:rgba(168,85,247,.15);color:#a855f7;border-color:#a855f7;box-shadow:0 0 8px rgba(168,85,247,.3)}
+.fbtn.f-org.active{background:rgba(255,159,0,.15);color:#ff9f00;border-color:#ff9f00;box-shadow:0 0 8px rgba(255,159,0,.3)}
 
 #apistatus{
   position:fixed;top:66px;right:22px;z-index:50;display:none;
@@ -171,7 +191,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
     <div class="ld-dot"></div>
   </div>
   <div id="ld-title">GIT CITY</div>
-  <div id="ld-sub">JEEVAN9898 · SCANNING REPOSITORIES</div>
+  <div id="ld-sub">JEEVAN9898 · SCANNING ALL REPOSITORIES</div>
   <div class="ld-bar"><div id="ld-prog"></div></div>
   <div id="ld-msg">INITIALISING...</div>
 </div>
@@ -183,7 +203,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
     <div class="intro-name">◈ JEEVAN YADAV</div>
     <div class="intro-sub">FULL STACK · BLOCKCHAIN · WEB3 · B.TECH CSE 2028</div>
     <div class="scroll-cta">
-      <div class="scroll-cta-text">SCROLL DOWN TO SEE THE BUILDINGS</div>
+      <div class="scroll-cta-text">SCROLL DOWN TO ENTER THE CITY</div>
       <div class="chev"></div>
       <div class="chev"></div>
     </div>
@@ -201,16 +221,26 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   </div>
   <div class="hud-stats">
     <div class="hstat"><div class="hval" id="hv-b">—</div><div class="hlbl">REPOS</div></div>
+    <div class="hstat"><div class="hval" id="hv-f">—</div><div class="hlbl">FORKS</div></div>
     <div class="hstat"><div class="hval" id="hv-o">—</div><div class="hlbl">ORGS</div></div>
     <div class="hstat"><div class="hval" id="hv-c">—</div><div class="hlbl">COMMITS</div></div>
     <div class="hstat"><div class="hval" id="hv-s">—</div><div class="hlbl">STARS</div></div>
   </div>
 </div>
 
-<!-- Org Legend -->
+<!-- Legend -->
 <div id="org-legend">
-  <div class="org-legend-row"><div class="org-legend-dot org-personal-dot"></div>PERSONAL REPO</div>
-  <div class="org-legend-row"><div class="org-legend-dot org-org-dot"></div>ORGANISATION REPO</div>
+  <div class="org-legend-row"><div class="org-legend-dot dot-personal"></div>PERSONAL REPO</div>
+  <div class="org-legend-row"><div class="org-legend-dot dot-forked"></div>FORKED REPO</div>
+  <div class="org-legend-row"><div class="org-legend-dot dot-org"></div>ORGANISATION REPO</div>
+</div>
+
+<!-- Filter Bar -->
+<div id="filter-bar">
+  <button class="fbtn active" data-filter="all">◈ ALL</button>
+  <button class="fbtn" data-filter="personal">◈ PERSONAL</button>
+  <button class="fbtn f-fork" data-filter="forked">⑂ FORKED</button>
+  <button class="fbtn f-org" data-filter="org">◈ ORGS</button>
 </div>
 
 <div id="apistatus"></div>
@@ -219,13 +249,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;cursor:none}
   <div class="tip-head">
     <div class="tip-accent-bar" id="tip-bar"></div>
     <div class="tip-name" id="tip-name"></div>
-    <div id="tip-org-badge" class="tip-org-badge" style="display:none">◈ ORG: <span id="tip-org-name"></span></div>
+    <div id="tip-type-badge" class="tip-type-badge"></div>
   </div>
   <div class="tip-body">
     <div class="tip-num" id="tip-commits"></div>
     <div class="tip-lbl">TOTAL COMMITS</div>
     <div class="tip-row"><div class="tip-dot" id="tip-dot"></div><span id="tip-lang"></span></div>
     <div class="tip-desc" id="tip-desc"></div>
+    <div class="tip-parent" id="tip-parent" style="display:none"></div>
     <div class="tip-meta" id="tip-meta"></div>
     <div class="tip-cta">▶ CLICK TO OPEN ON GITHUB</div>
   </div>
@@ -293,11 +324,12 @@ function dismissIntro() {
   el.style.opacity = '0';
   el.style.pointerEvents = 'none';
   setTimeout(() => { el.style.display = 'none'; }, 1500);
-  document.getElementById('c').style.display         = 'block';
-  document.getElementById('hud').style.display       = 'flex';
-  document.getElementById('bbar').style.display      = 'flex';
-  document.getElementById('scanlines').style.display = 'block';
-  document.getElementById('vignette').style.display  = 'block';
+  document.getElementById('c').style.display          = 'block';
+  document.getElementById('hud').style.display        = 'flex';
+  document.getElementById('bbar').style.display       = 'flex';
+  document.getElementById('filter-bar').style.display = 'flex';
+  document.getElementById('scanlines').style.display  = 'block';
+  document.getElementById('vignette').style.display   = 'block';
   document.getElementById('org-legend').style.display = 'flex';
 }
 window.addEventListener('wheel',      () => { if (!introDone) dismissIntro(); }, {passive:true});
@@ -315,8 +347,12 @@ const LANG_PAL = {
   Markdown:'#083fa1', Vue:'#41b883', Svelte:'#ff3e00', default:'#00f2ff'
 };
 
-// Org repos use a warm amber tint overlay to stand out in the city
-const ORG_TINT = new THREE.Color('#ff9f00');
+// Repo type accent colors
+const TYPE_COLORS = {
+  personal: '#00f2ff',
+  forked:   '#a855f7',
+  org:      '#ff9f00'
+};
 
 // ── LOADER HELPER ─────────────────────────────────
 function setLoad(pct, msg) {
@@ -359,7 +395,7 @@ async function fetchOrgRepos(orgName) {
     );
     if (!r.ok) return [];
     const repos = await r.json();
-    return Array.isArray(repos) ? repos : [];
+    return Array.isArray(repos) ? repos.map(rp => ({...rp, _orgName: orgName})) : [];
   } catch { return []; }
 }
 
@@ -374,58 +410,73 @@ async function fetchData() {
   } catch {}
   if (remaining < 5) throw new Error('Rate limit exhausted');
 
-  // ── 1. Personal repos ──────────────────────────
-  setLoad(10, 'FETCHING PERSONAL REPOS...');
-  const rPersonal = await fetch(
-    `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed&type=owner`,
-    GH_HEADERS
-  );
-  if (!rPersonal.ok) throw new Error('Repos fetch failed: ' + rPersonal.status);
-  const rawPersonal = await rPersonal.json();
-  if (!Array.isArray(rawPersonal)) throw new Error('No personal repos found');
+  // ── 1. ALL personal repos (including forks) ──────
+  setLoad(10, 'FETCHING ALL PERSONAL REPOS (INCL. FORKS)...');
+  
+  // Fetch page by page to get everything
+  let allPersonal = [];
+  let page = 1;
+  while (true) {
+    const r = await fetch(
+      `https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed&type=all&page=${page}`,
+      GH_HEADERS
+    );
+    if (!r.ok) break;
+    const batch = await r.json();
+    if (!Array.isArray(batch) || batch.length === 0) break;
+    allPersonal = allPersonal.concat(batch);
+    if (batch.length < 100) break;
+    page++;
+  }
 
-  setLoad(22, `${rawPersonal.length} PERSONAL REPOS — FETCHING ORGANISATIONS...`);
+  setLoad(25, `${allPersonal.length} PERSONAL/FORKED REPOS FOUND — FETCHING ORGS...`);
 
-  // ── 2. Organisations ──────────────────────────
+  // ── 2. Organisations ─────────────────────────────
   const orgs = await fetchUserOrgs();
-  setLoad(28, orgs.length > 0
-    ? `FOUND ${orgs.length} ORG(S): ${orgs.slice(0,3).join(', ')}...`
+  setLoad(32, orgs.length > 0
+    ? `FOUND ${orgs.length} ORG(S): ${orgs.slice(0,4).join(', ')}`
     : 'NO PUBLIC ORGANISATIONS FOUND');
 
   // Fetch org repos in parallel
   let rawOrgRepos = [];
   if (orgs.length > 0) {
     const orgFetches = await Promise.all(orgs.map(o => fetchOrgRepos(o)));
-    orgFetches.forEach((repos, idx) => {
-      repos.forEach(r => {
-        rawOrgRepos.push({ ...r, _orgName: orgs[idx] });
-      });
-    });
+    orgFetches.forEach(repos => { rawOrgRepos = rawOrgRepos.concat(repos); });
   }
-  setLoad(36, `${rawOrgRepos.length} ORG REPO(S) FETCHED — MERGING...`);
+  setLoad(40, `${rawOrgRepos.length} ORG REPO(S) FETCHED — MERGING...`);
 
-  // ── 3. Deduplicate: org repo overrides personal if same name ─
-  const seenNames = new Set();
-  const allRaw = [];
-  // Org repos first (they carry richer context if duplicated)
-  for (const r of rawOrgRepos) {
-    const key = r.full_name || r.name;
-    if (!seenNames.has(key)) { seenNames.add(key); allRaw.push(r); }
+  // ── 3. Merge — tag each repo by type ──────────────
+  const seenIds = new Set();
+  const allRaw  = [];
+
+  // Org repos first
+  for (const rp of rawOrgRepos) {
+    if (!seenIds.has(rp.id)) {
+      seenIds.add(rp.id);
+      allRaw.push({ ...rp, _type: 'org' });
+    }
   }
-  for (const r of rawPersonal) {
-    const key = r.full_name || r.name;
-    if (!seenNames.has(key)) { seenNames.add(key); allRaw.push(r); }
+  // Personal/forked repos
+  for (const rp of allPersonal) {
+    if (!seenIds.has(rp.id)) {
+      seenIds.add(rp.id);
+      allRaw.push({ ...rp, _type: rp.fork ? 'forked' : 'personal' });
+    }
   }
 
-  setLoad(40, `TOTAL ${allRaw.length} REPOS — COUNTING COMMITS...`);
+  setLoad(42, `TOTAL ${allRaw.length} REPOS — COUNTING COMMITS...`);
 
   const budget = Math.min(allRaw.length, Math.max(0, remaining - 8));
   const out    = [];
 
   for (let i = 0; i < allRaw.length; i++) {
-    const rp          = allRaw[i];
-    const isOrg       = !!rp._orgName;
-    const fullName    = rp.full_name || `${isOrg ? rp._orgName : USERNAME}/${rp.name}`;
+    const rp       = allRaw[i];
+    const type     = rp._type || 'personal';
+    const isOrg    = type === 'org';
+    const isForked = type === 'forked';
+    const orgName  = rp._orgName || null;
+    const fullName = rp.full_name || `${isOrg ? orgName : USERNAME}/${rp.name}`;
+
     const commitCount = (i < budget)
       ? await getCommitCount(fullName)
       : Math.max(1, Math.round((rp.size || 5) * 0.35));
@@ -439,11 +490,15 @@ async function fetchData() {
       forks_count:      rp.forks_count || 0,
       description:      rp.description || '',
       html_url:         rp.html_url,
+      type,
       isOrg,
-      orgName:          rp._orgName || null,
+      isForked,
+      orgName,
+      parentRepo:       rp.parent ? rp.parent.full_name : null,
     });
-    setLoad(40 + (i / allRaw.length) * 45,
-      `[${i+1}/${allRaw.length}] ${(isOrg ? `[${rp._orgName}] ` : '') + rp.name.substring(0,18).toUpperCase()}`);
+
+    setLoad(42 + (i / allRaw.length) * 44,
+      `[${i+1}/${allRaw.length}] [${type.toUpperCase()}] ${rp.name.substring(0,18).toUpperCase()}`);
   }
 
   out.sort((a, b) => b.commitCount - a.commitCount);
@@ -452,17 +507,17 @@ async function fetchData() {
 }
 
 const FALLBACK = [
-  {name:'DSA-Practice',   commitCount:60, language:'C++',        stargazers_count:0, forks_count:0, description:'Data Structures & Algorithms — arrays, trees, recursion, linked lists.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
-  {name:'BlockChain',     commitCount:48, language:'Solidity',   stargazers_count:1, forks_count:0, description:'Full-stack DApp with Solidity, React & Web3.js.', html_url:'https://github.com/Jeevan9898/BlockChain', isOrg:false, orgName:null},
-  {name:'Space-Portfolio',commitCount:35, language:'JavaScript', stargazers_count:0, forks_count:0, description:'3D space-themed portfolio with Three.js and GSAP.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
-  {name:'Jeevan9898',     commitCount:22, language:'Markdown',   stargazers_count:0, forks_count:0, description:'GitHub profile README.', html_url:'https://github.com/Jeevan9898/Jeevan9898', isOrg:false, orgName:null},
-  {name:'Greeter-DApp',   commitCount:18, language:'Solidity',   stargazers_count:0, forks_count:0, description:'Decentralized Greeter App — Solidity + React + Web3.js.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
-  {name:'Python-OOP',     commitCount:14, language:'Python',     stargazers_count:0, forks_count:0, description:'Python OOP fundamentals.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
-  {name:'B_Projects',     commitCount:12, language:'JavaScript', stargazers_count:0, forks_count:0, description:'React + Smart Contract projects.', html_url:'https://github.com/Jeevan9898', isOrg:false, orgName:null},
+  {name:'DSA-Practice',    commitCount:60, language:'C++',        stargazers_count:0,forks_count:0,description:'DSA — arrays, trees, recursion.',html_url:'https://github.com/Jeevan9898',type:'personal',isOrg:false,isForked:false,orgName:null,parentRepo:null},
+  {name:'BlockChain',      commitCount:48, language:'Solidity',   stargazers_count:1,forks_count:0,description:'Full-stack DApp with Solidity & React.',html_url:'https://github.com/Jeevan9898/BlockChain',type:'personal',isOrg:false,isForked:false,orgName:null,parentRepo:null},
+  {name:'Space-Portfolio', commitCount:35, language:'JavaScript', stargazers_count:0,forks_count:0,description:'3D space-themed portfolio.',html_url:'https://github.com/Jeevan9898',type:'personal',isOrg:false,isForked:false,orgName:null,parentRepo:null},
+  {name:'three.js',        commitCount:28, language:'JavaScript', stargazers_count:0,forks_count:0,description:'Forked: three.js library.',html_url:'https://github.com/Jeevan9898',type:'forked',isOrg:false,isForked:true,orgName:null,parentRepo:'mrdoob/three.js'},
+  {name:'Jeevan9898',      commitCount:22, language:'Markdown',   stargazers_count:0,forks_count:0,description:'GitHub profile README.',html_url:'https://github.com/Jeevan9898/Jeevan9898',type:'personal',isOrg:false,isForked:false,orgName:null,parentRepo:null},
+  {name:'Greeter-DApp',    commitCount:18, language:'Solidity',   stargazers_count:0,forks_count:0,description:'Decentralized Greeter App.',html_url:'https://github.com/Jeevan9898',type:'org',isOrg:true,isForked:false,orgName:'DemoOrg',parentRepo:null},
+  {name:'Python-OOP',      commitCount:14, language:'Python',     stargazers_count:0,forks_count:0,description:'Python OOP fundamentals.',html_url:'https://github.com/Jeevan9898',type:'personal',isOrg:false,isForked:false,orgName:null,parentRepo:null},
 ];
 
 // ── WINDOW TEXTURE ────────────────────────────────
-function makeWinTex(color, cols, rows, density, isOrg) {
+function makeWinTex(color, cols, rows, density, type) {
   const S=12, cv=document.createElement('canvas');
   cv.width=cols*S; cv.height=rows*S;
   const ctx=cv.getContext('2d');
@@ -470,9 +525,11 @@ function makeWinTex(color, cols, rows, density, isOrg) {
   for (let r=0;r<rows;r++) for (let c=0;c<cols;c++) {
     if (Math.random()<density) {
       ctx.globalAlpha=.4+Math.random()*.55;
-      // Org repos get a warm amber tint on some windows
-      const useAmber = isOrg && Math.random() > .55;
-      ctx.fillStyle = useAmber ? '#ff9f00' : (Math.random()>.65?'#ffc84a':color);
+      let winColor = color;
+      if (type === 'forked' && Math.random() > .6) winColor = '#c084fc';
+      else if (type === 'org' && Math.random() > .55) winColor = '#ffc040';
+      else if (Math.random() > .65) winColor = '#ffc84a';
+      ctx.fillStyle = winColor;
       ctx.fillRect(c*S+1,r*S+1,S-2,S-2);
     }
   }
@@ -484,12 +541,10 @@ function makeWinTex(color, cols, rows, density, isOrg) {
 
 // ── BUILD BUILDING ────────────────────────────────
 function makeBuilding(scene, repo, cx, cz, maxC) {
-  const isOrg  = !!repo.isOrg;
+  const type   = repo.type || 'personal';
   const color  = LANG_PAL[repo.language] || LANG_PAL.default;
   const col3   = new THREE.Color(color);
-
-  // Org buildings get a warm amber ground ring and slight emissive warmth
-  const orgRingCol = new THREE.Color(0xff9f00);
+  const typeCol = new THREE.Color(TYPE_COLORS[type] || TYPE_COLORS.personal);
 
   const logR  = Math.log(repo.commitCount+1) / Math.log(maxC+1);
   const floors = Math.max(4, Math.round(4 + logR*68));
@@ -498,17 +553,29 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
   const grp = new THREE.Group();
   grp.position.set(cx, 0, cz);
 
-  // ── Org: amber ground ring ──
-  if (isOrg) {
-    const ringGeo = new THREE.RingGeometry(fw*.7, fw*.9, 32);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: orgRingCol, transparent: true, opacity: .55,
-      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = -Math.PI / 2;
-    ring.position.y = 0.04;
-    grp.add(ring);
+  // Ground ring — color by type
+  const ringGeo = new THREE.RingGeometry(fw*.7, fw*.95, 32);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: typeCol, transparent: true, opacity: type==='personal'?.25:.5,
+    side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = 0.04;
+  grp.add(ring);
+
+  // Forked: add a secondary inner ring for "forked" visual marker
+  if (type === 'forked') {
+    const innerRing = new THREE.Mesh(
+      new THREE.RingGeometry(fw*.2, fw*.35, 32),
+      new THREE.MeshBasicMaterial({
+        color: typeCol, transparent:true, opacity:.45,
+        side:THREE.DoubleSide, blending:THREE.AdditiveBlending, depthWrite:false
+      })
+    );
+    innerRing.rotation.x = -Math.PI/2;
+    innerRing.position.y = 0.05;
+    grp.add(innerRing);
   }
 
   const tiers = [
@@ -516,20 +583,21 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     {y0:Math.floor(floors*.5), y1:Math.floor(floors*.78), w:Math.max(2,fw-1)},
     {y0:Math.floor(floors*.78),y1:floors,                 w:Math.max(2,fw-2)},
   ];
+
   tiers.forEach(({y0,y1,w}) => {
     if (y0>=y1) return;
     const h   = y1-y0;
-    const wt  = makeWinTex(color, w*2, h*2, .28+logR*.35, isOrg);
+    const wt  = makeWinTex(color, w*2, h*2, .28+logR*.35, type);
 
-    // Org buildings: slightly warm emissive
-    const emissiveColor = isOrg
-      ? col3.clone().lerp(orgRingCol, .18)
-      : col3.clone();
+    // Emissive tint depends on type
+    let emissiveColor = col3.clone();
+    if (type === 'forked') emissiveColor = col3.clone().lerp(typeCol, .22);
+    if (type === 'org')    emissiveColor = col3.clone().lerp(typeCol, .18);
 
     const sM = new THREE.MeshLambertMaterial({
       color:col3.clone().multiplyScalar(.1),
       map:wt, emissiveMap:wt, emissive:emissiveColor,
-      emissiveIntensity: isOrg ? .55+logR*.45 : .4+logR*.4
+      emissiveIntensity: .4+logR*.4
     });
     const geo  = new THREE.BoxGeometry(w,h,w);
     const mesh = new THREE.Mesh(geo, [sM,sM,
@@ -539,20 +607,28 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     mesh.castShadow = mesh.receiveShadow = true;
     grp.add(mesh);
 
-    const edgeColor = isOrg
-      ? orgRingCol.clone().multiplyScalar(1.4)
-      : col3.clone().multiplyScalar(1.6);
+    const edgeCol = typeCol.clone().multiplyScalar(1.5);
     const eL = new THREE.LineSegments(new THREE.EdgesGeometry(geo),
-      new THREE.LineBasicMaterial({color:edgeColor,transparent:true,opacity: isOrg ? .35 : .22}));
+      new THREE.LineBasicMaterial({color:edgeCol,transparent:true,opacity:type==='personal'?.18:.3}));
     eL.position.copy(mesh.position); grp.add(eL);
   });
 
   // Roof cap
   const capW  = Math.max(1, fw-2);
-  const capCol = isOrg ? orgRingCol.clone().lerp(col3, .4) : col3;
   const cap = new THREE.Mesh(new THREE.BoxGeometry(capW+.1,.12,capW+.1),
-    new THREE.MeshBasicMaterial({color:capCol,transparent:true,opacity:.8}));
+    new THREE.MeshBasicMaterial({color:typeCol.clone().lerp(col3,.5),transparent:true,opacity:.8}));
   cap.position.y = floors+.06; grp.add(cap);
+
+  // Forked: angled "fork" indicator on roof
+  if (type === 'forked' && floors > 10) {
+    const forkPole = new THREE.Mesh(
+      new THREE.CylinderGeometry(.06,.06,2.5,4),
+      new THREE.MeshBasicMaterial({color:typeCol,transparent:true,opacity:.7})
+    );
+    forkPole.position.y = floors + 1.3;
+    forkPole.rotation.z = 0.25;
+    grp.add(forkPole);
+  }
 
   // Spire + beacon
   if (floors > 18) {
@@ -560,7 +636,7 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     const sp = new THREE.Mesh(new THREE.CylinderGeometry(.04,.12,spH,6),
       new THREE.MeshLambertMaterial({color:0x112233}));
     sp.position.y = floors+spH/2; grp.add(sp);
-    const beaconCol = isOrg ? orgRingCol.clone() : col3.clone();
+    const beaconCol = typeCol.clone();
     const bMat = new THREE.MeshBasicMaterial({color:beaconCol});
     const beacon = new THREE.Mesh(new THREE.BoxGeometry(.34,.34,.34), bMat);
     beacon.position.y = floors+spH+.25;
@@ -568,11 +644,10 @@ function makeBuilding(scene, repo, cx, cz, maxC) {
     grp.add(beacon);
   }
 
-  const lightCol = isOrg ? orgRingCol.clone().lerp(col3,.5) : col3;
-  const pl = new THREE.PointLight(lightCol, .58+logR*.65, floors*2.6, 2);
+  const pl = new THREE.PointLight(typeCol.clone().lerp(col3,.5), .55+logR*.6, floors*2.6, 2);
   pl.position.y = floors+1; grp.add(pl);
 
-  grp.userData = {...repo, _color:color, _isBuilding:true};
+  grp.userData = {...repo, _color:color, _typeColor:TYPE_COLORS[type], _isBuilding:true};
   scene.add(grp);
   return grp;
 }
@@ -593,7 +668,8 @@ function buildSpace(scene) {
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
     const mat = new THREE.PointsMaterial({color:0xffffff,size:sz,sizeAttenuation:true,
       transparent:true,opacity:.85,blending:THREE.AdditiveBlending,depthWrite:false});
-    scene.add(new THREE.Points(geo,mat)); starObjs.push(new THREE.Points(geo,mat));
+    const pts = new THREE.Points(geo,mat);
+    scene.add(pts); starObjs.push(pts);
   });
 
   const mCv=document.createElement('canvas'); mCv.width=mCv.height=128;
@@ -626,8 +702,8 @@ function buildSpace(scene) {
 
   const TRAIL=22, shooters=[];
   function spawnShooter(){
-    const sx=(Math.random()-.5)*500, sy=65+Math.random()*160, sz=(Math.random()-.5)*500;
-    const ang=Math.random()*Math.PI*2, spd=7+Math.random()*9;
+    const sx=(Math.random()-.5)*500,sy=65+Math.random()*160,sz=(Math.random()-.5)*500;
+    const ang=Math.random()*Math.PI*2,spd=7+Math.random()*9;
     const trail=Array.from({length:TRAIL},()=>({x:sx,y:sy,z:sz}));
     const pos=new Float32Array(TRAIL*3);
     const geo=new THREE.BufferGeometry();
@@ -645,9 +721,7 @@ function buildSpace(scene) {
   }
   for(let i=0;i<3;i++){const s=spawnShooter();s.life=Math.random()*s.maxLife;shooters.push(s);}
 
-  let sf=0;
   function updateSpace(){
-    sf++;
     starObjs.forEach((s,i)=>{ s.rotation.y+=.000022*(i+1); });
     if(Math.random()<.007&&shooters.filter(s=>!s._dead).length<5) shooters.push(spawnShooter());
     for(let i=shooters.length-1;i>=0;i--){
@@ -671,31 +745,58 @@ function buildSpace(scene) {
 // ── TOOLTIP ───────────────────────────────────────
 const tip = document.getElementById('tip');
 let hoveredGroup = null;
-function showTip(r, x, y) {
-  const sc = r._color || '#00f2ff';
-  document.getElementById('tip-bar').style.cssText = `background:${sc};box-shadow:0 0 10px ${sc}`;
-  document.getElementById('tip-name').textContent  = r.name.toUpperCase();
 
-  // Org badge
-  const badge = document.getElementById('tip-org-badge');
-  if (r.isOrg && r.orgName) {
-    document.getElementById('tip-org-name').textContent = r.orgName.toUpperCase();
-    badge.style.display = 'inline-flex';
+function showTip(r, x, y) {
+  const sc    = r._color || '#00f2ff';
+  const typeC = r._typeColor || '#00f2ff';
+  const type  = r.type || 'personal';
+
+  document.getElementById('tip-bar').style.cssText =
+    `background:${typeC};box-shadow:0 0 10px ${typeC}`;
+  document.getElementById('tip-name').textContent = r.name.toUpperCase();
+
+  // Type badge
+  const badge = document.getElementById('tip-type-badge');
+  badge.className = 'tip-type-badge';
+  if (type === 'org') {
+    badge.classList.add('badge-org');
+    badge.textContent = `◈ ORG: ${(r.orgName||'').toUpperCase()}`;
+  } else if (type === 'forked') {
+    badge.classList.add('badge-forked');
+    badge.textContent = '⑂ FORKED REPO';
   } else {
-    badge.style.display = 'none';
+    badge.classList.add('badge-personal');
+    badge.textContent = '◈ PERSONAL REPO';
   }
 
   const nc = document.getElementById('tip-commits');
   nc.textContent = r.commitCount.toLocaleString();
   nc.style.cssText = `color:${sc};text-shadow:0 0 16px ${sc};font-family:Orbitron,monospace;font-size:28px;line-height:1`;
-  document.getElementById('tip-dot').style.cssText = `background:${sc};box-shadow:0 0 5px ${sc};width:8px;height:8px;border-radius:1px;flex-shrink:0`;
-  document.getElementById('tip-lang').textContent  = (r.language || 'UNKNOWN').toUpperCase();
-  document.getElementById('tip-lang').style.color  = sc;
-  document.getElementById('tip-desc').textContent  = r.description || 'No description.';
-  document.getElementById('tip-meta').textContent  = `★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
-  tip.style.borderColor = sc+'28'; tip.style.display = 'block';
-  moveTip(x, y); curEl.classList.add('hover');
+
+  document.getElementById('tip-dot').style.cssText =
+    `background:${sc};box-shadow:0 0 5px ${sc};width:8px;height:8px;border-radius:1px;flex-shrink:0`;
+  document.getElementById('tip-lang').textContent = (r.language || 'UNKNOWN').toUpperCase();
+  document.getElementById('tip-lang').style.color = sc;
+  document.getElementById('tip-desc').textContent = r.description || 'No description.';
+
+  // Parent repo for forks
+  const parentEl = document.getElementById('tip-parent');
+  if (r.isForked && r.parentRepo) {
+    parentEl.textContent = `⑂ FORKED FROM: ${r.parentRepo}`;
+    parentEl.style.display = 'block';
+  } else {
+    parentEl.style.display = 'none';
+  }
+
+  document.getElementById('tip-meta').textContent =
+    `★ ${r.stargazers_count||0} STARS  ·  ⑂ ${r.forks_count||0} FORKS`;
+
+  tip.style.borderColor = typeC + '28';
+  tip.style.display = 'block';
+  moveTip(x, y);
+  curEl.classList.add('hover');
 }
+
 function moveTip(x, y) {
   const pw=tip.offsetWidth||235, ph=tip.offsetHeight||200, pad=14;
   tip.style.left = (x+22+pw>window.innerWidth-pad ? x-pw-12 : x+22)+'px';
@@ -709,7 +810,7 @@ async function main() {
   try {
     const result = await fetchData();
     repos = result.repos; orgs = result.orgs; fromAPI = true;
-    console.log(`GitHub API OK: ${repos.length} repos (${orgs.length} org(s): ${orgs.join(', ')})`);
+    console.log(`GitHub API OK: ${repos.length} repos (${orgs.length} org(s))`);
   } catch(e) {
     setLoad(84, 'DEMO DATA — ' + e.message.substring(0,28));
     console.warn('API failed, using fallback:', e.message);
@@ -717,27 +818,28 @@ async function main() {
   }
   if (!repos || repos.length === 0) repos = FALLBACK;
 
-  const totC   = repos.reduce((s,r) => s + r.commitCount, 0);
-  const totS   = repos.reduce((s,r) => s + (r.stargazers_count||0), 0);
-  const orgCnt = repos.filter(r => r.isOrg).length;
+  const totC     = repos.reduce((s,r) => s + r.commitCount, 0);
+  const totS     = repos.reduce((s,r) => s + (r.stargazers_count||0), 0);
+  const forkCnt  = repos.filter(r => r.type === 'forked').length;
+  const orgCnt   = repos.filter(r => r.type === 'org').length;
 
   document.getElementById('hv-b').textContent = repos.length;
-  document.getElementById('hv-o').textContent = orgs.length || (orgCnt > 0 ? '?' : 0);
+  document.getElementById('hv-f').textContent = forkCnt;
+  document.getElementById('hv-o').textContent = orgs.length || (orgCnt > 0 ? orgCnt : 0);
   document.getElementById('hv-c').textContent = totC.toLocaleString();
   document.getElementById('hv-s').textContent = totS;
 
   // API badge
   const apiEl = document.getElementById('apistatus');
-  const orgMsg = orgs.length > 0 ? ` · ${orgs.length} ORG(S)` : '';
   apiEl.textContent  = fromAPI
-    ? `✓ LIVE DATA · ${repos.length} REPOS${orgMsg}`
+    ? `✓ LIVE DATA · ${repos.length} REPOS · ${forkCnt} FORKS · ${orgs.length} ORGS`
     : '⚠ DEMO MODE · API RATE LIMITED';
   apiEl.style.color       = fromAPI ? 'rgba(0,255,110,.75)' : 'rgba(255,200,0,.75)';
-  apiEl.style.borderColor = fromAPI ? 'rgba(0,255,110,.3)' : 'rgba(255,200,0,.3)';
+  apiEl.style.borderColor = fromAPI ? 'rgba(0,255,110,.3)'  : 'rgba(255,200,0,.3)';
   apiEl.style.display = 'block';
   setTimeout(() => { apiEl.style.opacity = '1'; }, 1600);
-  setTimeout(() => { apiEl.style.opacity = '0'; }, 7000);
-  setTimeout(() => { apiEl.style.display = 'none'; }, 8000);
+  setTimeout(() => { apiEl.style.opacity = '0'; }, 8000);
+  setTimeout(() => { apiEl.style.display = 'none'; }, 9000);
 
   setLoad(90, 'BUILDING CITY...');
 
@@ -771,10 +873,12 @@ async function main() {
   const groups = [];
   repos.forEach((repo, i) => {
     const col = i % COLS, row = Math.floor(i / COLS);
-    groups.push(makeBuilding(scene, repo,
+    const grp = makeBuilding(scene, repo,
       (col-(COLS-1)/2)*SP,
       (row-(Math.ceil(repos.length/COLS)-1)/2)*SP,
-      maxC));
+      maxC);
+    grp.userData._idx = i;
+    groups.push(grp);
   });
 
   setLoad(100, 'ENTERING GIT CITY ◈');
@@ -783,6 +887,29 @@ async function main() {
     ld.style.opacity = '0';
     setTimeout(() => { ld.style.display = 'none'; }, 800);
   }, 350);
+
+  // ── FILTER BUTTONS ──────────────────────────────
+  let activeFilter = 'all';
+  document.querySelectorAll('.fbtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      groups.forEach(g => {
+        const t = g.userData.type || 'personal';
+        if (activeFilter === 'all') {
+          g.visible = true;
+        } else if (activeFilter === 'personal') {
+          g.visible = t === 'personal';
+        } else if (activeFilter === 'forked') {
+          g.visible = t === 'forked';
+        } else if (activeFilter === 'org') {
+          g.visible = t === 'org';
+        }
+      });
+      hideTip();
+    });
+  });
 
   // CAMERA ORBIT STATE
   let theta=0.4, phi=0.88, radius=110;
@@ -843,7 +970,11 @@ async function main() {
       new THREE.Vector2((e.clientX/window.innerWidth)*2-1, -(e.clientY/window.innerHeight)*2+1),
       camera
     );
-    const hits = raycaster.intersectObjects(allMeshes);
+    const visibleMeshes = allMeshes.filter(m => {
+      let g = m; while(g && !g.userData._isBuilding) g=g.parent;
+      return g && g.visible;
+    });
+    const hits = raycaster.intersectObjects(visibleMeshes);
     if(hits.length){
       let g = hits[0].object;
       while(g && !g.userData._isBuilding) g = g.parent;
