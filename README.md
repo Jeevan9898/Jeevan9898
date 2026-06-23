@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=200&section=header&text=Jeevan%20Yadav&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=Full%20Stack%20Developer%20%C2%B7%20Blockchain%20%C2%B7%20Web3&descAlignY=58&descSize=20" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=200&section=header&text=Jeevan%20Yadav&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=MERN%20Stack%20Developer%20%C2%B7%20Blockchain%20%C2%B7%20Web3&descAlignY=58&descSize=20" />
 
 ![Profile Views](https://komarev.com/ghpvc/?username=Jeevan9898&color=6c63ff&style=for-the-badge&label=PROFILE+VIEWS)
 [![Open to Work](https://img.shields.io/badge/🟢%20OPEN%20TO%20WORK-Available-success?style=for-the-badge)](https://jeevanyadavportfolio.vercel.app)
