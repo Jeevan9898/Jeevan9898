@@ -12,13 +12,13 @@
 ## 👨‍💻 About Me
 ```yaml
 Name     : Jeevan Yadav
-Role     : Full Stack Developer | Blockchain Engineer | Web3 Builder
+Role     : MERN Stack Developer | Blockchain Engineer | Web3 Builder
 Education: B.Tech Computer Science 
 Focus    : Decentralized Systems · Smart Contracts · Modern Web
 Status   : Open to Work · OSS Contributor · Web3 Dev
 ```
 
-I'm a **Full Stack Developer** with a deep focus on **Blockchain**, **Web3**, and scalable web applications. I enjoy building real-world decentralized systems — from smart contracts on Ethereum to full-stack DApps with modern frontend tooling.
+I'm a **MERN Stack Developer** with a deep focus on **Blockchain**, **Web3**, and scalable web applications. I enjoy building real-world decentralized systems — from smart contracts on Ethereum to full-stack DApps with modern frontend tooling.
 
 - 🔗 Developing smart contracts and DApps using **Solidity** & **Web3.js**
 - ⚛️ Building responsive, performant UIs with **React** & **JavaScript**
