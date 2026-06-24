@@ -93,7 +93,7 @@ I'm a **MERN Stack Developer** with a deep focus on **Blockchain**, **Web3**, an
 ---
 
 ## 🏙️ My GitHub City
-[**→ Explore my repos in 3D**](https://jeevan-yadav.vercel.app/github-city.html)
+[**→ Explore my repos in 3D**](https://jeevan-yadav.vercel.app/github-village.html)
 
 ---
 
