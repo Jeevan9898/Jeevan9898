@@ -30,13 +30,12 @@
 
 # 💫 About Me
 
-I'm a passionate **Full Stack Developer** specializing in **MERN Stack**, **Blockchain**, and **Web3**.
-
-I enjoy building production-style applications that combine scalable backend architecture with modern frontend experiences and decentralized technologies.
-
-Instead of learning technologies in isolation, I prefer building complete software products—from REST APIs and authentication systems to DeFi protocols and blockchain applications.
-
-I believe the best way to learn software engineering is by building real projects, which is why my GitHub reflects my journey through increasingly complex applications.
+I build complete software products — not tutorial clones. My work spans **decentralized finance protocols**, **production-grade REST APIs**, and **full-stack web applications**, with an emphasis on shipping things that actually run end-to-end: smart contracts deployed and tested, auth systems hardened, dashboards wired to real data.
+ 
+I learn by building. Rather than studying technologies in isolation, I pick a real product idea — a lending protocol, a job board, an NFT marketplace — and build it fully, including the parts that are easy to skip: error handling, access control, gas optimization, and deployment.
+ 
+**What I'm looking for:** opportunities to build production systems — especially where full-stack engineering meets blockchain/DeFi.
+ 
 
 ---
 
@@ -122,7 +121,8 @@ An interactive **3D visualization** of my GitHub repositories, allowing visitors
 
 # 🚀 Featured Projects
 
-> These projects represent some of my strongest work in **Blockchain**, **DeFi**, **MERN Stack**, and **AI**.
+A curated selection from **22+ shipped projects** across DeFi, MERN, and AI. Full list → [View all repositories](https://github.com/Jeevan9898)
+ 
 
 <br>
 
@@ -369,12 +369,12 @@ I've built **22+ major projects** across **Blockchain**, **DeFi**, **MERN Stack*
 
 # 🏆 Achievements
 
-- 🚀 Built **22+ Major Projects** across MERN Stack, Blockchain, and DeFi.
-- ⛓️ Developed decentralized applications including **NFT Marketplace**, **Mini DEX**, **Lending Protocol**, and **Yield Farming Platform**.
-- 🌐 Built scalable backend systems with **Node.js**, **Express.js**, and **MongoDB**.
-- 🔐 Implemented secure authentication using **JWT**, **bcrypt**, and role-based authorization.
-- 🤝 Active Open Source Contributor.
-- 📚 Continuously learning **Artificial Intelligence**, **Machine Learning**, and **System Design**.
+- 🚀 Shipped **22+ major projects** spanning MERN Stack, Blockchain, and DeFi
+- ⛓️ Built decentralized applications including an **NFT Marketplace**, **Mini DEX**, **Lending Protocol**, and **Yield Farming Platform**
+- 🌐 Designed scalable backend systems with **Node.js**, **Express.js**, and **MongoDB**
+- 🔐 Implemented secure authentication using **JWT**, **bcrypt**, and role-based authorization
+- 🤝 Active open-source contributor
+- 📚 Currently deepening skills in **AI/ML** and **System Design**
 
 ---
 
