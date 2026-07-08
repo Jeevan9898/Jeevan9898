@@ -1,18 +1,28 @@
 <div align="center">
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=250&color=0:0f172a,50:2563eb,100:06b6d4&text=Jeevan%20Yadav&fontColor=ffffff&fontSize=60&fontAlignY=38&desc=Full%20Stack%20Developer%20•%20Blockchain%20Engineer%20•%20Web3%20Builder&descAlignY=60&descSize=18"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=280&color=0:020617,30:1E3A8A,70:2563EB,100:06B6D4&text=Jeevan%20Yadav&fontColor=ffffff&fontSize=58&fontAlignY=38&desc=Full%20Stack%20Developer%20•%20Blockchain%20Engineer%20•%20Web3%20Builder&descAlignY=60&descSize=18"/>
 
-<br>
+# 👋 Hello, I'm Jeevan Yadav
 
-[![](https://komarev.com/ghpvc/?username=Jeevan9898&style=for-the-badge&color=blue)](https://github.com/Jeevan9898)
-[![GitHub followers](https://img.shields.io/github/followers/Jeevan9898?style=for-the-badge)](https://github.com/Jeevan9898)
-[![GitHub Stars](https://img.shields.io/github/stars/Jeevan9898?affiliations=OWNER&style=for-the-badge)](https://github.com/Jeevan9898)
+### Building Modern Web Applications • Blockchain Protocols • Decentralized Finance
 
-# 👋 Hi, I'm Jeevan Yadav
+<p>
 
-### 🚀 Full Stack Developer | Blockchain Engineer | MERN Stack Developer | Web3 Builder
+<a href="https://github.com/Jeevan9898">
+<img src="https://img.shields.io/github/followers/Jeevan9898?style=for-the-badge"/>
+</a>
 
-Building scalable web applications, decentralized protocols and modern full-stack solutions.
+<img src="https://komarev.com/ghpvc/?username=Jeevan9898&style=for-the-badge&color=2563EB"/>
+
+<a href="https://jeevan-yadav.vercel.app">
+<img src="https://img.shields.io/badge/Portfolio-Live-2563EB?style=for-the-badge&logo=vercel"/>
+</a>
+
+<a href="https://jeevan-yadav.vercel.app/github-village.html">
+<img src="https://img.shields.io/badge/GitHub_City-Explore-0EA5E9?style=for-the-badge"/>
+</a>
+
+</p>
 
 </div>
 
@@ -20,393 +30,389 @@ Building scalable web applications, decentralized protocols and modern full-stac
 
 # 💫 About Me
 
-I'm a **B.Tech Computer Science** student and passionate **Full Stack Developer** specializing in **MERN Stack**, **Blockchain**, and **Web3** development.
+I'm a passionate **Full Stack Developer** specializing in **MERN Stack**, **Blockchain**, and **Web3**.
 
-Over the past few years, I've focused on building real-world applications instead of just learning concepts. My journey started with web development and gradually expanded into smart contracts, decentralized finance (DeFi), backend architecture, authentication systems, and modern JavaScript ecosystems.
+I enjoy building production-style applications that combine scalable backend architecture with modern frontend experiences and decentralized technologies.
 
-I enjoy solving challenging engineering problems, designing scalable backend systems, and creating decentralized applications that combine usability with blockchain technology.
+Instead of learning technologies in isolation, I prefer building complete software products—from REST APIs and authentication systems to DeFi protocols and blockchain applications.
 
-Currently, I'm expanding my expertise into **Artificial Intelligence**, **System Design**, and advanced software engineering while continuously contributing to personal and open-source projects.
-
----
-
-# 🚀 What I Do
-
-- ⚛️ Build Full Stack MERN Applications
-- ⛓️ Develop Smart Contracts using Solidity
-- 🌐 Create Modern Web3 DApps
-- 💰 Build DeFi Protocols
-- 🔐 Design Secure Authentication Systems
-- ⚡ Develop REST APIs
-- 📦 Build Backend Architectures
-- ☁️ Integrate Cloud Services
-- 🤖 Learn AI & Machine Learning
-- 💻 Practice Data Structures & Algorithms
+I believe the best way to learn software engineering is by building real projects, which is why my GitHub reflects my journey through increasingly complex applications.
 
 ---
 
-# 🛠️ Tech Stack
+## 🌐 My Portfolio
+
+### 🚀 Portfolio
+
+🔗 **https://jeevan-yadav.vercel.app**
+
+Explore my complete portfolio, featured projects, technical skills, and development journey.
+
+---
+
+### 🏙 GitHub City
+
+🔗 **https://jeevan-yadav.vercel.app/github-village.html**
+
+An interactive **3D visualization** of my GitHub repositories, allowing visitors to explore my projects in a unique and engaging way.
+
+---
+
+# 🛠 Tech Stack
 
 ## 💻 Languages
 
-<p align="left">
-
-<img src="https://skillicons.dev/icons?i=js,cpp,html,css,solidity"/>
-
-</p>
-
----
-
-## ⚛️ Frontend
-
-<p>
-
-<img src="https://skillicons.dev/icons?i=react,vite,threejs"/>
-
-</p>
+| Icon | Technology |
+|------|------------|
+| <img src="https://skillicons.dev/icons?i=js" width="22"/> | JavaScript |
+| <img src="https://skillicons.dev/icons?i=cpp" width="22"/> | C++ |
+| <img src="https://skillicons.dev/icons?i=html" width="22"/> | HTML5 |
+| <img src="https://skillicons.dev/icons?i=css" width="22"/> | CSS3 |
+| <img src="https://skillicons.dev/icons?i=solidity" width="22"/> | Solidity |
 
 ---
 
-## ⚙️ Backend
+## ⚛ Frontend
 
-<p>
-
-<img src="https://skillicons.dev/icons?i=nodejs,express,mongodb"/>
-
-</p>
-
----
-
-## 🔗 Blockchain
-
-<p>
-
-<img src="https://skillicons.dev/icons?i=solidity,ethereum"/>
-
-</p>
-
-**Also Experienced With**
-
-- Hardhat
-- Ethers.js
-- OpenZeppelin
-- MetaMask
-- ERC-20
-- ERC-721
-- DeFi
-- Yield Farming
-- Lending Protocols
-- DAO
-- IPFS
+| Icon | Technology |
+|------|------------|
+| <img src="https://skillicons.dev/icons?i=react" width="22"/> | React |
+| <img src="https://skillicons.dev/icons?i=vite" width="22"/> | Vite |
+| <img src="https://skillicons.dev/icons?i=threejs" width="22"/> | Three.js |
 
 ---
 
-## 🧰 Tools
+## ⚙ Backend
 
-<p>
-
-<img src="https://skillicons.dev/icons?i=git,github,vscode,postman,npm"/>
-
-</p>
-
-**Other Tools**
-
-- JWT Authentication
-- Cloudinary
-- Multer
-- REST APIs
-- Render
-- Vercel
-- MongoDB Atlas
+| Icon | Technology |
+|------|------------|
+| <img src="https://skillicons.dev/icons?i=nodejs" width="22"/> | Node.js |
+| <img src="https://skillicons.dev/icons?i=express" width="22"/> | Express.js |
+| <img src="https://skillicons.dev/icons?i=mongodb" width="22"/> | MongoDB |
+| <img src="https://skillicons.dev/icons?i=postman" width="22"/> | Postman |
 
 ---
 
-# 📈 GitHub Stats
+## ⛓ Blockchain
 
-<div align="center">
-
-![](https://github-readme-stats.vercel.app/api?username=Jeevan9898&show_icons=true&theme=tokyonight&hide_border=true)
-
-![](https://github-readme-streak-stats.herokuapp.com/?user=Jeevan9898&theme=tokyonight&hide_border=true)
-
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=Jeevan9898&layout=compact&theme=tokyonight&hide_border=true)
-
-</div>
-
----
-
-# 🎯 Current Focus
-
-```text
-✅ Full Stack Development
-✅ Blockchain Development
-✅ Smart Contract Security
-✅ DeFi Protocols
-✅ Advanced Backend Development
-🌱 Artificial Intelligence
-🌱 System Design
-🌱 Advanced DSA
-```
+| Icon | Technology |
+|------|------------|
+| <img src="https://skillicons.dev/icons?i=solidity" width="22"/> | Solidity |
+| <img src="https://skillicons.dev/icons?i=ethereum" width="22"/> | Ethereum |
+| ⚒️ | Hardhat |
+| 💎 | Ethers.js |
+| 🛡 | OpenZeppelin |
+| 🦊 | MetaMask |
 
 ---
 
-# 💼 Professional Highlights
+## ☁ Cloud & Deployment
 
-✔️ Built **22+ Major Projects**
-
-✔️ Full Stack MERN Developer
-
-✔️ Blockchain & Web3 Developer
-
-✔️ Developed Advanced DeFi Applications
-
-✔️ Experience with Smart Contracts & DApps
-
-✔️ Strong Backend Development Skills
-
-✔️ Open Source Contributor
-
-✔️ Passionate Continuous Learner
+| Icon | Technology |
+|------|------------|
+| <img src="https://skillicons.dev/icons?i=git" width="22"/> | Git |
+| <img src="https://skillicons.dev/icons?i=github" width="22"/> | GitHub |
+| <img src="https://skillicons.dev/icons?i=vscode" width="22"/> | VS Code |
+| <img src="https://skillicons.dev/icons?i=vercel" width="22"/> | Vercel |
+| ☁️ | Cloudinary |
+| 📤 | Multer |
+| 🔐 | JWT |
 
 ---
 
 # 🚀 Featured Projects
 
-> A collection of projects demonstrating my expertise in **MERN Stack**, **Blockchain**, **Web3**, **DeFi**, and **Backend Development**.
+> These projects represent some of my strongest work in **Blockchain**, **DeFi**, **MERN Stack**, and **AI**.
+
+<br>
+
+<table>
+<tr>
+
+<td width="50%" valign="top">
+
+## 🏦 Lending & Borrowing Protocol
+
+A decentralized lending platform that enables users to deposit collateral, borrow assets, repay loans, and withdraw collateral through secure smart contracts.
+
+**Highlights**
+- 🔹 Collateral Management
+- 🔹 Borrow & Repay Assets
+- 🔹 Interest Calculation
+- 🔹 Secure Smart Contracts
+
+**Tech Stack**
+
+`Solidity` • `Hardhat` • `React` • `Ethers.js`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+<td width="50%" valign="top">
+
+## 🌾 Yield Farming Platform
+
+A DeFi protocol where users stake LP tokens and earn governance token rewards through automated reward distribution.
+
+**Highlights**
+
+- 🔹 LP Token Staking
+- 🔹 Reward Distribution
+- 🔹 Harvest Rewards
+- 🔹 Secure Farming Logic
+
+**Tech Stack**
+
+`Solidity` • `React` • `Hardhat` • `Ethers.js`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+</tr>
+</table>
 
 ---
 
-# ⛓️ Blockchain & Web3 Projects
+<table>
+<tr>
 
-| Project | Description | Tech |
-|---------|-------------|------|
-| 🪙 **ERC20 Token** | Developed a customizable ERC-20 token with minting, burning, and ownership functionality using OpenZeppelin standards. | Solidity, Hardhat, OpenZeppelin |
-| 📊 **ERC20 Dashboard** | Built an interactive dashboard to display token balances, transfers, wallet connection, and token information. | React, Ethers.js |
-| 🔒 **Staking DApp** | Implemented staking and reward distribution with secure smart contracts and frontend integration. | Solidity, React, Ethers.js |
-| 🗳️ **Voting DApp** | Blockchain-based decentralized voting system ensuring transparent and tamper-proof elections. | Solidity, React |
-| 🖼️ **NFT Marketplace** | NFT minting, buying, selling, and ownership transfer with Ethereum smart contracts. | Solidity, IPFS, React |
-| 💱 **Mini DEX** | Decentralized exchange supporting token swapping and liquidity management. | Solidity, Hardhat |
-| 💸 **Crowdfunding DApp** | Decentralized crowdfunding platform with transparent campaign management. | Solidity, React |
-| 👥 **MultiSig Wallet** | Multi-signature wallet requiring multiple approvals before transaction execution. | Solidity |
-| 📈 **DeFi Dashboard** | Dashboard displaying wallet balances, staking rewards, token statistics, and DeFi analytics. | React, Ethers.js |
-| 🚰 **Token Faucet** | Ethereum faucet for distributing ERC20 tokens to users on test networks. | Solidity |
-| 🎁 **Token Airdrop System** | Automated token distribution platform supporting multiple wallet addresses. | Solidity |
-| 🏛️ **DAO Governance** | Governance platform enabling proposal creation and decentralized voting. | Solidity |
+<td width="50%" valign="top">
+
+## 💱 Mini DEX
+
+A decentralized exchange enabling users to swap ERC-20 tokens and interact directly with blockchain smart contracts.
+
+**Highlights**
+
+- 🔹 Token Swaps
+- 🔹 Liquidity Management
+- 🔹 Wallet Integration
+
+**Tech Stack**
+
+`Solidity` • `React` • `Hardhat`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+<td width="50%" valign="top">
+
+## 🖼 NFT Marketplace
+
+A marketplace for minting, buying, selling, and transferring NFTs with decentralized ownership.
+
+**Highlights**
+
+- 🔹 NFT Minting
+- 🔹 Marketplace
+- 🔹 Ownership Transfer
+
+**Tech Stack**
+
+`Solidity` • `React` • `IPFS`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+</tr>
+</table>
 
 ---
 
-# 💰 Advanced DeFi Projects
+<table>
+<tr>
 
-| Project | Description | Tech |
-|---------|-------------|------|
-| 🏦 **Lending & Borrowing Protocol** | Complete decentralized lending platform with collateral management, borrowing, repayment, and interest calculation. | Solidity, Hardhat, Ethers.js |
-| 🌾 **Yield Farming Platform** | Built a reward distribution protocol where users stake LP tokens and earn governance rewards securely. | Solidity, React |
+<td width="50%" valign="top">
+
+## 💼 Job Portal
+
+A production-ready backend with secure authentication, authorization, image uploads, and job management APIs.
+
+**Highlights**
+
+- 🔹 JWT Authentication
+- 🔹 Role-Based Authorization
+- 🔹 Cloudinary Integration
+- 🔹 REST APIs
+
+**Tech Stack**
+
+`Node.js` • `Express.js` • `MongoDB` • `JWT`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+<td width="50%" valign="top">
+
+## 🛒 E-Commerce Platform
+
+A scalable MERN application featuring product management, authentication, orders, and an admin dashboard.
+
+**Highlights**
+
+- 🔹 Authentication
+- 🔹 Product Management
+- 🔹 Shopping Cart
+- 🔹 Admin Dashboard
+
+**Tech Stack**
+
+`React` • `Node.js` • `Express.js` • `MongoDB`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+</tr>
+</table>
 
 ---
 
-# 🌐 MERN Stack Projects
+<table>
+<tr>
 
-| Project | Description | Tech |
-|---------|-------------|------|
-| ✅ **Task Manager API** | REST API supporting CRUD operations, authentication, authorization, filtering, and pagination. | Node.js, Express, MongoDB |
-| 🔐 **Authentication System** | Secure authentication with JWT, bcrypt, role-based authorization, password hashing, and protected routes. | MERN, JWT |
-| 💸 **Expense Tracker** | Full-stack expense management application with dashboards and analytics. | MERN Stack |
-| 💬 **Real-Time Chat Application** | Real-time messaging application supporting multiple users and instant communication. | MERN |
-| 💼 **Job Portal Backend** | Production-ready backend featuring user management, job posting, applications, authentication, Cloudinary integration, and REST APIs. | Node.js, Express, MongoDB |
-| 🤖 **AI Resume Analyzer** | AI-powered resume analysis platform providing suggestions and scoring. | MERN + AI |
-| 🛒 **E-Commerce Platform** | Full-stack shopping platform with authentication, products, orders, payments, and admin dashboard. | MERN |
-| 📋 **Project Management SaaS** | Team collaboration platform with authentication, projects, tasks, and role management. | MERN |
+<td align="center">
+
+## 🤖 AI Resume Analyzer
+
+An AI-powered application that analyzes resumes and provides intelligent insights to help improve ATS compatibility and overall quality.
+
+**Tech Stack**
+
+`React` • `Node.js` • `Express.js` • `MongoDB` • `AI`
+
+<br>
+
+<a href="YOUR_REPO_LINK">
+<img src="https://img.shields.io/badge/View_Repository-181717?style=for-the-badge&logo=github"/>
+</a>
+
+</td>
+
+</tr>
+</table>
 
 ---
-
-# 📌 Highlighted Repositories
 
 <div align="center">
 
-<a href="https://github.com/Jeevan9898/BlockChain">
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=Jeevan9898&repo=BlockChain&theme=tokyonight&hide_border=true"/>
-</a>
+### 📂 Explore More
+
+I've built **22+ major projects** across **Blockchain**, **DeFi**, **MERN Stack**, and **AI**.
 
 <a href="https://github.com/Jeevan9898">
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=Jeevan9898&repo=TaskManager&theme=tokyonight&hide_border=true"/>
+<img src="https://img.shields.io/badge/View_All_Repositories-181717?style=for-the-badge&logo=github"/>
 </a>
 
-<a href="https://github.com/Jeevan9898">
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=Jeevan9898&repo=Job-Portal&theme=tokyonight&hide_border=true"/>
-</a>
-
-<a href="https://github.com/Jeevan9898">
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=Jeevan9898&repo=Yield-Farming-Platform&theme=tokyonight&hide_border=true"/>
+<a href="https://jeevan-yadav.vercel.app/github-village.html">
+<img src="https://img.shields.io/badge/Explore_GitHub_City-2563EB?style=for-the-badge"/>
 </a>
 
 </div>
 
 ---
 
-# 🏆 Technical Expertise
+# 📊 GitHub Analytics
 
-### 💻 Frontend
-- React.js
-- JavaScript (ES6+)
-- HTML5
-- CSS3
-- Responsive Design
-- Three.js
-- Vite
+<div align="center">
 
-### ⚙️ Backend
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- REST APIs
-- JWT Authentication
-- Middleware
-- Cloudinary
-- Multer
-- API Security
+<img height="170" src="https://github-readme-stats.vercel.app/api?username=Jeevan9898&show_icons=true&theme=tokyonight&hide_border=true&rank_icon=github"/>
 
-### 🔗 Blockchain
-- Solidity
-- Ethereum
-- Hardhat
-- Ethers.js
-- OpenZeppelin
-- ERC20
-- ERC721
-- Smart Contracts
-- DApps
-- DAO
-- Yield Farming
-- Lending Protocols
+<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jeevan9898&layout=compact&theme=tokyonight&hide_border=true"/>
 
-### 🛠 Tools
-- Git
-- GitHub
-- VS Code
-- Postman
-- npm
-- MongoDB Atlas
-- Render
-- Vercel
+</div>
+
+<div align="center">
+
+<img width="80%" src="https://github-readme-streak-stats.herokuapp.com/?user=Jeevan9898&theme=tokyonight&hide_border=true"/>
+
+</div>
 
 ---
 
-# 📊 Development Journey
+<div align="center">
 
-```text
-Frontend Development        ████████████████████ 100%
+<img width="95%" src="https://github-readme-activity-graph.vercel.app/graph?username=Jeevan9898&theme=tokyo-night&hide_border=true&area=true"/>
 
-Backend Development         ████████████████████ 100%
-
-MERN Stack                  ████████████████████ 100%
-
-Blockchain                  ████████████████████ 100%
-
-Smart Contracts             ████████████████████ 100%
-
-DeFi Development            ████████████████████ 100%
-
-Artificial Intelligence      ████████░░░░░░░░░░░ 40%
-
-System Design                ██████░░░░░░░░░░░░░ 30%
-```
+</div>
 
 ---
 
 # 🏆 Achievements
 
-- 🚀 Completed **22+ Major Full Stack & Blockchain Projects**
-- ⛓️ Built production-ready **DeFi Protocols** including Lending & Borrowing and Yield Farming
-- 💻 Strong foundation in **MERN Stack Development**
-- 🌐 Developed decentralized applications using **Solidity**, **Hardhat**, and **Ethers.js**
-- 🔐 Built secure authentication systems with **JWT**, **bcrypt**, and role-based authorization
-- 📦 Designed scalable REST APIs using **Node.js**, **Express.js**, and **MongoDB**
-- 🤝 Active Open Source Contributor
-- 📚 Continuously learning AI, System Design, and Advanced Software Engineering
+- 🚀 Built **22+ Major Projects** across MERN Stack, Blockchain, and DeFi.
+- ⛓️ Developed decentralized applications including **NFT Marketplace**, **Mini DEX**, **Lending Protocol**, and **Yield Farming Platform**.
+- 🌐 Built scalable backend systems with **Node.js**, **Express.js**, and **MongoDB**.
+- 🔐 Implemented secure authentication using **JWT**, **bcrypt**, and role-based authorization.
+- 🤝 Active Open Source Contributor.
+- 📚 Continuously learning **Artificial Intelligence**, **Machine Learning**, and **System Design**.
 
 ---
 
 # 📜 Certifications
 
-- Google AI Essentials
-- Crash Course on Python (Google)
-- C for Everyone (University of California)
-
-> *More certifications will be added as I continue learning.*
+- 🏅 Google AI Essentials
+- 🏅 Crash Course on Python
+- 🏅 C for Everyone
 
 ---
 
-# 🌱 Currently Learning
-
-```text
-🤖 Artificial Intelligence
-🧠 Machine Learning
-🏗️ System Design
-⚡ Advanced Backend Architecture
-📈 Data Structures & Algorithms
-🔐 Smart Contract Security
-☁️ Cloud Technologies
-```
-
----
-
-# 🎯 2026 Goals
-
-- 🚀 Build production-grade SaaS applications
-- ⛓️ Master advanced Blockchain & DeFi development
-- 🤖 Integrate AI into Full Stack applications
-- 📖 Strengthen System Design knowledge
-- 🌍 Contribute to impactful Open Source projects
-- 💼 Secure a Software Development internship/full-time opportunity
-
----
-
-# 💼 Services
-
-### 🌐 Full Stack Web Development
-- MERN Stack Applications
-- REST API Development
-- Authentication Systems
-- Admin Dashboards
-
-### ⛓️ Blockchain Development
-- Smart Contracts
-- ERC20 / ERC721 Tokens
-- DeFi Applications
-- DApps
-- DAO Systems
-
-### ⚙️ Backend Development
-- Node.js
-- Express.js
-- MongoDB
-- JWT Authentication
-- API Design
-
----
-
-# 📈 GitHub Activity
+# 🌐 Explore My Work
 
 <div align="center">
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=Jeevan9898&theme=tokyo-night&hide_border=true&area=true"/>
+### 💼 Portfolio
+
+Explore my projects, technical skills, and development journey.
+
+<a href="https://jeevan-yadav.vercel.app">
+<img src="https://img.shields.io/badge/Visit_Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
+</a>
+
+<br><br>
+
+### 🏙️ GitHub City
+
+An interactive 3D visualization of my GitHub repositories.
+
+<a href="https://jeevan-yadav.vercel.app/github-village.html">
+<img src="https://img.shields.io/badge/Explore_GitHub_City-2563EB?style=for-the-badge"/>
+</a>
 
 </div>
 
 ---
 
-# 📊 Coding Profiles
-
-<div align="center">
-
-[![LeetCode](https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/9889_/)
-
-</div>
-
----
-
-# 🌍 Connect With Me
+# 🌍 Let's Connect
 
 <div align="center">
 
@@ -426,22 +432,20 @@ System Design                ██████░░░░░░░░░░░
 <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
 </a>
 
+<a href="https://leetcode.com/u/9889_/">
+<img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=white"/>
+</a>
+
 </div>
-
----
-
-# 💡 Fun Fact
-
-> I enjoy turning complex ideas into real-world software—from scalable MERN applications to decentralized blockchain protocols. Every project I build is an opportunity to learn something new and improve as an engineer.
 
 ---
 
 <div align="center">
 
-## ⭐ If you like my work, consider giving a star to my repositories!
+### ⭐ Thanks for visiting my profile!
 
-### Thanks for visiting my profile ❤️
+*"Building software that makes an impact."*
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:06b6d4,50:2563eb,100:0f172a&height=120&section=footer"/>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=120&color=0:06B6D4,50:2563EB,100:0F172A&section=footer"/>
 
 </div>
