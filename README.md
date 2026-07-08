@@ -121,7 +121,7 @@ An interactive **3D visualization** of my GitHub repositories, allowing visitors
 
 # 🚀 Featured Projects
 
-A curated selection from **22+ shipped projects** across DeFi, MERN, and AI. Full list → [View all repositories](https://github.com/Jeevan9898)
+A curated selection from **22+ shipped projects** across DeFi, MERN, and AI.
  
 
 <br>
@@ -325,38 +325,6 @@ An AI-powered application that analyzes resumes and provides intelligent insight
 
 <div align="center">
 
-### 📂 Explore More
-
-I've built **22+ major projects** across **Blockchain**, **DeFi**, **MERN Stack**, and **AI**.
-
-<a href="https://github.com/Jeevan9898">
-<img src="https://img.shields.io/badge/View_All_Repositories-181717?style=for-the-badge&logo=github"/>
-</a>
-
-<a href="https://jeevan-yadav.vercel.app/github-village.html">
-<img src="https://img.shields.io/badge/Explore_GitHub_City-2563EB?style=for-the-badge"/>
-</a>
-
-</div>
-
----
-
-# 📊 GitHub Analytics
-
-<div align="center">
-
-<img height="170" src="https://github-readme-stats.vercel.app/api?username=Jeevan9898&show_icons=true&theme=tokyonight&hide_border=true&rank_icon=github"/>
-
-<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jeevan9898&layout=compact&theme=tokyonight&hide_border=true"/>
-
-</div>
-
-<div align="center">
-
-<img width="80%" src="https://github-readme-streak-stats.herokuapp.com/?user=Jeevan9898&theme=tokyonight&hide_border=true"/>
-
-</div>
-
 ---
 
 <div align="center">
@@ -383,32 +351,6 @@ I've built **22+ major projects** across **Blockchain**, **DeFi**, **MERN Stack*
 - 🏅 Google AI Essentials
 - 🏅 Crash Course on Python
 - 🏅 C for Everyone
-
----
-
-# 🌐 Explore My Work
-
-<div align="center">
-
-### 💼 Portfolio
-
-Explore my projects, technical skills, and development journey.
-
-<a href="https://jeevan-yadav.vercel.app">
-<img src="https://img.shields.io/badge/Visit_Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
-</a>
-
-<br><br>
-
-### 🏙️ GitHub City
-
-An interactive 3D visualization of my GitHub repositories.
-
-<a href="https://jeevan-yadav.vercel.app/github-village.html">
-<img src="https://img.shields.io/badge/Explore_GitHub_City-2563EB?style=for-the-badge"/>
-</a>
-
-</div>
 
 ---
 
