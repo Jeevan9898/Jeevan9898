@@ -230,19 +230,8 @@
   @media(max-width:700px){ .tl-line-bg{left:48px;} .tl-line-fill{left:48px;} .tl-dot{left:44px;} .tl-item{grid-template-columns:60px 1fr;} }
 
   /* WORK */
-  .work-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:200px; gap:22px;}
-  .work-card.featured{grid-column:span 2; grid-row:span 2;}
-  .work-card.wide{grid-column:span 2; grid-row:span 1;}
-  .work-card:not(.featured) .work-desc{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
-  .work-card.featured .work-desc{-webkit-line-clamp:5;}
-  .work-card.featured h3{font-size:28px;}
-  .work-card.featured .work-category{font-size:13px;}
-  @media(max-width:900px){
-    .work-grid{grid-template-columns:1fr; grid-auto-rows:auto;}
-    .work-card.featured, .work-card.wide{grid-column:span 1; grid-row:span 1;}
-  }
-  .work-card{padding:30px; position:relative; overflow:hidden; transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s; display:flex; flex-direction:column; text-decoration:none; color:inherit; cursor:pointer;}
-  .work-card .tech-tags{margin-top:auto; padding-top:14px;}
+  .work-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:26px;}
+  .work-card{padding:36px; position:relative; overflow:hidden; transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s; display:block; text-decoration:none; color:inherit; cursor:pointer;}
   .work-card::after{
     content:''; position:absolute; top:-40%; right:-40%; width:60%; height:60%; border-radius:50%;
     background:radial-gradient(circle, var(--violet), transparent 70%); opacity:0; filter:blur(50px); transition:opacity .4s;
@@ -258,7 +247,7 @@
     font-family:'JetBrains Mono',monospace; font-size:12px; padding:6px 12px; border-radius:100px;
     background:var(--glass-strong); border:1px solid var(--glass-border); color:#d4d4dc;
   }
-
+  @media(max-width:800px){.work-grid{grid-template-columns:1fr;}}
 
   /* TECH STACK — rocket shape */
   .rocket-stack{
@@ -533,7 +522,7 @@
     </div>
     <div class="work-grid" data-reveal>
 
-      <a class="work-card glass featured" href="https://github.com/ChainForgeX/Lending_Borrowing_Protocol_DeFi" target="_blank" rel="noopener">
+      <a class="work-card glass" href="https://github.com/ChainForgeX/Lending_Borrowing_Protocol_DeFi" target="_blank" rel="noopener">
         <span class="work-category">DeFi / Blockchain</span>
         <h3>Lending &amp; Borrowing Protocol</h3>
         <div class="work-tagline">Decentralized lending infrastructure for digital assets.</div>
@@ -543,7 +532,7 @@
         </div>
       </a>
 
-      <a class="work-card glass wide" href="https://github.com/ChainForgeX/Yield_Farming_Protocol" target="_blank" rel="noopener">
+      <a class="work-card glass" href="https://github.com/ChainForgeX/Yield_Farming_Protocol" target="_blank" rel="noopener">
         <span class="work-category">DeFi / Blockchain</span>
         <h3>Yield Farming Platform</h3>
         <div class="work-tagline">Maximizing rewards through decentralized finance.</div>
@@ -573,7 +562,7 @@
         </div>
       </a>
 
-      <a class="work-card glass wide" href="https://github.com/ChainForgeX/Authentication_System" target="_blank" rel="noopener">
+      <a class="work-card glass" href="https://github.com/ChainForgeX/Authentication_System" target="_blank" rel="noopener">
         <span class="work-category">Full Stack</span>
         <h3>Full Stack Authentication System</h3>
         <div class="work-tagline">Secure authentication system for modern web applications.</div>
@@ -583,7 +572,7 @@
         </div>
       </a>
 
-      <a class="work-card glass wide" href="https://github.com/ChainForgeX/AI_Resume_Analyzer" target="_blank" rel="noopener">
+      <a class="work-card glass" href="https://github.com/ChainForgeX/AI_Resume_Analyzer" target="_blank" rel="noopener">
         <span class="work-category">Full Stack / AI</span>
         <h3>Full Stack AI Resume Analyzer</h3>
         <div class="work-tagline">AI-powered resume analysis for smarter career insights.</div>
