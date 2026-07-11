@@ -76,7 +76,7 @@
     font-family:'Space Grotesk',sans-serif; font-weight:700;
     font-size:clamp(56px, 11vw, 150px); letter-spacing:-0.03em; line-height:1;
     color:#14141c; opacity:0.92;
-    animation:bigtextScroll 16s linear infinite;
+    animation:bigtextScroll 8s linear infinite;
   }
   @keyframes bigtextScroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
 
@@ -94,6 +94,7 @@
   }
   .loading-pill-label{
     font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:19px; color:#f4f4f7; letter-spacing:0.02em;
+    transition:letter-spacing .3s ease;
   }
   .loading-pill-pct{
     font-family:'JetBrains Mono',monospace; font-size:17px; color:#8f8f99;
@@ -465,15 +466,15 @@
 
   <div class="loader-bigtext-wrap">
     <div class="loader-bigtext-track">
-      <span>AI ENGINEER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;FULL STACK DEVELOPER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;BLOCKCHAIN DEVELOPER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
-      <span>AI ENGINEER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;FULL STACK DEVELOPER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;BLOCKCHAIN DEVELOPER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+      <span>AI ENGINEER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;BLOCKCHAIN DEVELOPER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
+      <span>AI ENGINEER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;BLOCKCHAIN DEVELOPER&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;</span>
     </div>
   </div>
 
-  <div class="loading-pill">
-    <span class="loading-pill-label">LOADING</span>
+  <div class="loading-pill" id="loadingPill">
+    <span class="loading-pill-label" id="loadingLabel">LOADING</span>
     <span class="loading-pill-pct" id="loaderPct">0%</span>
-    <span class="pill-cursor"></span>
+    <span class="pill-cursor" id="pillCursor"></span>
   </div>
 </div>
 
@@ -778,19 +779,24 @@
   (function(){
     const loader = document.getElementById('loader');
     const pct = document.getElementById('loaderPct');
+    const label = document.getElementById('loadingLabel');
+    const pill = document.getElementById('loadingPill');
+    const cursorEl = document.getElementById('pillCursor');
     let progress = 0;
     const tick = setInterval(() => {
-      progress += Math.random() * 18;
+      progress += Math.random() * 5 + 3;
       if(progress >= 100){
         progress = 100;
         clearInterval(tick);
         pct.textContent = '100%';
+
+        // brief pause on 100%, then reveal the portfolio
         setTimeout(() => loader.classList.add('hide'), 400);
         setTimeout(() => loader.remove(), 1600);
       } else {
         pct.textContent = Math.floor(progress) + '%';
       }
-    }, 160);
+    }, 100);
   })();
 
   // timeline scroll-fill progress bar
