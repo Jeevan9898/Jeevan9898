@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jeevan Yadav — Full Stack & Blockchain Developer</title>
+<meta name="description" content="Portfolio of Jeevan Yadav, a Full Stack & Blockchain Developer building DeFi protocols, MERN applications, and AI-powered tools. Explore projects, experience, and tech stack.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jeevan-yadav.vercel.app/">
+<meta property="og:title" content="Jeevan Yadav — Full Stack & Blockchain Developer">
+<meta property="og:description" content="Building software that creates impact — DeFi protocols, MERN applications, and AI-powered tools. Explore my projects, experience, and tech stack.">
+<meta property="og:image" content="https://jeevan-yadav.vercel.app/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Jeevan Yadav — Full Stack & Blockchain Developer">
+<meta name="twitter:description" content="Building software that creates impact — DeFi protocols, MERN applications, and AI-powered tools.">
+<meta name="twitter:image" content="https://jeevan-yadav.vercel.app/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -292,8 +306,34 @@
   @media(max-width:700px){ .tl-line-bg{left:48px;} .tl-line-fill{left:48px;} .tl-dot{left:44px;} .tl-item{grid-template-columns:60px 1fr;} }
 
   /* WORK */
+  .filter-toggle{
+    display:inline-flex; flex-wrap:wrap; gap:6px; padding:8px; margin-bottom:32px;
+  }
+  .filter-btn{
+    font-family:'Space Grotesk',sans-serif; font-size:13.5px; font-weight:600;
+    color:var(--muted); background:transparent; border:none; border-radius:100px;
+    padding:10px 20px; cursor:pointer; transition:all .25s ease; white-space:nowrap;
+  }
+  .filter-btn:hover{color:var(--text);}
+  .filter-btn.active{
+    background:linear-gradient(135deg, var(--violet), var(--violet-2)); color:#fff;
+    box-shadow:0 4px 16px rgba(139,124,246,0.35);
+  }
+  .filter-btn[data-filter="defi"].active{
+    background:linear-gradient(135deg, #8b7cf6, #6d5cf0); box-shadow:0 4px 16px rgba(139,124,246,0.35);
+  }
+  .filter-btn[data-filter="fullstack"].active{
+    background:linear-gradient(135deg, #5fead4, #35c9b0); color:#06231d; box-shadow:0 4px 16px rgba(95,234,212,0.35);
+  }
+  .filter-btn[data-filter="ai"].active{
+    background:linear-gradient(135deg, #f6ad55, #e8912f); color:#2b1a05; box-shadow:0 4px 16px rgba(246,173,85,0.35);
+  }
+  .filter-btn[data-filter="ml"].active{
+    background:linear-gradient(135deg, #f472b6, #db4e94); box-shadow:0 4px 16px rgba(244,114,182,0.35);
+  }
   .work-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:26px;}
-  .work-card{padding:36px; position:relative; overflow:hidden; transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s; display:block; text-decoration:none; color:inherit; cursor:pointer;}
+  .work-card{padding:36px; position:relative; overflow:hidden; transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s, opacity .3s ease; display:block; text-decoration:none; color:inherit; cursor:pointer;}
+  .work-card.filtered-out{display:none;}
   .work-card::after{
     content:''; position:absolute; top:-40%; right:-40%; width:60%; height:60%; border-radius:50%;
     background:radial-gradient(circle, var(--violet), transparent 70%); opacity:0; filter:blur(50px); transition:opacity .4s;
@@ -301,6 +341,10 @@
   .work-card:hover{transform:translateY(-6px); border-color:rgba(139,124,246,0.35);}
   .work-card:hover::after{opacity:0.35;}
   .work-category{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--cyan); text-transform:uppercase; letter-spacing:0.06em;}
+  .work-card[data-filter="defi"] .work-category{color:#a599f8;}
+  .work-card[data-filter="fullstack"] .work-category{color:#5fead4;}
+  .work-card[data-filter="fullstack ai"] .work-category{color:#f6ad55;}
+  .work-card[data-filter="ml"] .work-category{color:#f472b6;}
   .work-card h3{font-size:23px; font-weight:600; margin:12px 0 8px; position:relative; z-index:1;}
   .work-tagline{color:var(--muted); font-size:14.5px; font-style:italic; margin-bottom:16px;}
   .work-desc{color:#c6c6d0; font-size:14.5px; line-height:1.75; margin-bottom:22px; position:relative; z-index:1;}
@@ -588,11 +632,20 @@
     <div class="section-head" data-reveal>
       <span class="section-tag">04 — Featured Projects</span>
       <h2 class="section-title">My <span class="accent">Work</span></h2>
-      <p class="section-sub">A selection of DeFi protocols and full-stack systems I've designed and shipped end to end.</p>
+      <p class="section-sub">A selection of DeFi protocols, full-stack systems, and ML models I've designed and shipped end to end.</p>
     </div>
+
+    <div class="filter-toggle glass" data-reveal>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="defi">DeFi / Blockchain</button>
+      <button class="filter-btn" data-filter="fullstack">Full Stack</button>
+      <button class="filter-btn" data-filter="ai">AI</button>
+      <button class="filter-btn" data-filter="ml">Machine Learning</button>
+    </div>
+
     <div class="work-grid" data-reveal>
 
-      <a class="work-card glass" href="https://github.com/ChainForgeX/Lending_Borrowing_Protocol_DeFi" target="_blank" rel="noopener">
+      <a class="work-card glass" data-filter="defi" href="https://github.com/ChainForgeX/Lending_Borrowing_Protocol_DeFi" target="_blank" rel="noopener">
         <span class="work-category">DeFi / Blockchain</span>
         <h3>Lending &amp; Borrowing Protocol</h3>
         <div class="work-tagline">Decentralized lending infrastructure for digital assets.</div>
@@ -602,7 +655,7 @@
         </div>
       </a>
 
-      <a class="work-card glass" href="https://github.com/ChainForgeX/Yield_Farming_Protocol" target="_blank" rel="noopener">
+      <a class="work-card glass" data-filter="defi" href="https://github.com/ChainForgeX/Yield_Farming_Protocol" target="_blank" rel="noopener">
         <span class="work-category">DeFi / Blockchain</span>
         <h3>Yield Farming Platform</h3>
         <div class="work-tagline">Maximizing rewards through decentralized finance.</div>
@@ -612,7 +665,7 @@
         </div>
       </a>
 
-      <a class="work-card glass" href="https://github.com/ChainForgeX/DAO_Treasury" target="_blank" rel="noopener">
+      <a class="work-card glass" data-filter="defi" href="https://github.com/ChainForgeX/DAO_Treasury" target="_blank" rel="noopener">
         <span class="work-category">DeFi / Governance</span>
         <h3>DAO Treasury</h3>
         <div class="work-tagline">Transparent, community-governed decision making.</div>
@@ -622,7 +675,7 @@
         </div>
       </a>
 
-      <a class="work-card glass" href="https://github.com/ChainForgeX/Job_Portal" target="_blank" rel="noopener">
+      <a class="work-card glass" data-filter="fullstack" href="https://github.com/ChainForgeX/Job_Portal" target="_blank" rel="noopener">
         <span class="work-category">Full Stack</span>
         <h3>Job Portal Backend</h3>
         <div class="work-tagline">Scalable backend for a modern hiring platform.</div>
@@ -632,7 +685,7 @@
         </div>
       </a>
 
-      <a class="work-card glass" href="https://github.com/ChainForgeX/Authentication_System" target="_blank" rel="noopener">
+      <a class="work-card glass" data-filter="fullstack" href="https://github.com/ChainForgeX/Authentication_System" target="_blank" rel="noopener">
         <span class="work-category">Full Stack</span>
         <h3>Full Stack Authentication System</h3>
         <div class="work-tagline">Secure authentication system for modern web applications.</div>
@@ -642,13 +695,23 @@
         </div>
       </a>
 
-      <a class="work-card glass" href="https://github.com/ChainForgeX/AI_Resume_Analyzer" target="_blank" rel="noopener">
+      <a class="work-card glass" data-filter="fullstack ai" href="https://github.com/ChainForgeX/AI_Resume_Analyzer" target="_blank" rel="noopener">
         <span class="work-category">Full Stack / AI</span>
         <h3>Full Stack AI Resume Analyzer</h3>
         <div class="work-tagline">AI-powered resume analysis for smarter career insights.</div>
         <div class="work-desc">A full-stack AI-powered application that analyzes resumes, extracts key information, evaluates skills, identifies strengths and improvement areas, and provides intelligent feedback based on job requirements — built with a scalable MERN architecture, secure file uploads, AI-driven text processing, and RESTful APIs to deliver accurate and actionable resume insights.</div>
         <div class="tech-tags">
           <span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">AI API (OpenAI/Gemini)</span><span class="tech-tag">Multer</span><span class="tech-tag">Cloudinary</span>
+        </div>
+      </a>
+
+      <a class="work-card glass" data-filter="ml" href="https://github.com/ChainForgeX/House_Price_Prediction" target="_blank" rel="noopener">
+        <span class="work-category">Machine Learning</span>
+        <h3>House Price Prediction</h3>
+        <div class="work-tagline">Machine learning pipeline for real-world housing price prediction.</div>
+        <div class="work-desc">Developed an end-to-end regression model using the California Housing dataset, implementing EDA, feature engineering, model evaluation, cross-validation, and hyperparameter tuning. Compared Linear Regression, Decision Tree, and Random Forest models to identify the best-performing solution following professional machine learning practices.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span><span class="tech-tag">Jupyter</span>
         </div>
       </a>
 
@@ -769,6 +832,29 @@
       requestAnimationFrame(loop);
     }
     loop();
+  })();
+
+  // work grid filter toggle
+  (function(){
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const workCards = document.querySelectorAll('.work-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        workCards.forEach(card => {
+          const cats = (card.dataset.filter || '').split(' ');
+          if(filter === 'all' || cats.includes(filter)){
+            card.classList.remove('filtered-out');
+          } else {
+            card.classList.add('filtered-out');
+          }
+        });
+      });
+    });
   })();
 
   // scroll spy
