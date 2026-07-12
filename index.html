@@ -332,6 +332,9 @@
   .filter-btn[data-filter="ml"].active{
     background:linear-gradient(135deg, #f472b6, #db4e94); box-shadow:0 4px 16px rgba(244,114,182,0.35);
   }
+  .filter-btn[data-filter="dl"].active{
+    background:linear-gradient(135deg, #60a5fa, #3b82f6); box-shadow:0 4px 16px rgba(96,165,250,0.35);
+  }
   .work-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:26px;}
   .work-card{padding:36px; position:relative; overflow:hidden; transition:transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s, opacity .3s ease; display:block; text-decoration:none; color:inherit; cursor:pointer;}
   .work-card.filtered-out{display:none;}
@@ -346,6 +349,7 @@
   .work-card[data-filter="fullstack"] .work-category{color:#5fead4;}
   .work-card[data-filter="fullstack ai"] .work-category{color:#f6ad55;}
   .work-card[data-filter="ml"] .work-category{color:#f472b6;}
+  .work-card[data-filter="dl"] .work-category{color:#60a5fa;}
   .work-card h3{font-size:23px; font-weight:600; margin:12px 0 8px; position:relative; z-index:1;}
   .work-tagline{color:var(--muted); font-size:14.5px; font-style:italic; margin-bottom:16px;}
   .work-desc{color:#c6c6d0; font-size:14.5px; line-height:1.75; margin-bottom:22px; position:relative; z-index:1;}
@@ -668,7 +672,7 @@
     <div class="section-head" data-reveal>
       <span class="section-tag">04 — Featured Projects</span>
       <h2 class="section-title">My <span class="accent">Work</span></h2>
-      <p class="section-sub">A selection of DeFi protocols, full-stack systems, and ML models I've designed and shipped end to end.</p>
+      <p class="section-sub">A selection of DeFi protocols, full-stack systems, and ML/DL models I've designed and shipped end to end.</p>
     </div>
 
     <div class="filter-toggle glass" data-reveal>
@@ -677,6 +681,7 @@
       <button class="filter-btn" data-filter="fullstack">Full Stack</button>
       <button class="filter-btn" data-filter="ai">AI</button>
       <button class="filter-btn" data-filter="ml">Machine Learning</button>
+      <button class="filter-btn" data-filter="dl">Deep Learning</button>
     </div>
 
     <div class="work-grid" data-reveal>
@@ -768,6 +773,16 @@
         <div class="work-desc">Developed an end-to-end clustering pipeline using the Mall Customers dataset, implementing exploratory data analysis, feature scaling, K-Means clustering, the Elbow Method, centroid analysis, and silhouette evaluation to identify meaningful customer segments for targeted marketing and business insights.</div>
         <div class="tech-tags">
           <span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span><span class="tech-tag">Jupyter</span>
+        </div>
+      </a>
+
+      <a class="work-card glass" data-filter="dl" href="https://github.com/ChainForgeX/Customer_Churn_Prediction" target="_blank" rel="noopener">
+        <span class="work-category">Deep Learning</span>
+        <h3>Customer Churn Prediction</h3>
+        <div class="work-tagline">Deep learning model for customer retention prediction.</div>
+        <div class="work-desc">Developed an end-to-end deep learning pipeline using the Bank Customer Churn dataset, implementing data preprocessing, feature engineering, label encoding, one-hot encoding, feature scaling, an Artificial Neural Network (ANN), model training, evaluation, confusion matrix analysis, and customer churn prediction to identify customers likely to leave the bank and support data-driven retention strategies.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span><span class="tech-tag">TensorFlow</span><span class="tech-tag">Keras</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span>
         </div>
       </a>
 
