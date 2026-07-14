@@ -67,6 +67,17 @@
   }
   .loader-icon .dot{width:6px; height:6px; border-radius:50%; background:var(--violet-2);}
 
+  .bar-dodge{position:relative; width:64px; height:22px; overflow:hidden;}
+  .bar-dodge-dot{
+    position:absolute; left:6px; top:8px; width:6px; height:6px; border-radius:50%;
+    background:var(--violet-2);
+  }
+  .bar-track{
+    position:absolute; left:22px; bottom:0; height:100%;
+    display:flex; align-items:flex-end; gap:10px;
+  }
+  .bar-track .bar{width:4px; border-radius:1px 1px 0 0; background:#14141c; flex-shrink:0;}
+
   .loader-bigtext-wrap{
     position:absolute; top:50%; left:0; width:100%; transform:translateY(-50%);
     overflow:hidden; white-space:nowrap; z-index:1;
@@ -499,8 +510,23 @@
 <div id="loader">
   <div class="loader-mark">Jeevan Yadav</div>
   <div class="loader-icon">
-    <span class="dot"></span>
-    <svg width="20" height="16" viewBox="0 0 20 16" fill="none"><rect x="0" y="8" width="3" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="3" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="3" height="11" rx="1" fill="currentColor"/></svg>
+    <div class="bar-dodge">
+      <div class="bar-dodge-dot" id="dodgeDot"></div>
+      <div class="bar-track" id="barTrack">
+        <div class="bar" style="height:6px;"></div>
+        <div class="bar" style="height:16px;"></div>
+        <div class="bar" style="height:9px;"></div>
+        <div class="bar" style="height:19px;"></div>
+        <div class="bar" style="height:7px;"></div>
+        <div class="bar" style="height:13px;"></div>
+        <div class="bar" style="height:6px;"></div>
+        <div class="bar" style="height:16px;"></div>
+        <div class="bar" style="height:9px;"></div>
+        <div class="bar" style="height:19px;"></div>
+        <div class="bar" style="height:7px;"></div>
+        <div class="bar" style="height:13px;"></div>
+      </div>
+    </div>
   </div>
 
   <div class="loader-bigtext-wrap">
@@ -786,6 +812,16 @@
         </div>
       </a>
 
+      <a class="work-card glass" data-filter="dl" href="https://github.com/ChainForgeX/CIFAR10_Image_Classifier" target="_blank" rel="noopener">
+        <span class="work-category">Deep Learning</span>
+        <h3>CIFAR-10 Image Classification</h3>
+        <div class="work-tagline">Deep learning model for multi-class image recognition.</div>
+        <div class="work-desc">Built an end-to-end image classification system using a Convolutional Neural Network (CNN) implemented from scratch in PyTorch. Developed the complete deep learning pipeline including image preprocessing, mini-batch data loading with DataLoader, CNN architecture design, model training, evaluation, prediction visualization, confusion matrix analysis, and model checkpointing to classify images from the CIFAR-10 dataset into 10 object categories.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span><span class="tech-tag">PyTorch</span><span class="tech-tag">Torchvision</span><span class="tech-tag">NumPy</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Scikit-learn</span>
+        </div>
+      </a>
+
     </div>
   </section>
 
@@ -863,6 +899,53 @@
 </footer>
 
 <script>
+  // bar-dodge mini animation: dot dodges bars based on their actual height/position
+  (function(){
+    const track = document.getElementById('barTrack');
+    const dot = document.getElementById('dodgeDot');
+    if(!track || !dot) return;
+
+    const barHeights = [6, 16, 9, 19, 7, 13];
+    const barW = 4, gap = 10, slot = barW + gap;   // 14px per bar+gap
+    const setWidth = barHeights.length * slot;      // 84px
+    const trackStartX = 22;                         // matches .bar-track left
+    const containerH = 22;
+    const dotSize = 6;
+    const dotX = 9;                                  // dot's x-center (left:6 + size/2)
+    const detectMargin = 6;                          // start reacting a bit before the bar arrives
+    const speed = setWidth / 2400;                   // px per ms (2.4s per loop, matches old timing)
+
+    let dotY = 8;          // current animated top offset
+    let start = null;
+
+    function frame(ts){
+      if(start === null) start = ts;
+      const elapsed = ts - start;
+      const offset = (elapsed * speed) % setWidth;
+      track.style.transform = `translateX(${-offset}px)`;
+
+      // find if any bar currently overlaps the dot's detection zone
+      let targetY = containerH / 2 - dotSize / 2; // straight/center position when no bar nearby
+      const totalBars = barHeights.length * 2; // duplicated set in the DOM
+      for(let i = 0; i < totalBars; i++){
+        const barLeft = trackStartX + i * slot - offset;
+        const barRight = barLeft + barW;
+        if(barRight >= dotX - detectMargin && barLeft <= dotX + detectMargin){
+          const h = barHeights[i % barHeights.length];
+          const barTopY = containerH - h; // y-coordinate of the bar's top surface
+          targetY = Math.max(0, barTopY - dotSize - 2); // hover just above the bar
+          break;
+        }
+      }
+
+      dotY += (targetY - dotY) * 0.28; // smooth easing toward target
+      dot.style.transform = `translateY(${dotY - 8}px)`;
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
   // preloader
   (function(){
     const loader = document.getElementById('loader');
