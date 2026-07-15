@@ -371,6 +371,24 @@
   }
   @media(max-width:800px){.work-grid{grid-template-columns:1fr;}}
 
+  .work-pagination{
+    display:flex; align-items:center; justify-content:center; gap:18px; margin-top:40px;
+  }
+  .work-pagination.hidden{display:none;}
+  .page-btn{
+    width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--glass-strong); border:1px solid var(--glass-border); color:var(--text);
+    font-size:15px; cursor:pointer; transition:all .25s ease;
+  }
+  .page-btn:hover:not(:disabled){background:var(--violet); border-color:var(--violet); transform:translateY(-2px);}
+  .page-btn:disabled{opacity:0.3; cursor:default;}
+  .page-dots{display:flex; gap:8px;}
+  .page-dot{
+    width:8px; height:8px; border-radius:50%; background:var(--glass-strong); border:1px solid var(--glass-border);
+    cursor:pointer; transition:all .25s ease; padding:0;
+  }
+  .page-dot.active{background:var(--violet); border-color:var(--violet); transform:scale(1.3);}
+
   /* TECH STACK — rocket shape */
   .rocket-stack{
     display:flex; flex-direction:column; align-items:center; gap:12px;
@@ -822,6 +840,22 @@
         </div>
       </a>
 
+      <a class="work-card glass" data-filter="dl" href="https://github.com/ChainForgeX/Sentiment_Analysis_LSTM" target="_blank" rel="noopener">
+        <span class="work-category">Deep Learning</span>
+        <h3>Sentiment Analysis using LSTM</h3>
+        <div class="work-tagline">Deep learning model for movie review sentiment classification.</div>
+        <div class="work-desc">Developed a Deep Learning-based Sentiment Analysis model using PyTorch and a two-layer LSTM network to classify IMDb movie reviews as positive or negative. Built a complete NLP pipeline including text preprocessing, tokenization, vocabulary creation, integer encoding, sequence padding, and word embeddings. Achieved high classification accuracy while visualizing training performance and saving the trained model for inference.</div>
+        <div class="tech-tags">
+          <span class="tech-tag">PyTorch</span><span class="tech-tag">LSTM</span><span class="tech-tag">Python</span><span class="tech-tag">NumPy</span><span class="tech-tag">Pandas</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="work-pagination" id="workPagination">
+      <button class="page-btn" id="pagePrev" aria-label="Previous page">←</button>
+      <div class="page-dots" id="pageDots"></div>
+      <button class="page-btn" id="pageNext" aria-label="Next page">→</button>
     </div>
   </section>
 
@@ -1011,27 +1045,72 @@
     loop();
   })();
 
-  // work grid filter toggle
+  // work grid filter toggle + pagination (pagination applies only to the "All" view)
   (function(){
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const workCards = document.querySelectorAll('.work-card');
+    const workCards = Array.from(document.querySelectorAll('.work-card'));
+    const pagination = document.getElementById('workPagination');
+    const dotsWrap = document.getElementById('pageDots');
+    const prevBtn = document.getElementById('pagePrev');
+    const nextBtn = document.getElementById('pageNext');
+    const PAGE_SIZE = 4;
+
+    let activeFilter = 'all';
+    let currentPage = 1;
+
+    function matchesFilter(card, filter){
+      const cats = (card.dataset.filter || '').split(' ');
+      return filter === 'all' || cats.includes(filter);
+    }
+
+    function render(){
+      const matched = workCards.filter(card => matchesFilter(card, activeFilter));
+
+      if(activeFilter === 'all'){
+        const totalPages = Math.max(1, Math.ceil(matched.length / PAGE_SIZE));
+        currentPage = Math.min(currentPage, totalPages);
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const end = start + PAGE_SIZE;
+
+        workCards.forEach(card => {
+          const idx = matched.indexOf(card);
+          card.classList.toggle('filtered-out', !(idx >= start && idx < end));
+        });
+
+        pagination.classList.toggle('hidden', totalPages <= 1);
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+
+        dotsWrap.innerHTML = '';
+        for(let i = 1; i <= totalPages; i++){
+          const dot = document.createElement('button');
+          dot.className = 'page-dot' + (i === currentPage ? ' active' : '');
+          dot.setAttribute('aria-label', 'Page ' + i);
+          dot.addEventListener('click', () => { currentPage = i; render(); });
+          dotsWrap.appendChild(dot);
+        }
+      } else {
+        workCards.forEach(card => {
+          card.classList.toggle('filtered-out', !matchesFilter(card, activeFilter));
+        });
+        pagination.classList.add('hidden');
+      }
+    }
 
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const filter = btn.dataset.filter;
-
-        workCards.forEach(card => {
-          const cats = (card.dataset.filter || '').split(' ');
-          if(filter === 'all' || cats.includes(filter)){
-            card.classList.remove('filtered-out');
-          } else {
-            card.classList.add('filtered-out');
-          }
-        });
+        activeFilter = btn.dataset.filter;
+        currentPage = 1;
+        render();
       });
     });
+
+    prevBtn.addEventListener('click', () => { if(currentPage > 1){ currentPage--; render(); } });
+    nextBtn.addEventListener('click', () => { currentPage++; render(); });
+
+    render();
   })();
 
   // scroll spy
