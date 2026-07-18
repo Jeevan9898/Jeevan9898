@@ -389,54 +389,21 @@
   }
   .page-dot.active{background:var(--violet); border-color:var(--violet); transform:scale(1.3);}
 
-  /* TECH STACK — rocket shape */
-  .rocket-stack{
-    display:flex; flex-direction:column; align-items:center; gap:12px;
-    max-width:760px; margin:0 auto; padding:10px 0 40px;
+  /* TECH STACK — particle text */
+  .stack-particle-wrap{
+    position:relative; width:100%; max-width:900px; margin:0 auto;
+    height:420px;
   }
-  .rocket-nose{
-    font-size:40px; margin-bottom:4px; filter:drop-shadow(0 0 18px rgba(139,124,246,0.6));
-    animation:noseFloat 3.2s ease-in-out infinite;
+  .stack-particle-wrap canvas{
+    position:absolute; inset:0; width:100%; height:100%; display:block;
   }
-  @keyframes noseFloat{0%,100%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-8px) rotate(-2deg);}}
-  .rocket-row{
-    display:flex; flex-wrap:wrap; justify-content:center; gap:10px; width:100%;
-    margin:0 auto;
+  .stack-hint{
+    text-align:center; color:var(--muted-2); font-size:12.5px; font-family:'JetBrains Mono',monospace;
+    margin-top:18px; letter-spacing:0.03em;
   }
-  .rocket-fins{display:flex; align-items:center; gap:14px; width:100%; justify-content:center;}
-  .fin{
-    width:0; height:0; flex-shrink:0;
-    border-top:34px solid transparent; border-bottom:34px solid transparent;
-  }
-  .fin-left{border-right:26px solid rgba(139,124,246,0.28);}
-  .fin-right{border-left:26px solid rgba(95,234,212,0.28);}
-  .rocket-row-wide{max-width:82%; flex:1;}
-  .rocket-flame{
-    position:relative; display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
-    max-width:46%; margin-top:8px; padding-top:14px;
-  }
-  .flame-glow{
-    position:absolute; left:50%; top:-10px; transform:translateX(-50%);
-    width:140px; height:80px; border-radius:50%;
-    background:radial-gradient(ellipse, rgba(255,140,80,0.45), rgba(139,124,246,0.2) 60%, transparent 75%);
-    filter:blur(20px); z-index:-1; animation:flameFlicker 1.4s ease-in-out infinite;
-  }
-  @keyframes flameFlicker{0%,100%{opacity:0.7; transform:translateX(-50%) scaleY(1);} 50%{opacity:1; transform:translateX(-50%) scaleY(1.15);}}
-  .flame-chip{border-color:rgba(255,140,80,0.35) !important; color:#ffd7b8;}
   @media(max-width:700px){
-    .rocket-row[style]{max-width:96% !important;}
-    .rocket-row-wide{max-width:96%;}
-    .rocket-flame{max-width:96%;}
-    .fin{border-top-width:20px; border-bottom-width:20px;}
+    .stack-particle-wrap{ height:560px; }
   }
-  .chip{
-    padding:10px 18px; border-radius:100px; font-size:14px; font-weight:500;
-    font-family:'Space Grotesk',sans-serif; transition:all .25s;
-  }
-  .chip:hover{transform:translateY(-4px) scale(1.05); border-color:var(--violet); background:rgba(139,124,246,0.14); box-shadow:0 8px 24px rgba(139,124,246,0.25);}
-  .chip.size-lg{font-size:19px; padding:14px 26px; font-weight:600; color:#fff;}
-  .chip.size-md{font-size:15.5px; padding:11px 20px; color:#e8e8ee;}
-  .chip.size-sm{font-size:13px; padding:8px 16px; color:var(--muted);}
 
   /* OPEN SOURCE + LEARNING */
   .split-two{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
@@ -591,7 +558,7 @@
   </div>
   <div class="wrap">
     <span class="eyebrow">AVAILABLE FOR OPPORTUNITIES</span>
-    <h1>Hi, I'm<br><span id="scrambleName">Jeevan Yadav</span>.</h1>
+    <h1>Hi, I'm<br>Jeevan Yadav.</h1>
     <p class="role">Full Stack &amp; <span class="accent">Blockchain</span> Developer — building software that creates impact.</p>
     <div class="hero-actions">
       <a href="#work" class="btn btn-primary">View My Work →</a>
@@ -859,38 +826,16 @@
     </div>
   </section>
 
-  <section id="stack" style="position:relative; overflow:hidden;">
-    <div id="blackholeWrap" style="position:absolute; inset:0; z-index:0; pointer-events:none;">
-      <canvas id="bhCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
-      <canvas id="bhFgCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
-    </div>
-    <div class="section-head" data-reveal style="position:relative; z-index:1;">
+  <section id="stack">
+    <div class="section-head" data-reveal>
       <span class="section-tag">05 — Tech Stack</span>
       <h2 class="section-title">Tools of the <span class="accent">trade</span></h2>
       <p class="section-sub">The languages, frameworks, and tools I build with — from full-stack web to AI/ML to blockchain.</p>
     </div>
-    <div class="rocket-stack" data-reveal style="position:relative; z-index:1;">
-      <div class="rocket-row" style="max-width:16%;"><span class="chip glass size-sm">AI Agents</span><span class="chip glass size-sm">RAG</span></div>
-      <div class="rocket-row" style="max-width:28%;"><span class="chip glass size-sm">Transformers</span><span class="chip glass size-sm">Hugging Face</span></div>
-      <div class="rocket-row" style="max-width:40%;"><span class="chip glass size-sm">Computer Vision (CV)</span><span class="chip glass size-sm">Natural Language Processing (NLP)</span><span class="chip glass size-sm">FastAPI</span></div>
-      <div class="rocket-row" style="max-width:52%;"><span class="chip glass size-sm">TensorFlow</span><span class="chip glass size-sm">Keras</span><span class="chip glass size-sm">PyTorch</span><span class="chip glass size-sm">Scikit-learn</span></div>
-      <div class="rocket-row" style="max-width:64%;"><span class="chip glass size-md">Machine Learning (ML)</span><span class="chip glass size-md">Deep Learning (DL)</span><span class="chip glass size-sm">NumPy</span><span class="chip glass size-sm">Pandas</span><span class="chip glass size-sm">Matplotlib</span></div>
-      <div class="rocket-row" style="max-width:76%;"><span class="chip glass size-sm">Seaborn</span><span class="chip glass size-sm">Solidity</span><span class="chip glass size-md">Ethereum</span><span class="chip glass size-sm">Hardhat</span><span class="chip glass size-sm">Ethers.js</span><span class="chip glass size-sm">Docker</span></div>
-      <div class="rocket-row" style="max-width:88%;"><span class="chip glass size-sm">OpenZeppelin</span><span class="chip glass size-sm">Chainlink</span><span class="chip glass size-md">Smart Contracts</span><span class="chip glass size-md">DeFi</span><span class="chip glass size-md">React.js</span><span class="chip glass size-md">Node.js</span><span class="chip glass size-sm">Express.js</span></div>
-
-      <div class="rocket-fins">
-        <div class="fin fin-left"></div>
-        <div class="rocket-row rocket-row-wide">
-          <span class="chip glass size-md">Python</span><span class="chip glass size-md">JavaScript</span><span class="chip glass size-md">TypeScript</span><span class="chip glass size-sm">C</span><span class="chip glass size-sm">SQL</span><span class="chip glass size-sm">HTML5</span><span class="chip glass size-sm">CSS3</span><span class="chip glass size-md">MongoDB</span><span class="chip glass size-sm">MySQL</span>
-        </div>
-        <div class="fin fin-right"></div>
-      </div>
-
-      <div class="rocket-flame">
-        <span class="chip glass size-sm flame-chip">REST API</span><span class="chip glass size-sm flame-chip">Git</span><span class="chip glass size-sm flame-chip">GitHub</span><span class="chip glass size-sm flame-chip">Postman</span>
-        <div class="flame-glow"></div>
-      </div>
+    <div class="stack-particle-wrap" data-reveal>
+      <canvas id="stackCanvas"></canvas>
     </div>
+    <p class="stack-hint">hover to scatter the particles</p>
   </section>
 
 
@@ -984,221 +929,6 @@
     requestAnimationFrame(frame);
   })();
 
-  // black hole accretion-disk animation behind the tech stack section
-  (function(){
-    const wrap = document.getElementById('blackholeWrap');
-    const canvas = document.getElementById('bhCanvas');
-    const fgCanvas = document.getElementById('bhFgCanvas');
-    if(!wrap || !canvas || !fgCanvas) return;
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const ctx = canvas.getContext('2d');
-    const fgCtx = fgCanvas.getContext('2d');
-
-    // config (matches the requested props; everything else is component default)
-    const opts = {
-      showCenter: true,
-      voidRadius: 40, voidX: 50, voidY: 50,
-      particleCount: 225,
-      particleSizeRaw: 1,
-      colors: ['#ffffff'],
-      outerRadiusPct: 100,
-      tilt: 10,
-      tiltSideway: 155,
-      trailRaw: 46,
-      orbitSpeed: 1,
-      pullSpeedRaw: 20
-    };
-    const particleSize = 0.5 + (Math.max(1, Math.min(50, opts.particleSizeRaw)) - 1) * (4 / 49);
-    const pullSpeed = Math.max(0, opts.pullSpeedRaw) / 2;
-    const trailAlpha = Math.max(0.02, 1 - (Math.max(0, opts.trailRaw) / 50) * 0.98);
-    const voidRadius = opts.showCenter ? opts.voidRadius : 1;
-    const perspective = 1300;
-
-    let size = { w: 600, h: 600 };
-    let particles = [];
-
-    function outerRadFromSize(w){
-      const maxR = w / 2;
-      const pct = Math.max(0, Math.min(100, opts.outerRadiusPct)) / 100;
-      return voidRadius + pct * (maxR - voidRadius);
-    }
-
-    function initParticles(){
-      const outerRad = outerRadFromSize(size.w);
-      const pts = [];
-      for(let i = 0; i < opts.particleCount; i++){
-        const radius = voidRadius + Math.pow(Math.random(), 2) * (outerRad - voidRadius);
-        pts.push({
-          angle: Math.random() * Math.PI * 2,
-          radius,
-          height: (Math.random() - 0.5) * 16,
-          speedOffset: 0.75 + Math.random() * 0.5,
-          colorIdx: Math.floor(Math.random() * opts.colors.length)
-        });
-      }
-      particles = pts;
-    }
-
-    function resize(){
-      const rect = wrap.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      const w = Math.max(1, rect.width), h = Math.max(1, rect.height);
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      fgCanvas.width = w * dpr; fgCanvas.height = h * dpr;
-      size = { w, h };
-      initParticles();
-    }
-
-    const ro = new ResizeObserver(resize);
-    ro.observe(wrap);
-    resize();
-
-    function hexToRgb(hex){
-      hex = hex.replace('#', '');
-      return {
-        r: parseInt(hex.substring(0,2), 16),
-        g: parseInt(hex.substring(2,4), 16),
-        b: parseInt(hex.substring(4,6), 16)
-      };
-    }
-
-    let lastTime = performance.now();
-    function draw(now){
-      const dt = Math.min((now - lastTime) / 16.667, 3);
-      lastTime = now;
-      const { w, h } = size;
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      fgCtx.setTransform(dpr,0,0,dpr,0,0);
-      ctx.globalAlpha = 1; fgCtx.globalAlpha = 1;
-
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = `rgba(0,0,0,${trailAlpha})`;
-      ctx.fillRect(0,0,w,h);
-      ctx.globalCompositeOperation = 'source-over';
-
-      fgCtx.globalCompositeOperation = 'destination-out';
-      fgCtx.fillStyle = `rgba(0,0,0,${trailAlpha})`;
-      fgCtx.fillRect(0,0,w,h);
-      fgCtx.globalCompositeOperation = 'source-over';
-
-      const outerRad = outerRadFromSize(w);
-      const voidCx = (opts.voidX/100) * w;
-      const voidCy = (opts.voidY/100) * h;
-      const tiltRad = (opts.tilt * Math.PI) / 180;
-      const tiltSidewayRad = (opts.tiltSideway * Math.PI) / 180;
-
-      const bg = [], fg = [];
-
-      for(let i = 0; i < particles.length; i++){
-        const pt = particles[i];
-        const speedFactor = Math.sqrt(voidRadius / Math.max(pt.radius, 10));
-        const localOrbitSpeed = opts.orbitSpeed * speedFactor * pt.speedOffset;
-        const localPullSpeed = pullSpeed * speedFactor * pt.speedOffset;
-        pt.angle += localOrbitSpeed * 0.012 * dt;
-        pt.radius -= localPullSpeed * dt;
-
-        if(pt.radius < voidRadius){
-          pt.radius = voidRadius + 0.7*(outerRad-voidRadius) + Math.random()*0.3*(outerRad-voidRadius);
-          pt.angle = Math.random() * Math.PI * 2;
-          pt.height = (Math.random()-0.5)*16;
-          continue;
-        }
-
-        const cosA = Math.cos(pt.angle), sinA = Math.sin(pt.angle);
-        const xB = pt.radius*cosA, yB = pt.height, zB = pt.radius*sinA;
-
-        const x1 = xB;
-        const y1 = yB*Math.cos(tiltRad) + zB*Math.sin(tiltRad);
-        const z1 = -yB*Math.sin(tiltRad) + zB*Math.cos(tiltRad);
-
-        const x3d = x1*Math.cos(tiltSidewayRad) - y1*Math.sin(tiltSidewayRad);
-        const y3d = x1*Math.sin(tiltSidewayRad) + y1*Math.cos(tiltSidewayRad);
-        const z3d = z1;
-
-        const scale = perspective / (perspective + z3d);
-        const px = voidCx + x3d*scale;
-        const py = voidCy + y3d*scale;
-        if(px < -30 || px > w+30 || py < -30 || py > h+30) continue;
-
-        const pSize = Math.max(0.3, particleSize*scale);
-        const alpha = Math.max(0.35, 1 - ((z3d+outerRad)/(2*outerRad))*0.45);
-        const color = opts.colors[pt.colorIdx % opts.colors.length];
-        const p = { x:px, y:py, size:pSize, alpha, z:z3d, color };
-        if(z3d >= 0) bg.push(p); else fg.push(p);
-      }
-
-      bg.sort((a,b) => b.z - a.z);
-      fg.sort((a,b) => b.z - a.z);
-
-      for(const p of bg){ ctx.globalAlpha = p.alpha; ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill(); }
-      ctx.globalAlpha = 1;
-
-      if(opts.showCenter){
-        const voidRgb = hexToRgb('#000000');
-        const grad = ctx.createRadialGradient(voidCx-voidRadius*0.25, voidCy-voidRadius*0.3, voidRadius*0.05, voidCx, voidCy, voidRadius);
-        const eR = Math.min(255, voidRgb.r+18), eG = Math.min(255, voidRgb.g+18), eB = Math.min(255, voidRgb.b+18);
-        grad.addColorStop(0, `rgba(${voidRgb.r+8},${voidRgb.g+8},${voidRgb.b+8},1)`);
-        grad.addColorStop(0.65, `rgba(${voidRgb.r},${voidRgb.g},${voidRgb.b},1)`);
-        grad.addColorStop(0.92, `rgba(${eR},${eG},${eB},1)`);
-        grad.addColorStop(1, `rgba(${eR},${eG},${eB},0.9)`);
-        ctx.fillStyle = grad;
-        ctx.beginPath(); ctx.arc(voidCx, voidCy, voidRadius, 0, Math.PI*2); ctx.fill();
-
-        const rim = ctx.createRadialGradient(voidCx, voidCy, voidRadius*0.88, voidCx, voidCy, voidRadius*1.02);
-        rim.addColorStop(0, 'rgba(255,255,255,0)');
-        rim.addColorStop(0.6, 'rgba(180,180,200,0.06)');
-        rim.addColorStop(0.85, 'rgba(180,180,200,0.12)');
-        rim.addColorStop(1, 'rgba(180,180,200,0)');
-        ctx.fillStyle = rim;
-        ctx.beginPath(); ctx.arc(voidCx, voidCy, voidRadius*1.02, 0, Math.PI*2); ctx.fill();
-      }
-
-      for(const p of fg){ fgCtx.globalAlpha = p.alpha; fgCtx.fillStyle = p.color; fgCtx.beginPath(); fgCtx.arc(p.x,p.y,p.size,0,Math.PI*2); fgCtx.fill(); }
-      fgCtx.globalAlpha = 1;
-
-      requestAnimationFrame(draw);
-    }
-    requestAnimationFrame(draw);
-  })();
-
-  // flicker-reveal for the hero name: all letters flicker together (white), then settle
-  function scrambleReveal(el, text, opts){
-    opts = opts || {};
-    const scrambleFrames = opts.scrambleFrames || 9;
-    const frameSpeed = opts.frameSpeed || 110;
-    const pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-
-    const finalChars = text.split('');
-    el.innerHTML = '';
-    const spans = finalChars.map(ch => {
-      const span = document.createElement('span');
-      span.textContent = ch === ' ' ? '\u00A0' : ch;
-      el.appendChild(span);
-      return span;
-    });
-
-    let frame = 0;
-    const iv = setInterval(() => {
-      spans.forEach((span, i) => {
-        if(finalChars[i] === ' ') return;
-        span.style.webkitTextFillColor = '#ffffff';
-        span.style.color = '#ffffff';
-        span.textContent = pool[Math.floor(Math.random() * pool.length)];
-      });
-      frame++;
-      if(frame >= scrambleFrames){
-        clearInterval(iv);
-        spans.forEach((span, i) => {
-          span.textContent = finalChars[i] === ' ' ? '\u00A0' : finalChars[i];
-          span.style.webkitTextFillColor = '';
-          span.style.color = '';
-        });
-      }
-    }, frameSpeed);
-  }
-
   // preloader
   (function(){
     const loader = document.getElementById('loader');
@@ -1206,7 +936,6 @@
     const label = document.getElementById('loadingLabel');
     const pill = document.getElementById('loadingPill');
     const cursorEl = document.getElementById('pillCursor');
-    const scrambleEl = document.getElementById('scrambleName');
     let progress = 0;
     const tick = setInterval(() => {
       progress += Math.random() * 6 + 7;
@@ -1217,10 +946,7 @@
 
         // brief pause on 100%, then reveal the portfolio
         setTimeout(() => loader.classList.add('hide'), 400);
-        setTimeout(() => {
-          loader.remove();
-          if(scrambleEl) scrambleReveal(scrambleEl, 'Jeevan Yadav');
-        }, 1600);
+        setTimeout(() => loader.remove(), 1600);
       } else {
         pct.textContent = Math.floor(progress) + '%';
       }
@@ -1334,6 +1060,130 @@
     nextBtn.addEventListener('click', () => { currentPage++; render(); });
 
     render();
+  })();
+
+  // tech-stack particle text: idle = fixed text made of particles, hover = particles scatter near cursor
+  (function(){
+    const wrap = document.querySelector('.stack-particle-wrap');
+    const canvas = document.getElementById('stackCanvas');
+    if(!wrap || !canvas) return;
+    const ctx = canvas.getContext('2d');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // rows of words, top to bottom — larger size = visually emphasized terms
+    const rows = [
+      { size: 13, words: ['AI Agents', 'RAG'] },
+      { size: 13, words: ['Transformers', 'Hugging Face'] },
+      { size: 13, words: ['Computer Vision (CV)', 'Natural Language Processing (NLP)', 'FastAPI'] },
+      { size: 13, words: ['TensorFlow', 'Keras', 'PyTorch', 'Scikit-learn'] },
+      { size: 17, words: ['Machine Learning (ML)', 'Deep Learning (DL)', 'NumPy', 'Pandas', 'Matplotlib'] },
+      { size: 13, words: ['Seaborn', 'Solidity', 'Ethereum', 'Hardhat', 'Ethers.js', 'Docker'] },
+      { size: 15, words: ['OpenZeppelin', 'Chainlink', 'Smart Contracts', 'DeFi', 'React.js', 'Node.js', 'Express.js'] },
+      { size: 17, words: ['Python', 'JavaScript', 'TypeScript', 'C', 'SQL', 'HTML5', 'CSS3', 'MongoDB', 'MySQL'] },
+      { size: 13, words: ['REST API', 'Git', 'GitHub', 'Postman'] }
+    ];
+
+    let W = 0, H = 0, dpr = 1;
+    let particles = [];
+    const mouse = { x: -9999, y: -9999, active: false };
+
+    function buildParticles(){
+      const rect = wrap.getBoundingClientRect();
+      W = Math.max(1, Math.round(rect.width));
+      H = Math.max(1, Math.round(rect.height));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+
+      // draw all rows onto an offscreen canvas purely to sample particle positions
+      const off = document.createElement('canvas');
+      off.width = W;
+      off.height = H;
+      const octx = off.getContext('2d');
+      octx.clearRect(0, 0, W, H);
+      octx.fillStyle = '#ffffff';
+      octx.textBaseline = 'middle';
+
+      const lineGap = Math.max(30, H / (rows.length + 1));
+      let y = lineGap * 0.75;
+
+      rows.forEach(row => {
+        octx.font = `600 ${row.size}px 'Space Grotesk', sans-serif`;
+        const gap = 22;
+        const widths = row.words.map(w => octx.measureText(w).width);
+        const totalW = widths.reduce((a, b) => a + b, 0) + gap * (row.words.length - 1);
+        let x = (W - totalW) / 2;
+        row.words.forEach((w, i) => {
+          octx.fillText(w, x, y);
+          x += widths[i] + gap;
+        });
+        y += lineGap;
+      });
+
+      const imgData = octx.getImageData(0, 0, W, H).data;
+      const step = 2; // sampling density — lower = denser particles
+      const pts = [];
+      for(let py = 0; py < H; py += step){
+        for(let px = 0; px < W; px += step){
+          const idx = (py * W + px) * 4;
+          if(imgData[idx + 3] > 100){
+            pts.push({ homeX: px, homeY: py, x: px, y: py, repX: 0, repY: 0 });
+          }
+        }
+      }
+      particles = pts;
+    }
+
+    const ro = new ResizeObserver(() => buildParticles());
+    ro.observe(wrap);
+    buildParticles();
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+    });
+    canvas.addEventListener('mouseleave', () => {
+      mouse.active = false;
+      mouse.x = -9999; mouse.y = -9999;
+    });
+
+    const RADIUS = 90;
+    const RADIUS_SQ = RADIUS * RADIUS;
+
+    function step(){
+      if(!reduceMotion) requestAnimationFrame(step);
+      if(!particles.length){ return; }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#dcdce2';
+
+      for(const p of particles){
+        if(mouse.active){
+          const dx = p.homeX - mouse.x;
+          const dy = p.homeY - mouse.y;
+          const distSq = dx * dx + dy * dy;
+          if(distSq < RADIUS_SQ && distSq > 0.01){
+            const dist = Math.sqrt(distSq);
+            const push = (1 - dist / RADIUS) * 26;
+            const nx = dx / dist, ny = dy / dist;
+            p.repX += (nx * push - p.repX) * 0.2;
+            p.repY += (ny * push - p.repY) * 0.2;
+          } else {
+            p.repX *= 0.9;
+            p.repY *= 0.9;
+          }
+        } else {
+          p.repX *= 0.9;
+          p.repY *= 0.9;
+        }
+        p.x = p.homeX + p.repX;
+        p.y = p.homeY + p.repY;
+        ctx.fillRect(p.x, p.y, 1.6, 1.6);
+      }
+    }
+    step();
   })();
 
   // scroll spy
