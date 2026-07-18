@@ -389,20 +389,22 @@
   }
   .page-dot.active{background:var(--violet); border-color:var(--violet); transform:scale(1.3);}
 
-  /* TECH STACK — particle text */
+  /* TECH STACK — particle text (rocket silhouette) */
   .stack-particle-wrap{
-    position:relative; width:100%; max-width:900px; margin:0 auto;
-    height:420px;
+    position:relative; width:100%; max-width:960px; margin:0 auto;
+    height:520px;
   }
   .stack-particle-wrap canvas{
     position:absolute; inset:0; width:100%; height:100%; display:block;
   }
-  .stack-hint{
-    text-align:center; color:var(--muted-2); font-size:12.5px; font-family:'JetBrains Mono',monospace;
-    margin-top:18px; letter-spacing:0.03em;
+  .stack-particle-wrap .flame-glow{
+    position:absolute; left:50%; transform:translateX(-50%);
+    width:160px; height:90px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(ellipse, rgba(255,140,80,0.4), rgba(139,124,246,0.18) 60%, transparent 75%);
+    filter:blur(22px); z-index:0; animation:flameFlicker 1.4s ease-in-out infinite;
   }
   @media(max-width:700px){
-    .stack-particle-wrap{ height:560px; }
+    .stack-particle-wrap{ height:680px; }
   }
 
   /* OPEN SOURCE + LEARNING */
@@ -834,8 +836,8 @@
     </div>
     <div class="stack-particle-wrap" data-reveal>
       <canvas id="stackCanvas"></canvas>
+      <div class="flame-glow" id="flameGlow"></div>
     </div>
-    <p class="stack-hint">hover to scatter the particles</p>
   </section>
 
 
@@ -1062,7 +1064,7 @@
     render();
   })();
 
-  // tech-stack particle text: idle = fixed text made of particles, hover = particles scatter near cursor
+  // tech-stack text: crisp & fully readable at rest, shatters into particles only right around the cursor
   (function(){
     const wrap = document.querySelector('.stack-particle-wrap');
     const canvas = document.getElementById('stackCanvas');
@@ -1070,24 +1072,27 @@
     const ctx = canvas.getContext('2d');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // rows of words, top to bottom — larger size = visually emphasized terms
+    // rows of words, top to bottom — grouping + sizes tuned to taper into a
+    // rocket silhouette: narrow nose → widening body → wide row → narrow "flame" row
     const rows = [
-      { size: 13, words: ['AI Agents', 'RAG'] },
-      { size: 13, words: ['Transformers', 'Hugging Face'] },
-      { size: 13, words: ['Computer Vision (CV)', 'Natural Language Processing (NLP)', 'FastAPI'] },
-      { size: 13, words: ['TensorFlow', 'Keras', 'PyTorch', 'Scikit-learn'] },
-      { size: 17, words: ['Machine Learning (ML)', 'Deep Learning (DL)', 'NumPy', 'Pandas', 'Matplotlib'] },
-      { size: 13, words: ['Seaborn', 'Solidity', 'Ethereum', 'Hardhat', 'Ethers.js', 'Docker'] },
+      { size: 14, words: ['AI Agents', 'RAG'] },
+      { size: 14, words: ['Transformers', 'Hugging Face'] },
+      { size: 14, words: ['Computer Vision (CV)', 'Natural Language Processing (NLP)', 'FastAPI'] },
+      { size: 14, words: ['TensorFlow', 'Keras', 'PyTorch', 'Scikit-learn'] },
+      { size: 16, words: ['Machine Learning (ML)', 'Deep Learning (DL)', 'NumPy', 'Pandas', 'Matplotlib'] },
+      { size: 14, words: ['Seaborn', 'Solidity', 'Ethereum', 'Hardhat', 'Ethers.js', 'Docker'] },
       { size: 15, words: ['OpenZeppelin', 'Chainlink', 'Smart Contracts', 'DeFi', 'React.js', 'Node.js', 'Express.js'] },
-      { size: 17, words: ['Python', 'JavaScript', 'TypeScript', 'C', 'SQL', 'HTML5', 'CSS3', 'MongoDB', 'MySQL'] },
-      { size: 13, words: ['REST API', 'Git', 'GitHub', 'Postman'] }
+      { size: 16, words: ['Python', 'JavaScript', 'TypeScript', 'C', 'SQL', 'HTML5', 'CSS3', 'MongoDB', 'MySQL'] },
+      { size: 14, words: ['REST API', 'Git', 'GitHub', 'Postman'], isFlame: true }
     ];
+    const flameGlow = document.getElementById('flameGlow');
 
     let W = 0, H = 0, dpr = 1;
-    let particles = [];
+    let baseCanvas = null;   // crisp pre-rendered text, drawn every frame as the resting state
+    let particles = [];      // sparse sample points used only for the hover shatter effect
     const mouse = { x: -9999, y: -9999, active: false };
 
-    function buildParticles(){
+    function build(){
       const rect = wrap.getBoundingClientRect();
       W = Math.max(1, Math.round(rect.width));
       H = Math.max(1, Math.round(rect.height));
@@ -1095,48 +1100,54 @@
       canvas.width = W * dpr;
       canvas.height = H * dpr;
 
-      // draw all rows onto an offscreen canvas purely to sample particle positions
-      const off = document.createElement('canvas');
-      off.width = W;
-      off.height = H;
-      const octx = off.getContext('2d');
-      octx.clearRect(0, 0, W, H);
-      octx.fillStyle = '#ffffff';
-      octx.textBaseline = 'middle';
+      // render the real, crisp text once onto an offscreen canvas
+      baseCanvas = document.createElement('canvas');
+      baseCanvas.width = W;
+      baseCanvas.height = H;
+      const bctx = baseCanvas.getContext('2d');
+      bctx.fillStyle = '#f4f4f7';
+      bctx.textBaseline = 'middle';
 
-      const lineGap = Math.max(30, H / (rows.length + 1));
+      const lineGap = Math.max(38, H / (rows.length + 1));
       let y = lineGap * 0.75;
+      let flameY = null;
 
       rows.forEach(row => {
-        octx.font = `600 ${row.size}px 'Space Grotesk', sans-serif`;
-        const gap = 22;
-        const widths = row.words.map(w => octx.measureText(w).width);
+        bctx.font = `600 ${row.size}px 'Space Grotesk', sans-serif`;
+        const gap = 20;
+        const widths = row.words.map(w => bctx.measureText(w).width);
         const totalW = widths.reduce((a, b) => a + b, 0) + gap * (row.words.length - 1);
         let x = (W - totalW) / 2;
         row.words.forEach((w, i) => {
-          octx.fillText(w, x, y);
+          bctx.fillText(w, x, y);
           x += widths[i] + gap;
         });
+        if(row.isFlame) flameY = y;
         y += lineGap;
       });
 
-      const imgData = octx.getImageData(0, 0, W, H).data;
-      const step = 2; // sampling density — lower = denser particles
+      if(flameGlow && flameY !== null){
+        flameGlow.style.top = (flameY - 45) + 'px';
+      }
+
+      // sparse sample of the same text, used only to animate the shattered pixels near the cursor
+      const imgData = bctx.getImageData(0, 0, W, H).data;
+      const step = 2;
       const pts = [];
       for(let py = 0; py < H; py += step){
         for(let px = 0; px < W; px += step){
           const idx = (py * W + px) * 4;
           if(imgData[idx + 3] > 100){
-            pts.push({ homeX: px, homeY: py, x: px, y: py, repX: 0, repY: 0 });
+            pts.push({ homeX: px, homeY: py, repX: 0, repY: 0 });
           }
         }
       }
       particles = pts;
     }
 
-    const ro = new ResizeObserver(() => buildParticles());
+    const ro = new ResizeObserver(() => build());
     ro.observe(wrap);
-    buildParticles();
+    build();
 
     canvas.addEventListener('mousemove', (e) => {
       const rect = canvas.getBoundingClientRect();
@@ -1149,38 +1160,42 @@
       mouse.x = -9999; mouse.y = -9999;
     });
 
-    const RADIUS = 90;
+    const RADIUS = 70;
     const RADIUS_SQ = RADIUS * RADIUS;
+    const HOLE = 3; // px cleared from the crisp base per active particle, matches particle size
 
     function step(){
       if(!reduceMotion) requestAnimationFrame(step);
-      if(!particles.length){ return; }
+      if(!baseCanvas) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#dcdce2';
+      // 1) draw the crisp, fully readable text as the resting state
+      ctx.drawImage(baseCanvas, 0, 0, W, H);
 
+      // 2) locally shatter only the particles near the cursor; everywhere else stays untouched
+      ctx.fillStyle = '#ffffff';
       for(const p of particles){
-        if(mouse.active){
-          const dx = p.homeX - mouse.x;
-          const dy = p.homeY - mouse.y;
-          const distSq = dx * dx + dy * dy;
-          if(distSq < RADIUS_SQ && distSq > 0.01){
-            const dist = Math.sqrt(distSq);
-            const push = (1 - dist / RADIUS) * 26;
-            const nx = dx / dist, ny = dy / dist;
-            p.repX += (nx * push - p.repX) * 0.2;
-            p.repY += (ny * push - p.repY) * 0.2;
-          } else {
-            p.repX *= 0.9;
-            p.repY *= 0.9;
-          }
+        const dx = p.homeX - mouse.x;
+        const dy = p.homeY - mouse.y;
+        const distSq = dx * dx + dy * dy;
+        const inZone = mouse.active && distSq < RADIUS_SQ;
+
+        if(inZone && distSq > 0.01){
+          const dist = Math.sqrt(distSq);
+          const push = (1 - dist / RADIUS) * 24;
+          const nx = dx / dist, ny = dy / dist;
+          p.repX += (nx * push - p.repX) * 0.25;
+          p.repY += (ny * push - p.repY) * 0.25;
         } else {
-          p.repX *= 0.9;
-          p.repY *= 0.9;
+          p.repX *= 0.88;
+          p.repY *= 0.88;
         }
-        p.x = p.homeX + p.repX;
-        p.y = p.homeY + p.repY;
-        ctx.fillRect(p.x, p.y, 1.6, 1.6);
+
+        const active = Math.abs(p.repX) > 0.4 || Math.abs(p.repY) > 0.4 || inZone;
+        if(active){
+          ctx.clearRect(p.homeX - HOLE / 2, p.homeY - HOLE / 2, HOLE, HOLE);
+          ctx.fillRect(p.homeX + p.repX, p.homeY + p.repY, HOLE, HOLE);
+        }
       }
     }
     step();
