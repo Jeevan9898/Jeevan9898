@@ -885,7 +885,7 @@
 </a>
 
 <footer>
-  © 2026 Jeevan Yadav — Designed with glass, built with code.<span class="footer-signature">Jeevan Yadav</span>
+  © <span id="footerYear">2026</span> Jeevan Yadav — Designed with precision. Built with code.<span class="footer-signature">Jeevan Yadav</span>
 </footer>
 
 <script>
@@ -958,6 +958,12 @@
         pct.textContent = Math.floor(progress) + '%';
       }
     }, 100);
+  })();
+
+  // footer year — always shows the current year automatically
+  (function(){
+    const yearEl = document.getElementById('footerYear');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
   })();
 
   // timeline scroll-fill progress bar
