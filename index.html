@@ -549,7 +549,7 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#do">What I Do</a></li>
-    <li><a href="#experience">Experience</a></li>
+    <li><a href="#experience">Journey</a></li>
     <li><a href="#work">Work</a></li>
     <li><a href="#stack">Stack</a></li>
   </ul>
@@ -565,8 +565,8 @@
   <div class="wrap">
     <span class="eyebrow">AVAILABLE FOR OPPORTUNITIES</span>
     <h1>Hi, I'm<br>Jeevan Yadav.</h1>
-    <p class="role">Software Engineer — building software that creates impact.</p>
-    <p class="role-sub">Software Engineer specializing in Full Stack, Blockchain &amp; Artificial Intelligence</p>
+    <p class="role">Software Engineer specializing in <span class="accent">Full Stack, Blockchain &amp; AI</span>.</p>
+    <p class="role-sub">Building software that creates impact.</p>
     <div class="hero-actions">
       <a href="#work" class="btn btn-primary">View My Work →</a>
       <a href="#contact" class="btn btn-glass">Get In Touch</a>
@@ -620,15 +620,15 @@
         <span class="do-icon">🧠</span>
         <h3>Artificial Intelligence</h3>
         <div class="tagline">Creating intelligent software</div>
-        <p>I'm expanding into Artificial Intelligence by building Machine Learning, Deep Learning, and Transformer-based applications. My focus is on integrating AI into modern software systems to create practical and impactful user experiences.</p>
+        <p>I build Machine Learning, Deep Learning, and Transformer-based applications — from classification and regression pipelines to CNNs and LSTMs — with a focus on integrating AI into real software systems, not just notebooks.</p>
       </div>
     </div>
   </section>
 
   <section id="experience">
     <div class="section-head" data-reveal>
-      <span class="section-tag">03 — Experience</span>
-      <h2 class="section-title">My career &amp; <span class="accent">growth</span></h2>
+      <span class="section-tag">03 — Journey</span>
+      <h2 class="section-title">My path &amp; <span class="accent">growth</span></h2>
     </div>
     <div class="timeline glass" style="padding:20px 40px;" id="timelineEl" data-reveal>
       <div class="tl-line-bg"></div>
@@ -708,7 +708,7 @@
         <span class="work-category">DeFi / Blockchain</span>
         <h3>Lending &amp; Borrowing Protocol</h3>
         <div class="work-tagline">Decentralized lending infrastructure for digital assets.</div>
-        <div class="work-desc">A DeFi protocol that lets users deposit crypto assets as collateral, borrow tokens against their holdings, repay loans, and manage positions securely through Ethereum smart contracts — with secure collateral management, interest calculations, and transparent on-chain transactions for a trustless lending experience.</div>
+        <div class="work-desc">Deposit crypto as collateral, borrow against it, repay, and manage positions — all enforced by Ethereum smart contracts. The core challenge was collateral safety: interest accrues per-block, and positions become liquidatable if their health factor drops below a set threshold, so under- and over-collateralization are handled entirely on-chain with no trusted intermediary.</div>
         <div class="tech-tags">
           <span class="tech-tag">Solidity</span><span class="tech-tag">Hardhat</span><span class="tech-tag">React</span><span class="tech-tag">Ethers.js</span><span class="tech-tag">Ethereum</span><span class="tech-tag">OpenZeppelin</span>
         </div>
@@ -718,7 +718,7 @@
         <span class="work-category">DeFi / Blockchain</span>
         <h3>Yield Farming Platform</h3>
         <div class="work-tagline">Maximizing rewards through decentralized finance.</div>
-        <div class="work-desc">A decentralized yield farming application where users stake digital assets and earn rewards through automated distribution mechanisms — built with a focus on security, transparency, and an intuitive UX, demonstrating core DeFi concepts like staking, APR calculations, and reward claiming.</div>
+        <div class="work-desc">Users stake assets and earn rewards distributed automatically based on stake size and time. Built the reward math (APR calculation, proportional distribution, claim logic) directly into the contract rather than off-chain, so payouts stay transparent and verifiable by anyone reading the chain.</div>
         <div class="tech-tags">
           <span class="tech-tag">Solidity</span><span class="tech-tag">Hardhat</span><span class="tech-tag">React</span><span class="tech-tag">Ethers.js</span><span class="tech-tag">Ethereum</span><span class="tech-tag">OpenZeppelin</span>
         </div>
@@ -728,7 +728,7 @@
         <span class="work-category">DeFi / Governance</span>
         <h3>DAO Treasury</h3>
         <div class="work-tagline">Transparent, community-governed decision making.</div>
-        <div class="work-desc">A decentralized governance platform where community members create proposals, vote on treasury decisions, and execute approved actions through transparent, on-chain blockchain governance.</div>
+        <div class="work-desc">A governance platform where members submit proposals, vote with on-chain weight, and trigger treasury execution automatically once a proposal passes — removing any single party's ability to unilaterally move funds.</div>
         <div class="tech-tags">
           <span class="tech-tag">Solidity</span><span class="tech-tag">Hardhat</span><span class="tech-tag">React</span>
         </div>
@@ -738,7 +738,7 @@
         <span class="work-category">Full Stack</span>
         <h3>Job Portal Backend</h3>
         <div class="work-tagline">Scalable backend for a modern hiring platform.</div>
-        <div class="work-desc">A scalable backend system featuring authentication, company management, job listings, resume uploads, role-based authorization, filtering, and RESTful APIs — built for real-world hiring workflows.</div>
+        <div class="work-desc">A backend built around role-based access — separate permission paths for candidates and companies — with resume uploads, filterable job listings, and REST APIs designed to support real hiring workflows rather than a toy CRUD app.</div>
         <div class="tech-tags">
           <span class="tech-tag">Node.js</span><span class="tech-tag">Express</span><span class="tech-tag">MongoDB</span>
         </div>
@@ -748,7 +748,7 @@
         <span class="work-category">Full Stack</span>
         <h3>Full Stack Authentication System</h3>
         <div class="work-tagline">Secure authentication system for modern web applications.</div>
-        <div class="work-desc">A production-ready authentication system featuring secure user registration, login, JWT-based authentication, password hashing with Bcrypt, protected routes, role-based authorization, user profile management, and RESTful APIs — built following industry best practices for scalable MERN applications.</div>
+        <div class="work-desc">JWT-based auth with Bcrypt password hashing, protected routes, and role-based authorization — built as a reusable foundation I've since carried into other MERN projects rather than a one-off demo.</div>
         <div class="tech-tags">
           <span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">JWT</span><span class="tech-tag">Bcrypt</span>
         </div>
@@ -758,7 +758,7 @@
         <span class="work-category">Full Stack / AI</span>
         <h3>Full Stack AI Resume Analyzer</h3>
         <div class="work-tagline">AI-powered resume analysis for smarter career insights.</div>
-        <div class="work-desc">A full-stack AI-powered application that analyzes resumes, extracts key information, evaluates skills, identifies strengths and improvement areas, and provides intelligent feedback based on job requirements — built with a scalable MERN architecture, secure file uploads, AI-driven text processing, and RESTful APIs to deliver accurate and actionable resume insights.</div>
+        <div class="work-desc">Parses uploaded resumes, extracts structured fields (skills, experience, education), and uses an LLM to score fit against a target job description with specific improvement feedback — not just a generic "ATS score." Handles file storage via Cloudinary and secure uploads via Multer.</div>
         <div class="tech-tags">
           <span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">AI API (OpenAI/Gemini)</span><span class="tech-tag">Multer</span><span class="tech-tag">Cloudinary</span>
         </div>
@@ -768,7 +768,7 @@
         <span class="work-category">Machine Learning</span>
         <h3>House Price Prediction</h3>
         <div class="work-tagline">Machine learning pipeline for real-world housing price prediction.</div>
-        <div class="work-desc">Developed an end-to-end regression model using the California Housing dataset, implementing EDA, feature engineering, model evaluation, cross-validation, and hyperparameter tuning. Compared Linear Regression, Decision Tree, and Random Forest models to identify the best-performing solution following professional machine learning practices.</div>
+        <div class="work-desc">Regression on the California Housing dataset. Compared Linear Regression, Decision Tree, and Random Forest after feature engineering and cross-validation — Random Forest gave the best R² after hyperparameter tuning, which is the version deployed in the pipeline.</div>
         <div class="tech-tags">
           <span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span><span class="tech-tag">Jupyter</span>
         </div>
@@ -778,7 +778,7 @@
         <span class="work-category">Machine Learning</span>
         <h3>Heart Disease Prediction</h3>
         <div class="work-tagline">Machine learning classification system for early heart disease prediction.</div>
-        <div class="work-desc">Developed an end-to-end classification pipeline using a real-world medical dataset, implementing exploratory data analysis, feature encoding, preprocessing, model comparison, cross-validation, and hyperparameter tuning. Evaluated multiple classifiers using Accuracy, Precision, Recall, F1-Score, Confusion Matrix, and ROC-AUC to identify the best-performing model.</div>
+        <div class="work-desc">Binary classification on a clinical dataset, where recall mattered more than raw accuracy since a missed positive case is far costlier than a false alarm. Compared multiple classifiers using Precision, Recall, F1, and ROC-AUC rather than accuracy alone to pick the final model.</div>
         <div class="tech-tags">
           <span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span><span class="tech-tag">Jupyter</span>
         </div>
@@ -788,7 +788,7 @@
         <span class="work-category">Machine Learning</span>
         <h3>Customer Segmentation</h3>
         <div class="work-tagline">Unsupervised machine learning model for customer behavior analysis.</div>
-        <div class="work-desc">Developed an end-to-end clustering pipeline using the Mall Customers dataset, implementing exploratory data analysis, feature scaling, K-Means clustering, the Elbow Method, centroid analysis, and silhouette evaluation to identify meaningful customer segments for targeted marketing and business insights.</div>
+        <div class="work-desc">Unsupervised clustering on the Mall Customers dataset. Used the Elbow Method and silhouette scores to choose the number of K-Means clusters objectively rather than guessing, then profiled each segment by spending behavior for targeted marketing use cases.</div>
         <div class="tech-tags">
           <span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span><span class="tech-tag">Jupyter</span>
         </div>
@@ -798,7 +798,7 @@
         <span class="work-category">Deep Learning</span>
         <h3>Customer Churn Prediction</h3>
         <div class="work-tagline">Deep learning model for customer retention prediction.</div>
-        <div class="work-desc">Developed an end-to-end deep learning pipeline using the Bank Customer Churn dataset, implementing data preprocessing, feature engineering, label encoding, one-hot encoding, feature scaling, an Artificial Neural Network (ANN), model training, evaluation, confusion matrix analysis, and customer churn prediction to identify customers likely to leave the bank and support data-driven retention strategies.</div>
+        <div class="work-desc">An ANN trained on the Bank Customer Churn dataset to flag customers likely to leave. Categorical features went through label/one-hot encoding and scaling before training; evaluated with a confusion matrix to understand which type of error (missed churners vs. false positives) the model was actually making.</div>
         <div class="tech-tags">
           <span class="tech-tag">Python</span><span class="tech-tag">TensorFlow</span><span class="tech-tag">Keras</span><span class="tech-tag">Pandas</span><span class="tech-tag">NumPy</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Seaborn</span>
         </div>
@@ -808,7 +808,7 @@
         <span class="work-category">Deep Learning</span>
         <h3>CIFAR-10 Image Classification</h3>
         <div class="work-tagline">Deep learning model for multi-class image recognition.</div>
-        <div class="work-desc">Built an end-to-end image classification system using a Convolutional Neural Network (CNN) implemented from scratch in PyTorch. Developed the complete deep learning pipeline including image preprocessing, mini-batch data loading with DataLoader, CNN architecture design, model training, evaluation, prediction visualization, confusion matrix analysis, and model checkpointing to classify images from the CIFAR-10 dataset into 10 object categories.</div>
+        <div class="work-desc">A CNN built from scratch in PyTorch (not a pretrained backbone) to classify CIFAR-10 images into 10 categories. Wrote the full training loop myself — batching via DataLoader, checkpointing, and confusion-matrix analysis to see exactly which classes the model confused most.</div>
         <div class="tech-tags">
           <span class="tech-tag">Python</span><span class="tech-tag">PyTorch</span><span class="tech-tag">Torchvision</span><span class="tech-tag">NumPy</span><span class="tech-tag">Matplotlib</span><span class="tech-tag">Scikit-learn</span>
         </div>
@@ -818,7 +818,7 @@
         <span class="work-category">Deep Learning</span>
         <h3>Sentiment Analysis using LSTM</h3>
         <div class="work-tagline">Deep learning model for movie review sentiment classification.</div>
-        <div class="work-desc">Developed a Deep Learning-based Sentiment Analysis model using PyTorch and a two-layer LSTM network to classify IMDb movie reviews as positive or negative. Built a complete NLP pipeline including text preprocessing, tokenization, vocabulary creation, integer encoding, sequence padding, and word embeddings. Achieved high classification accuracy while visualizing training performance and saving the trained model for inference.</div>
+        <div class="work-desc">A two-layer LSTM built in PyTorch to classify IMDb reviews as positive or negative, with a custom NLP pipeline — tokenization, vocabulary building, integer encoding, and sequence padding — written from scratch rather than relying on a pre-built tokenizer.</div>
         <div class="tech-tags">
           <span class="tech-tag">PyTorch</span><span class="tech-tag">LSTM</span><span class="tech-tag">Python</span><span class="tech-tag">NumPy</span><span class="tech-tag">Pandas</span><span class="tech-tag">Scikit-learn</span><span class="tech-tag">Matplotlib</span>
         </div>
