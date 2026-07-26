@@ -250,6 +250,10 @@
     margin-top:22px; font-size:clamp(18px, 2.4vw, 26px); color:var(--muted); font-weight:500;
   }
   .hero .role .accent{color:var(--violet); font-weight:600;}
+  .hero .role-sub{
+    margin-top:12px; font-size:14.5px; color:var(--muted-2);
+    font-family:'JetBrains Mono',monospace; letter-spacing:0.02em;
+  }
   .hero-actions{display:flex; gap:16px; margin-top:44px; flex-wrap:wrap;}
   .btn{
     padding:15px 30px; border-radius:100px; text-decoration:none; font-weight:600; font-size:14.5px;
@@ -561,7 +565,8 @@
   <div class="wrap">
     <span class="eyebrow">AVAILABLE FOR OPPORTUNITIES</span>
     <h1>Hi, I'm<br>Jeevan Yadav.</h1>
-    <p class="role">Full Stack &amp; <span class="accent">Blockchain</span> Developer — building software that creates impact.</p>
+    <p class="role">Software Engineer — building software that creates impact.</p>
+    <p class="role-sub">Software Engineer specializing in Full Stack, Blockchain &amp; Artificial Intelligence</p>
     <div class="hero-actions">
       <a href="#work" class="btn btn-primary">View My Work →</a>
       <a href="#contact" class="btn btn-glass">Get In Touch</a>
@@ -579,9 +584,9 @@
     </div>
     <div class="about-grid" data-reveal>
       <div class="about-card glass">
-        <p>I'm a software developer passionate about building scalable web applications and decentralized systems that solve real-world problems. My journey began with curiosity about programming and has evolved into a strong interest in full-stack development, blockchain technology, and software engineering.</p>
-        <p>I've built projects ranging from secure MERN applications to Ethereum-based smart contracts, including DeFi protocols such as lending & borrowing, yield farming, DAO treasury governance, staking, NFT marketplaces, and decentralized exchanges. Through these projects, I've developed a solid foundation in modern web development, backend architecture, RESTful APIs, authentication, and blockchain development.</p>
-        <p>I'm also expanding my expertise into Artificial Intelligence while continuously strengthening my understanding of data structures, algorithms, and computer science fundamentals. I enjoy learning by building, contributing to open-source projects, and taking on challenging projects that push my technical skills further.</p>
+        <p>I'm a Software Engineer passionate about building secure, scalable, and impactful software across Full Stack Development, Blockchain, and Artificial Intelligence. I enjoy solving complex problems and transforming ideas into products that deliver real value. My journey started with curiosity about programming and has grown into a deep interest in software engineering, distributed systems, and intelligent applications.</p>
+        <p>I have built projects ranging from production-ready MERN applications to Ethereum-based decentralized applications, gaining hands-on experience in frontend development, backend architecture, RESTful APIs, authentication, databases, cloud deployment, and secure smart contract development. On the blockchain side, I've developed DeFi protocols including lending & borrowing platforms, staking systems, decentralized exchanges, DAO governance, NFT marketplaces, and token-based applications using Solidity, Hardhat, and modern Web3 tooling.</p>
+        <p>Alongside Full Stack and Blockchain development, I'm building expertise in Artificial Intelligence through Machine Learning, Deep Learning, Transformers, and AI-powered applications. I continuously strengthen my foundation in Data Structures & Algorithms, System Design, and Computer Science fundamentals while contributing to open-source projects and exploring emerging technologies.</p>
         <div class="goal">My goal is to become a world-class Software Engineer capable of building secure, scalable, and impactful products across Web2, Web3, and AI.</div>
       </div>
       <div class="about-visual glass">
@@ -612,10 +617,10 @@
         <p>Smart contracts, DeFi protocols, and Web3 integrations built with Solidity and Hardhat — engineered around security, efficiency, and scalability as core principles, not afterthoughts.</p>
       </div>
       <div class="do-card glass">
-        <span class="do-icon">🚀</span>
-        <h3>Software Engineering</h3>
-        <div class="tagline">Solving real problems</div>
-        <p>Turning ideas into impactful software through clean code and continuous learning — currently expanding into AI while connecting Web2, Web3, and emerging technologies.</p>
+        <span class="do-icon">🧠</span>
+        <h3>Artificial Intelligence</h3>
+        <div class="tagline">Creating intelligent software</div>
+        <p>I'm expanding into Artificial Intelligence by building Machine Learning, Deep Learning, and Transformer-based applications. My focus is on integrating AI into modern software systems to create practical and impactful user experiences.</p>
       </div>
     </div>
   </section>
@@ -634,8 +639,8 @@
         <div class="tl-year">2026</div>
         <div class="tl-content">
           <h3>Artificial Intelligence</h3>
-          <span class="role-tag">Currently learning</span>
-          <p>Learning Machine Learning, Deep Learning, and Transformer architectures while building AI-powered applications — exploring how intelligent systems integrate with Full Stack and Blockchain work.</p>
+          <span class="role-tag">AI & Machine Learning</span>
+          <p>Building intelligent applications using Machine Learning, Deep Learning, Transformers, Hugging Face, NLP, and AI Agents while exploring how AI integrates with Full Stack applications and Blockchain ecosystems.</p>
         </div>
       </div>
 
@@ -671,7 +676,7 @@
 
       <div class="tl-item">
         <div class="tl-dot"></div>
-        <div class="tl-year">2023</div>
+        <div class="tl-year">2024</div>
         <div class="tl-content">
           <h3>Software Development Journey</h3>
           <span class="role-tag">Foundations</span>
@@ -1088,7 +1093,7 @@
     const flameGlow = document.getElementById('flameGlow');
 
     let W = 0, H = 0, dpr = 1;
-    let baseCanvas = null;   // crisp pre-rendered text, drawn every frame as the resting state
+    let wordDraws = [];      // {text, x, y, font} — drawn live each frame for crisp, native text rendering
     let particles = [];      // sparse sample points used only for the hover shatter effect
     const mouse = { x: -9999, y: -9999, active: false };
 
@@ -1100,26 +1105,30 @@
       canvas.width = W * dpr;
       canvas.height = H * dpr;
 
-      // render the real, crisp text once onto an offscreen canvas
-      baseCanvas = document.createElement('canvas');
-      baseCanvas.width = W;
-      baseCanvas.height = H;
-      const bctx = baseCanvas.getContext('2d');
-      bctx.fillStyle = '#f4f4f7';
-      bctx.textBaseline = 'middle';
+      // render text once onto a low-res offscreen canvas purely to sample particle
+      // positions from — never drawn to screen, so its resolution doesn't matter
+      const sampleCanvas = document.createElement('canvas');
+      sampleCanvas.width = W;
+      sampleCanvas.height = H;
+      const sctx = sampleCanvas.getContext('2d');
+      sctx.fillStyle = '#ffffff';
+      sctx.textBaseline = 'middle';
 
       const lineGap = Math.max(38, H / (rows.length + 1));
       let y = lineGap * 0.75;
       let flameY = null;
+      wordDraws = [];
 
       rows.forEach(row => {
-        bctx.font = `600 ${row.size}px 'Space Grotesk', sans-serif`;
+        const font = `600 ${row.size}px 'Space Grotesk', sans-serif`;
+        sctx.font = font;
         const gap = 20;
-        const widths = row.words.map(w => bctx.measureText(w).width);
+        const widths = row.words.map(w => sctx.measureText(w).width);
         const totalW = widths.reduce((a, b) => a + b, 0) + gap * (row.words.length - 1);
         let x = (W - totalW) / 2;
         row.words.forEach((w, i) => {
-          bctx.fillText(w, x, y);
+          sctx.fillText(w, x, y);
+          wordDraws.push({ text: w, x, y, font });
           x += widths[i] + gap;
         });
         if(row.isFlame) flameY = y;
@@ -1131,7 +1140,7 @@
       }
 
       // sparse sample of the same text, used only to animate the shattered pixels near the cursor
-      const imgData = bctx.getImageData(0, 0, W, H).data;
+      const imgData = sctx.getImageData(0, 0, W, H).data;
       const step = 2;
       const pts = [];
       for(let py = 0; py < H; py += step){
@@ -1166,11 +1175,18 @@
 
     function step(){
       if(!reduceMotion) requestAnimationFrame(step);
-      if(!baseCanvas) return;
+      if(!wordDraws.length) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      // 1) draw the crisp, fully readable text as the resting state
-      ctx.drawImage(baseCanvas, 0, 0, W, H);
+
+      // 1) draw the real, crisp, natively-rendered text as the resting state —
+      // same rendering path the browser uses for ordinary DOM text, so it's sharp
+      ctx.fillStyle = '#f4f4f7';
+      ctx.textBaseline = 'middle';
+      for(const wd of wordDraws){
+        ctx.font = wd.font;
+        ctx.fillText(wd.text, wd.x, wd.y);
+      }
 
       // 2) locally shatter only the particles near the cursor; everywhere else stays untouched
       ctx.fillStyle = '#ffffff';
