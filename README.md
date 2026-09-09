@@ -374,7 +374,7 @@ An AI-powered application that analyzes resumes and provides intelligent insight
 <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
 </a>
 
-<a href="https://leetcode.com/u/9889_/">
+<a href="https://leetcode.com/u/jeevan_y/">
 <img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=white"/>
 </a>
 
