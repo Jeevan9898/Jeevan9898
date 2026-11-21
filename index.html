@@ -844,6 +844,44 @@
     </a>`).join('');
 
   /* =========================================================
+     GRID WIPE: ~600 small, separated cubes ripple outward from the toggle button.
+     The page only changes where the wave has already passed (mask-based).
+       mode 'out' -> cubes shrink away and uncover the page (loader exit)
+       mode 'in'  -> cubes grow and reveal the new theme (theme toggle)
+     ========================================================= */
+  function gridWipe(ox, oy, mode, setMask){
+    const w = innerWidth, h = innerHeight, S = 0.5;
+    const COUNT = 600;                                   // approx. number of cubes
+    const size = Math.max(16, Math.round(Math.sqrt(w * h / COUNT)));
+    const cols = Math.ceil(w / size), rows = Math.ceil(h / size);
+    const DELAY = 1.4, JIT = 0.2, DUR = 0.5, GAP = 0.7;  // GAP: moving cubes are 70% of their cell, so they never touch
+    const END = DELAY + JIT + DUR;
+    const cv = document.createElement('canvas');
+    cv.width = Math.ceil(w * S); cv.height = Math.ceil(h * S);
+    const ctx = cv.getContext('2d');
+    const maxD = Math.hypot(Math.max(ox, w - ox), Math.max(oy, h - oy));
+    const cells = [];
+    for(let i = 0; i < rows; i++) for(let j = 0; j < cols; j++){
+      const cx = j * size + size / 2, cy = i * size + size / 2;
+      cells.push({ cx, cy, d: Math.hypot(cx - ox, cy - oy) / maxD * DELAY + Math.random() * JIT });
+    }
+    function frame(t){
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      ctx.fillStyle = '#000';
+      for(const k of cells){
+        const p = Math.min(1, Math.max(0, (t - k.d) / DUR));
+        let sz;
+        if(mode === 'out'){ if(p >= 1) continue; sz = p <= 0 ? size + 2 : size * GAP * (1 - p); }
+        else            { if(p <= 0) continue; sz = p >= 1 ? size + 2 : size * GAP * p; }
+        sz *= S;
+        ctx.fillRect(k.cx * S - sz / 2, k.cy * S - sz / 2, sz, sz);
+      }
+      setMask(cv.toDataURL());
+    }
+    return { END, frame, done(){} };
+  }
+
+  /* =========================================================
      PRELOADER: bar-dodge animation + progress counter
      + pixel-cube exit wipe (same style as the theme toggle)
      ========================================================= */
@@ -882,48 +920,24 @@
     }
     requestAnimationFrame(frame);
 
-    // Pixel-cube exit: the loader is masked by a grid of black squares that shrink away,
-    // rippling outward from the center (change ox, oy to start from elsewhere).
+    // Exit: a grid of small cubes ripples out from the toggle button; the loader only
+    // disappears where the wave has already passed.
     function pixelExit(){
       loader.classList.add('hide');
-      const w = innerWidth, h = innerHeight, size = w < 600 ? 14 : 22, S = 0.5;
-      const cols = Math.ceil(w/size), rows = Math.ceil(h/size);
-      const cv = document.createElement('canvas');
-      cv.width = Math.ceil(w*S); cv.height = Math.ceil(h*S);
-      const ctx = cv.getContext('2d');
-      // ripple starts from the theme toggle button, same as the bg toggle
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches){ running = false; loader.remove(); return; }
       const tb = document.getElementById('themeToggle').getBoundingClientRect();
-      const ox = tb.left + tb.width/2, oy = tb.top + tb.height/2;
-      const maxD = Math.hypot(Math.max(ox, w-ox), Math.max(oy, h-oy));
-      const DELAY = 0.7, JIT = 0.12, DUR = 0.25, END = DELAY + JIT + DUR;
-      const GAP = 0.7; // moving cubes are drawn at 70% of their cell, so they never touch
-      const cells = [];
-      for(let i = 0; i < rows; i++) for(let j = 0; j < cols; j++){
-        const cx = j*size + size/2, cy = i*size + size/2;
-        cells.push({ cx, cy, pop: Math.random() < 0.9, d: Math.hypot(cx-ox, cy-oy)/maxD*DELAY + Math.random()*JIT });
-      }
-
-      const setMask = () => {
-        const v = 'url("' + cv.toDataURL() + '")';
+      const g = gridWipe(tb.left + tb.width / 2, tb.top + tb.height / 2, 'out', u => {
+        const v = 'url("' + u + '")';
         loader.style.webkitMaskImage = loader.style.maskImage = v;
         loader.style.webkitMaskSize = loader.style.maskSize = '100% 100%';
         loader.style.webkitMaskRepeat = loader.style.maskRepeat = 'no-repeat';
-      };
-
+      });
       let t0 = null;
       (function step(now){
         if(t0 === null) t0 = now;
         const t = (now - t0) / 1000;
-        ctx.clearRect(0, 0, cv.width, cv.height);
-        ctx.fillStyle = '#000'; // black = loader still visible
-        for(const k of cells){
-          const p = k.pop ? (t >= k.d ? 1 : 0) : Math.min(1, Math.max(0, (t - k.d) / DUR));
-          if(p >= 1) continue; // cube fully gone
-          const sz = (p <= 0 ? size + 2 : size * GAP * (1 - p)) * S;
-          ctx.fillRect(k.cx*S - sz/2, k.cy*S - sz/2, sz, sz);
-        }
-        setMask();
-        if(t < END) requestAnimationFrame(step);
+        g.frame(t);
+        if(t < g.END) requestAnimationFrame(step);
         else { running = false; loader.remove(); }
       })(performance.now());
     }
@@ -1281,53 +1295,31 @@
       document.dispatchEvent(new Event('themechange'));
     }
 
-    // The View Transitions API snapshots the old page and the new-theme page. A pixel-cube mask
-    // (drawn on a small canvas) reveals the NEW theme cube by cube, rippling outward from the button,
-    // so all content is visible and changes colour exactly where the wave passes.
+    // The View Transitions API snapshots the old page and the new-theme page. A grid of small cubes
+    // (drawn as a mask on a canvas) reveals the NEW theme cube by cube, rippling outward from the
+    // button, so the page only changes where the wave has passed.
     function pixelReveal(ox, oy, next){
-      const w = innerWidth, h = innerHeight, size = w < 600 ? 14 : 22, S = 0.5;
-      const cols = Math.ceil(w/size), rows = Math.ceil(h/size);
-      const cv = document.createElement('canvas');
-      cv.width = Math.ceil(w*S); cv.height = Math.ceil(h*S);
-      const ctx = cv.getContext('2d');
-      const maxD = Math.hypot(Math.max(ox, w-ox), Math.max(oy, h-oy));
-      const DELAY = 0.7, JIT = 0.12, DUR = 0.25, END = DELAY + JIT + DUR;
-      const GAP = 0.7; // moving cubes are drawn at 70% of their cell, so they never touch
-      const cells = [];
-      for(let i = 0; i < rows; i++) for(let j = 0; j < cols; j++){
-        const cx = j*size + size/2, cy = i*size + size/2;
-        cells.push({ cx, cy, pop: Math.random() < 0.9, d: Math.hypot(cx-ox, cy-oy)/maxD*DELAY + Math.random()*JIT });
-      }
-
       const style = document.createElement('style');
       document.head.appendChild(style);
-      const setMask = () => {
-        const u = cv.toDataURL();
+      const setMask = u => {
         style.textContent =
           'html::view-transition-old(root),html::view-transition-new(root){animation:none;mix-blend-mode:normal;}' +
           'html::view-transition-new(root){-webkit-mask-image:url("'+u+'");mask-image:url("'+u+'");' +
           '-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;}';
       };
-      setMask(); // start fully masked: old theme visible
+      const g = gridWipe(ox, oy, 'in', setMask);
+      g.frame(-1); // start fully masked: old theme visible
 
       const vt = document.startViewTransition(() => apply(next));
       vt.ready.then(() => {
         // keep the transition alive until the wave has finished
-        root.animate({ opacity:[1,1] }, { duration:END*1000 + 80, pseudoElement:'::view-transition-new(root)' });
+        root.animate({ opacity:[1,1] }, { duration:g.END*1000 + 80, pseudoElement:'::view-transition-new(root)' });
         let t0 = null;
         (function step(now){
           if(t0 === null) t0 = now;
-          const t = (now - t0)/1000;
-          ctx.clearRect(0, 0, cv.width, cv.height);
-          ctx.fillStyle = '#000';
-          for(const k of cells){
-            const p = k.pop ? (t >= k.d ? 1 : 0) : Math.min(1, Math.max(0, (t - k.d)/DUR));
-            if(p <= 0) continue;
-            const sz = (p >= 1 ? size + 2 : size * GAP * p) * S;
-            ctx.fillRect(k.cx*S - sz/2, k.cy*S - sz/2, sz, sz);
-          }
-          setMask();
-          if(t < END) requestAnimationFrame(step);
+          const t = (now - t0) / 1000;
+          g.frame(t);
+          if(t < g.END) requestAnimationFrame(step);
         })(performance.now());
       }).catch(() => {});
       vt.finished.finally(() => { style.remove(); busy = false; });
