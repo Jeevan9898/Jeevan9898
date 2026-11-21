@@ -203,9 +203,13 @@
   }
   .hero-video-bg{position:absolute; inset:0; z-index:0; overflow:hidden;}
   .hero-video-bg video{
-    position:absolute; top:50%; left:50%; min-width:100%; min-height:100%;
-    width:auto; height:auto; transform:translate(-50%,-50%); object-fit:cover;
+    position:absolute; top:50%; left:50%; min-width:100%; min-height:140%;
+    width:auto; height:auto; object-fit:cover; will-change:transform;
+    transform:translate3d(-50%, calc(-50% + var(--py, 0px)), 0);
   }
+  /* parallax layers: moved by JS, hinted for the GPU */
+  .hero .eyebrow, .hero h1, .hero .role, .hero .role-sub, .hero-actions,
+  .section-tag, .section-title, .section-sub, .about-visual, .philosophy blockquote{will-change:transform;}
   .hero-video-bg::after{
     content:''; position:absolute; inset:0;
     background:
@@ -962,6 +966,80 @@
   window.addEventListener('scroll', () => { updateTimelineFill(); updateScrollSpy(); });
   window.addEventListener('resize', updateTimelineFill);
   updateTimelineFill();
+
+  /* =========================================================
+     LAYERED PARALLAX: hero layers drift at different speeds, section
+     headings / about card / quote float at their own depth
+     ========================================================= */
+  (function(){
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const hero = document.querySelector('header.hero');
+    const video = hero.querySelector('video');
+    const heroLayers = [
+      ['.eyebrow', .10], ['h1', .18], ['.role', .26], ['.role-sub', .30], ['.hero-actions', .36]
+    ].map(([sel, d]) => [hero.querySelector(sel), d]);
+    const cue = hero.querySelector('.scroll-cue');
+
+    // [selector, depth]: bigger depth = lags further behind the scroll
+    const floaters = [
+      ['.section-tag', .04], ['.section-title', .09], ['.section-sub', .13],
+      ['.about-visual', .10], ['.philosophy blockquote', .12]
+    ];
+    const items = [];
+    floaters.forEach(([sel, d]) => document.querySelectorAll(sel).forEach(el => {
+      const sec = el.closest('section');
+      if(sec) items.push({ el, sec, d });
+    }));
+
+    // Smoothed scroll: the layers chase the real scroll position with easing, so slow
+    // scrolling feels fluid, a fast flick doesn't make layers jump, and it behaves the
+    // same on 60Hz / 120Hz screens (damping is time-based, not frame-based).
+    const STIFFNESS = 9;            // higher = snappier, lower = floatier
+    let smoothY = window.scrollY, last = 0, running = false;
+
+    function render(y){
+      const vh = window.innerHeight, hh = hero.offsetHeight;
+      const lag = window.scrollY - y;   // how far the smoothed position trails the real one
+
+      if(y <= hh){
+        video.style.setProperty('--py', (y * 0.3) + 'px');
+        const fade = Math.max(0, 1 - y / (hh * 0.75));
+        heroLayers.forEach(([el, d]) => {
+          el.style.transform = `translate3d(0, ${y * d}px, 0)`;
+          el.style.opacity = fade;
+        });
+        cue.style.opacity = Math.max(0, 1 - y / (hh * 0.3));
+      }
+
+      const mid = vh / 2;
+      items.forEach(({ el, sec, d }) => {
+        const r = sec.getBoundingClientRect();
+        if(r.bottom < -200 || r.top > vh + 200) return;
+        const center = r.top + r.height / 2 + lag;
+        el.style.transform = `translate3d(0, ${(center - mid) * d}px, 0)`;
+      });
+    }
+
+    function loop(now){
+      const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+      last = now;
+      const target = window.scrollY;
+      smoothY += (target - smoothY) * (1 - Math.exp(-STIFFNESS * dt));
+      if(Math.abs(target - smoothY) < 0.1) smoothY = target;
+      render(smoothY);
+      if(smoothY !== target) requestAnimationFrame(loop);
+      else running = false;
+    }
+    function kick(){
+      if(running) return;
+      running = true;
+      last = performance.now();
+      requestAnimationFrame(loop);
+    }
+    window.addEventListener('scroll', kick, { passive:true });
+    window.addEventListener('resize', kick);
+    render(smoothY);
+  })();
 
   /* =========================================================
      MOUSE: orb parallax
